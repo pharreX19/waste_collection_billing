@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('payables', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->foreignUlid('property_id')->constrained();
+            $table->string('reference_no');
+            $table->string('billed_period')->nullable();
+            $table->datetime('due_date');
+            $table->decimal('amount')->default(0);
+            $table->decimal('discount')->default(0);
+            $table->decimal('fine')->default(0);
+            $table->decimal('grand_total');
+            $table->enum('state', ['pending', 'paid', 'overdue', 'partially_paid', 'cancelled', 'written_off']);
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('payables');
+    }
+};
