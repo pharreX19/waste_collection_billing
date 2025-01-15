@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PropertyRequest;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PropertyController extends Controller
 {
@@ -13,7 +14,8 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        return Property::paginate();
+        $properties = Property::paginate();
+        return Inertia::render('Properties/Index', $properties);
     }
 
     /**
@@ -29,7 +31,7 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        return $property;
+        return Inertia::render('Properties/View', $property);
     }
 
     /**
@@ -47,5 +49,18 @@ class PropertyController extends Controller
     public function destroy(Property $property)
     {
         return $property->deleteOrFail();
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function search(Request $request)
+    {
+        $properties = Property::where('name', 'LIKE', $request->name)
+            ->orWhere('registration_code', 'LIKE', $request->name)
+            ->get();
+
+        return Inertia::render('Properties/Search', $properties);
     }
 }
