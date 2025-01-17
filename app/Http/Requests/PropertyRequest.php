@@ -24,9 +24,17 @@ class PropertyRequest extends FormRequest
         return [
             'name' => 'required|string',
             'registration_no' => 'required|string',
-            'registration_date' => 'required|datetime',
+            'registration_date' => 'required|date',
             'property_category_id' => 'required|exists:property_categories,id',
-            'address' => 'nullable|sometimes|string'
+            'address' => 'nullable|sometimes|string',
+            'owner_id' => 'required|exists:people,id'
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'property name'
         ];
     }
 }

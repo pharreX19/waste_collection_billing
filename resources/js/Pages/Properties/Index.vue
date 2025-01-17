@@ -12,7 +12,7 @@
             </div>
             <NewProperty />
         </div>
-        <div class="mt-8 flow-root">
+        <div class="my-8 flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div
                     class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
@@ -24,19 +24,31 @@
                                     scope="col"
                                     class="py-3.5 pl-4 pr-3 text-right text-sm font-semibold text-gray-900 sm:pl-0"
                                 >
-                                    ނަން
+                                    ރަޖސްޓްރޭޝަން ނަންބަރ /ނަން
                                 </th>
                                 <th
                                     scope="col"
                                     class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                 >
-                                    މަސްއޫލުވެރިޔާ
+                                    ވެރިފަރާތް / މަސްއޫލުވެރިޔާ
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                >
+                                    ތަނުގެ ބާވަތް
                                 </th>
                                 <th
                                     scope="col"
                                     class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                 >
                                     ހާލަތު
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                >
+                                    ރަޖިސްޓްރީ ކުރެވުނު ތާރީޚް
                                 </th>
                                 <th
                                     scope="col"
@@ -54,21 +66,37 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                             <tr
-                                v-for="person in people"
+                                v-for="person in data"
                                 :key="person.email"
                                 class="cursor-pointer hover:bg-gray-50"
                                 @click="handleClick"
                             >
                                 <td
-                                    class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0"
+                                    class="whitespace-nowrap py-3 pl-4 pr-3 text-sm sm:pl-0"
                                 >
                                     <div class="flex items-center">
                                         <div class="size-11 shrink-0">
-                                            <img
+                                            <!-- <img
                                                 class="size-11 rounded-full"
                                                 :src="person.image"
                                                 alt=""
-                                            />
+                                            /> -->
+                                            <template>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke-width="1.5"
+                                                    stroke="currentColor"
+                                                    class="size-6"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                                                    />
+                                                </svg>
+                                            </template>
                                         </div>
                                         <div class="mr-4">
                                             <div
@@ -77,7 +105,7 @@
                                                 {{ person.name }}
                                             </div>
                                             <div class="mt-1 text-gray-500">
-                                                {{ person.email }}
+                                                {{ person.registration_no }}
                                             </div>
                                         </div>
                                     </div>
@@ -85,36 +113,48 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
                                 >
-                                    <div class="text-gray-900">
-                                        {{ person.title }}
+                                    <div
+                                        class="flex items-center text-gray-900"
+                                        v-for="(
+                                            rp, index
+                                        ) in person.responsible_persons"
+                                    >
+                                        <span
+                                            :class="[
+                                                index === 0
+                                                    ? ''
+                                                    : 'text-gray-500 mt-1',
+                                            ]"
+                                            >{{ rp.name }}</span
+                                        >
                                     </div>
-                                    <div class="mt-1 text-gray-500">
-                                        {{ person.department }}
-                                    </div>
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
+                                >
+                                    {{ person.category.name }}
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
                                 >
                                     <span
                                         class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
-                                        >Active</span
+                                        >{{
+                                            person.is_active
+                                                ? "Active"
+                                                : "Inactive"
+                                        }}</span
                                     >
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
                                 >
-                                    {{ person.role }}
+                                    {{ person.registration_date }}
                                 </td>
                                 <td
                                     class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
                                 >
-                                    <a
-                                        href="#"
-                                        class="text-indigo-600 hover:text-indigo-900"
-                                        >Edit<span class="sr-only"
-                                            >, {{ person.name }}</span
-                                        ></a
-                                    >
+                                    <NewProperty :id="person.id" />
                                 </td>
                             </tr>
                         </tbody>
@@ -122,51 +162,25 @@
                 </div>
             </div>
         </div>
+        <Pagination :links="links" />
     </div>
 </template>
 
 <script setup>
-import NewProperty from "../../Components/NewProperty.vue";
-import { router } from "@inertiajs/vue3";
+import NewProperty from "./NewProperty.vue";
+import Pagination from "../../Components/Pagination.vue";
 
-const handleClick = async () => {
-    router.get(route("properties.show", { id: "01jg9tm7myjfbayjpxqktx188q" }));
-    //     console.log("fetching propery");
-    //     try {
-    //         const response = await fetch(route("properties.show", { id: 123 }));
-    //         if (!response.ok) {
-    //             throw new Error("Network response was not ok");
-    //         }
-    //         // const result = await response.json();
-    //     } catch (error) {
-    //         console.error("Error fetching companies", error);
-    //     }
-};
+const props = defineProps({
+    data: {
+        type: Array,
+        required: true,
+    },
+    links: {
+        type: Array,
+    },
+});
 
-const people = [
-    {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        department: "Optimization",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-    {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        department: "Optimization",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-    {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        department: "Optimization",
-        email: "lindsay.walton@example.com",
-        role: "Member",
-        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    },
-];
+// const handleClick = async () => {
+//     router.get(route("properties.show", { id: "01jg9tm7myjfbayjpxqktx188q" }));
+// };
 </script>

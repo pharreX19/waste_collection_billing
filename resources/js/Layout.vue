@@ -4,7 +4,7 @@
             <Sidebar />
         </div>
 
-        <div class="mt-16 min-w-[82vw] overflow-y-scroll">
+        <div class="my-16 min-w-[82vw] overflow-y-scroll">
             <slot />
         </div>
     </main>

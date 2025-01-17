@@ -106,19 +106,25 @@
                                 scope="col"
                                 class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
-                                ފައިސާ ދެއްކި ތާރީޚް
+                                މަސް
                             </th>
                             <th
                                 scope="col"
                                 class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
-                                މަސް
+                                ޖުމްލަ
                             </th>
                             <th
                                 scope="col"
                                 class="py-3 pl-8 pr-0 text-right font-semibold"
                             >
-                                ޖުމްލަ
+                                ފައިސާ ދެއްކި ތާރީޚް
+                            </th>
+                            <th
+                                scope="col"
+                                class="py-3 pl-8 pr-0 text-right font-semibold"
+                            >
+                                ރަސީދު ޕްރިންޓް ކުރުން
                             </th>
                         </tr>
                     </thead>
@@ -139,17 +145,26 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.hours }}
+                                {{ item.rate }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.rate }}
+                                {{ item.price }}
+                            </td>
+
+                            <td
+                                class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700"
+                            >
+                                {{ item.hours }}
                             </td>
                             <td
                                 class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700"
                             >
-                                {{ item.price }}
+                                <BanknotesIcon
+                                    class="h-6 w-5 text-green-400 mx-auto hover:text-green-600"
+                                    aria-hidden="true"
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -206,6 +221,7 @@ import {
     UserCircleIcon,
 } from "@heroicons/vue/20/solid";
 import YearSelector from "../../Components/YearSelector.vue";
+import { BanknotesIcon } from "@heroicons/vue/24/outline";
 
 const invoice = {
     subTotal: "ރ8,800.00",

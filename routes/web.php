@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -15,7 +16,13 @@ Route::get('login', function () {
 })->name('login');
 
 
+Route::get('categories', [PropertyCategoryController::class, 'index'])->name('categories.index');
 
+Route::post('properties', [PropertyController::class, 'store'])->name('properties.store');
 Route::get('properties', [PropertyController::class, 'index'])->name('properties.index');
-Route::get('properties/search', [PropertyController::class, 'search'])->name('properties.search');
-Route::get('properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
+Route::get('properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
+Route::put('properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
+
+Route::get('properties/search', function () {
+    return Inertia::render('Properties/Search');
+})->name('properties.search');

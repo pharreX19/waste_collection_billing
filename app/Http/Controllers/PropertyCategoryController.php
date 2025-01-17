@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PropertyCategory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PropertyCategoryController extends Controller
 {
@@ -11,7 +13,7 @@ class PropertyCategoryController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(PropertyCategory::all(), Response::HTTP_OK);
     }
 
     /**
