@@ -35,7 +35,10 @@ const form = useForm({
 
 const onClick = () => {
     router.visit(
-        route("properties.show", { id: "01jg9tm7myjfbayjpxqktx188q" })
+        route("properties.show", {
+            property: "01jg9tm7myjfbayjpxqktx188q",
+            year: new Date().getFullYear(),
+        })
     );
 };
 </script>

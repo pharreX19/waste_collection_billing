@@ -17,7 +17,7 @@
                             <dd
                                 class="mt-1 text-base font-semibold text-gray-900"
                             >
-                                10000ރ
+                                {{ due_amount }}
                             </dd>
                         </div>
                         <div class="flex-none self-end px-6 pt-4">
@@ -38,7 +38,9 @@
                                     aria-hidden="true"
                                 />
                             </dt>
-                            <dd class="text-sm/6 text-gray-900">ޖަންބުމާގެ</dd>
+                            <dd class="text-sm/6 text-gray-900">
+                                {{ name }}
+                            </dd>
                         </div>
 
                         <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
@@ -50,7 +52,7 @@
                                 />
                             </dt>
                             <dd class="text-sm/6 font-medium text-gray-500">
-                                އަޙްމަދު މުޙައްމަދު ދީދީ
+                                {{ responsible_persons[0].name }}
                             </dd>
                         </div>
                         <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
@@ -62,9 +64,9 @@
                                 />
                             </dt>
                             <dd class="text-sm/6 text-gray-500">
-                                <time datetime="2023-01-31"
-                                    >23 ޖަނަވަރީ 2023</time
-                                >
+                                <time datetime="2023-01-31">{{
+                                    registration_date
+                                }}</time>
                             </dd>
                         </div>
                     </dl>
@@ -82,9 +84,9 @@
 
             <!-- Invoice -->
             <div
-                class="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 lg:col-span-2 lg:row-span-2 lg:row-end-2"
+                class="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 lg:col-span-2 lg:row-span-2 lg:row-end-2 overflow-x-scroll"
             >
-                <YearSelector />
+                <YearSelector :selectedYear="selectedYear" />
                 <table
                     class="mt-10 w-full whitespace-nowrap text-left text-sm/6"
                 >
@@ -106,7 +108,13 @@
                                 scope="col"
                                 class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
-                                މަސް
+                                ރޭޓް
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
+                            >
+                                ޖޫރިމަނާ
                             </th>
                             <th
                                 scope="col"
@@ -116,13 +124,19 @@
                             </th>
                             <th
                                 scope="col"
-                                class="py-3 pl-8 pr-0 text-right font-semibold"
+                                class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
+                            >
+                                މުއްދަތުހަމަވާ ތާރީޚް
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
                                 ފައިސާ ދެއްކި ތާރީޚް
                             </th>
                             <th
                                 scope="col"
-                                class="py-3 pl-8 pr-0 text-right font-semibold"
+                                class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
                                 ރަސީދު ޕްރިންޓް ކުރުން
                             </th>
@@ -130,36 +144,47 @@
                     </thead>
                     <tbody>
                         <tr
-                            v-for="item in invoice.items"
+                            v-for="item in payables"
                             :key="item.id"
                             class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                            :class="[
+                                selectedPayable === item.id ? 'bg-gray-50' : '',
+                            ]"
+                            @click="onPayableClick(item)"
                         >
-                            <td class="max-w-0 px-0 py-5 align-top text-right">
-                                <div class="truncate font-medium text-gray-900">
-                                    {{ item.title }}
-                                </div>
-                                <div class="truncate text-gray-500">
-                                    {{ item.description }}
-                                </div>
+                            <td
+                                class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
+                            >
+                                {{ item.billed_period }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.rate }}
+                                {{ item.amount }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.price }}
+                                {{ item.fine }}
+                            </td>
+                            <td
+                                class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
+                            >
+                                {{ item.grand_total }}
+                            </td>
+                            <td
+                                class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
+                            >
+                                {{ item.due_date }}
                             </td>
 
                             <td
-                                class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700"
+                                class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
                                 {{ item.hours }}
                             </td>
                             <td
-                                class="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700"
+                                class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
                                 <BanknotesIcon
                                     class="h-6 w-5 text-green-400 mx-auto hover:text-green-600"
@@ -171,24 +196,21 @@
                 </table>
             </div>
 
-            <!-- <div class="lg:col-start-3">
+            <div class="lg:col-start-3" v-if="payments">
                 <h2 class="text-sm/6 font-semibold text-gray-900">
-                    އިތުރު ތަފްޞީލް
+                    ދެއްކި ފައިސާގެ ތަފްޞީލް
                 </h2>
                 <ul role="list" class="mt-6 space-y-6">
                     <li
-                        v-for="(activityItem, activityItemIdx) in activity"
-                        :key="activityItem.id"
+                        v-for="(payment, index) in payments"
+                        :key="payment.id"
                         class="relative flex gap-x-4"
                     >
                         <div
-                            :class="[
-                                activityItemIdx === activity.length - 1
-                                    ? 'h-6'
-                                    : '-bottom-6',
-                                'absolute left-0 top-0 flex w-6 justify-center',
-                            ]"
-                        ></div>
+                            class="absolute left-0 top-0 flex w-6 justify-center text-xs/5 text-gray-500"
+                        >
+                            {{ payment.state }}
+                        </div>
                         <div
                             class="relative flex size-6 flex-none items-center justify-center bg-white"
                         >
@@ -198,18 +220,18 @@
                         </div>
                         <p class="flex-auto py-0.5 text-xs/5 text-gray-500">
                             <span class="font-medium text-gray-900">{{
-                                activityItem.person.name
+                                payment.amount
                             }}</span>
-                            {{ activityItem.type }}
+                            {{ payment.payment_date }}
                         </p>
                         <time
-                            :datetime="activityItem.dateTime"
+                            :datetime="payment.dateTime"
                             class="flex-none py-0.5 text-xs/5 text-gray-500"
-                            >{{ activityItem.date }}</time
+                            >{{ payment.date }}</time
                         >
                     </li>
                 </ul>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
@@ -222,146 +244,55 @@ import {
 } from "@heroicons/vue/20/solid";
 import YearSelector from "../../Components/YearSelector.vue";
 import { BanknotesIcon } from "@heroicons/vue/24/outline";
+import { usePage } from "@inertiajs/vue3";
+import { computed, onMounted, ref } from "vue";
 
-const invoice = {
-    subTotal: "ރ8,800.00",
-    tax: "ރ1,760.00",
-    total: "ރ10,560.00",
-    items: [
-        {
-            id: 1,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 ޖަނަވަރީ 2023",
-            rate: "މެއި 2023",
-            price: "300ރ",
-        },
-        {
-            id: 2,
-            title: "މަހު ފީ 250ރ",
-            description: "",
-            hours: "2 ފެބްރުއަރީ 2023",
-            rate: "ޖޫން 2023",
-            price: "300ރ",
-        },
-        {
-            id: 3,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 މާރޗް 2023",
-            rate: "ޖުލައި 2023",
-            price: "300ރ",
-        },
-        {
-            id: 4,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 އެޕްރީލް 2023",
-            rate: "އޮގަސްޓް 2023",
-            price: "300ރ",
-        },
-        {
-            id: 5,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 މާރޗް 2023",
-            rate: "ޖުލައި 2023",
-            price: "300ރ",
-        },
-        {
-            id: 6,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 އެޕްރީލް 2023",
-            rate: "އޮގަސްޓް 2023",
-            price: "300ރ",
-        },
-        {
-            id: 7,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 ޖަނަވަރީ 2023",
-            rate: "މެއި 2023",
-            price: "300ރ",
-        },
-        {
-            id: 8,
-            title: "މަހު ފީ 250ރ",
-            description: "",
-            hours: "2 ފެބްރުއަރީ 2023",
-            rate: "ޖޫން 2023",
-            price: "300ރ",
-        },
-        {
-            id: 9,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 މާރޗް 2023",
-            rate: "ޖުލައި 2023",
-            price: "300ރ",
-        },
-        {
-            id: 10,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 އެޕްރީލް 2023",
-            rate: "އޮގަސްޓް 2023",
-            price: "300ރ",
-        },
-        {
-            id: 11,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 މާރޗް 2023",
-            rate: "ޖުލައި 2023",
-            price: "300ރ",
-        },
-        {
-            id: 12,
-            title: "މަހު ފީ 250ރ",
-            description: "ޖޫރިމަނާ 30ރ",
-            hours: "2 އެޕްރީލް 2023",
-            rate: "އޮގަސްޓް 2023",
-            price: "300ރ",
-        },
-    ],
+const props = defineProps({
+    payables: {
+        type: Array,
+        required: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    responsible_persons: {
+        type: Array,
+        required: true,
+    },
+    registration_date: {
+        type: String,
+        required: true,
+    },
+    payables: {
+        type: Array,
+        required: true,
+    },
+});
+
+const payments = ref(null);
+const selectedPayable = ref(null);
+const selectedYear = ref(new Date().getFullYear());
+
+const url = new URL(window.location.href);
+const pathname = url.pathname;
+const params = Object.fromEntries(url.searchParams.entries());
+selectedYear.value = params.year;
+
+onMounted(() => {});
+
+const due_amount = computed(() => {
+    return props.payables.reduce((acc, payable) => {
+        console.log("payable", payable.state);
+        if (payable.state === "pending") {
+            return acc + parseFloat(payable.amount);
+        }
+        return acc;
+    }, 0);
+});
+
+const onPayableClick = (payable) => {
+    selectedPayable.value = payable.id;
+    payments.value = payable.payments;
 };
-
-const activity = [
-    {
-        id: 1,
-        type: "މަހުގެ ކުނި ނެގުމުގެ ފީ",
-        person: { name: "މެއި" },
-        date: "7d ago",
-        dateTime: "2023-01-23T10:32",
-    },
-    {
-        id: 2,
-        type: "މަހުގެ ކުނި ނެގުމުގެ ފީ",
-        person: { name: "އޭޕްރީލް" },
-        date: "6d ago",
-        dateTime: "2023-01-23T11:03",
-    },
-    {
-        id: 3,
-        type: "މަހުގެ ކުނި ނެގުމުގެ ފީ",
-        person: { name: "މެއި" },
-        date: "6d ago",
-        dateTime: "2023-01-23T11:24",
-    },
-    {
-        id: 4,
-        type: "މަހުގެ ކުނި ނެގުމުގެ ފީ",
-        person: { name: "ޖޫން" },
-        date: "2d ago",
-        dateTime: "2023-01-24T09:12",
-    },
-    {
-        id: 5,
-        type: "މަހުގެ ކުނި ނެގުމުގެ ފީ",
-        person: { name: "ޖުލައި" },
-        date: "1d ago",
-        dateTime: "2023-01-24T09:20",
-    },
-];
 </script>

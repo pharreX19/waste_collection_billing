@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUlid('property_id')->constrained();
             $table->foreignUlid('responsible_person_id')->references('id')->on('people');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -9,7 +9,8 @@
                 <option
                     v-for="tab in tabs"
                     :key="tab.name"
-                    :selected="tab.current"
+                    :href="tab.href"
+                    :selected="tab.name == selectedYear"
                 >
                     {{ tab.name }}
                 </option>
@@ -21,18 +22,18 @@
         </div>
         <div class="hidden sm:block">
             <nav class="flex space-x-4" aria-label="Tabs">
-                <a
+                <Link
                     v-for="tab in tabs"
                     :key="tab.name"
-                    @click="onClick(tab.name)"
+                    :href="tab.href"
                     :class="[
-                        tab.current
+                        tab.name == selectedYear
                             ? 'bg-indigo-100 text-indigo-700'
                             : 'text-gray-500 hover:text-gray-700',
                         'rounded-md px-3 py-2 text-sm font-medium cursor-pointer',
                     ]"
                     :aria-current="tab.current ? 'page' : undefined"
-                    >{{ tab.name }}</a
+                    >{{ tab.name }}</Link
                 >
             </nav>
         </div>
@@ -41,19 +42,36 @@
 
 <script setup>
 import { ChevronDownIcon } from "@heroicons/vue/16/solid";
-import { reactive } from "vue";
+import { Link } from "@inertiajs/vue3";
+import { onMounted, reactive } from "vue";
 
-const tabs = reactive([
-    { name: "2021", href: "#", current: false },
-    { name: "2022", href: "#", current: false },
-    { name: "2023", href: "#", current: true },
-    { name: "2024", href: "#", current: false },
-    { name: "2025", href: "#", current: false },
-]);
+const props = defineProps({
+    selectedYear: {
+        type: String,
+        required: false,
+        default: new Date().getFullYear(),
+    },
+});
 
-const onClick = (name) => {
-    tabs.forEach((tab) => {
-        tab.current = tab.name === name;
-    });
-};
+const tabs = reactive([]);
+
+onMounted(() => {
+    let currentYear = new Date().getFullYear();
+    for (let i = 4; i >= 0; i--) {
+        tabs.push({
+            name: currentYear - i,
+            href: route("properties.show", {
+                property: "01jg9tm7myjfbayjpxqktx188q",
+                year: currentYear - i,
+            }),
+            // current: i == 0 ? true : false,
+        });
+    }
+});
+
+// const onClick = (name) => {
+//     tabs.forEach((tab) => {
+//         tab.current = tab.name === name;
+//     });
+// };
 </script>

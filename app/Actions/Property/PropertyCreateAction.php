@@ -13,7 +13,13 @@ class PropertyCreateAction
     public function execute($data)
     {
         $validated_data = $this->validate($data);
-        return Property::create($validated_data);
+
+        return Property::updateOrCreate(
+            [
+                'registration_no' => $data['registration_no']
+            ],
+            $validated_data
+        );
     }
 
 

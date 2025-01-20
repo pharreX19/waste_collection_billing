@@ -1,3 +1,15 @@
+@font-face {
+    font-family: "Faruma";
+    src: url("../fonts/Faruma.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    font-family: "Faruma";
+    font-size: 16px !important;
+}

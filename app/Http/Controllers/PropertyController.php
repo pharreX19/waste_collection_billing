@@ -9,6 +9,7 @@ use App\Models\Person;
 use App\Models\PersonProperty;
 use App\Models\Property;
 use App\Services\PropertyAndResponsiblePeopleCreateService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -65,20 +66,23 @@ class PropertyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Property $property)
+    public function show(Property $property, Request $request)
     {
-        $property->load(['responsiblePersons', 'category']);
-        return response()->json($property, Response::HTTP_OK);
-        // return Inertia::render('Properties/View', $property);
+        $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request) {
+            $query->whereYear('billed_period', $request->year)
+                ->with('payments');
+        }]);
+
+        // return response()->json($property, Response::HTTP_OK);
+        return Inertia::render('Properties/View', $property);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PropertyRequest $request, Property $property)
+    public function update(Request $request, Property $property)
     {
-        $property->fill($request->validated());
-        return $property->save();
+        (new PropertyAndResponsiblePeopleCreateService())->execute($request->all());
     }
 
     /**

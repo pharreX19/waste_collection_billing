@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Models\Person;
+use App\Models\Payable;
+use App\Models\Payment;
 use App\Models\PropertyCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,5 +53,10 @@ class Property extends Model
     public function category()
     {
         return $this->belongsTo(PropertyCategory::class, 'property_category_id');
+    }
+
+    public function payables()
+    {
+        return $this->hasMany(Payable::class, 'property_id');
     }
 }

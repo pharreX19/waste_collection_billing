@@ -22,7 +22,7 @@
                                 v-for="(
                                     person, index
                                 ) in form.responsible_persons"
-                                :key="person.national_id"
+                                :key="index"
                             >
                                 <h2
                                     class="text-base/7 font-semibold text-gray-900"
@@ -93,7 +93,6 @@
                                                 name="name"
                                                 id="name"
                                                 v-model="person.name"
-                                                autocomplete="given-name"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -128,7 +127,6 @@
                                                 name="contact_no"
                                                 type="contact_no"
                                                 v-model="person.contact_no"
-                                                autocomplete="contact_no"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -160,7 +158,6 @@
                                                 name="address"
                                                 id="address"
                                                 v-model="person.address"
-                                                autocomplete="address"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -252,7 +249,6 @@
                                                 type="text"
                                                 name="name"
                                                 id="name"
-                                                autocomplete="given-name"
                                                 v-model="form.name"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
@@ -281,7 +277,6 @@
                                                 type="text"
                                                 name="registration_no"
                                                 id="registration_no"
-                                                autocomplete="family-name"
                                                 v-model="form.registration_no"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />

@@ -11,7 +11,7 @@ class PersonCreateAction
 {
     public function execute(array $data)
     {
-        return Person::firstOrCreate([
+        return Person::updateOrCreate([
             'national_id' => $data['national_id']
         ], [
             ...$data,

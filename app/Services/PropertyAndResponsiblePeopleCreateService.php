@@ -34,11 +34,17 @@ class PropertyAndResponsiblePeopleCreateService
         foreach ($people as $person) {
             $responsible_person = (new PersonCreateAction())->execute($person);
 
-            PersonProperty::create([
-                'id' => Ulid::generate(),
-                'responsible_person_id' => $responsible_person->id,
-                'property_id' => $property->id,
-            ]);
+            PersonProperty::updateOrCreate(
+                [
+                    'responsible_person_id' => $responsible_person->id,
+                    'property_id' => $property->id
+                ],
+                [
+                    'id' => Ulid::generate(),
+                    'responsible_person_id' => $responsible_person->id,
+                    'property_id' => $property->id,
+                ]
+            );
         }
     }
 
