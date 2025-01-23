@@ -35,7 +35,7 @@ const form = useForm({
 
 const onClick = () => {
     router.visit(
-        route("properties.show", {
+        route("payments.index", {
             property: "01jg9tm7myjfbayjpxqktx188q",
             year: new Date().getFullYear(),
         })

@@ -56,10 +56,7 @@
                                 >
                                     އެކްޝަން
                                 </th>
-                                <th
-                                    scope="col"
-                                    class="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                                >
+                                <th scope="col" class="relative py-3.5 sm:pr-0">
                                     <span class="sr-only">Edit</span>
                                 </th>
                             </tr>
@@ -137,14 +134,77 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
                                 >
-                                    <span
+                                    <!-- <span
                                         class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
                                         >{{
                                             person.is_active
                                                 ? "Active"
                                                 : "Inactive"
                                         }}</span
+                                    > -->
+                                    <Switch
+                                        dir="ltr"
+                                        @click="togglePropertyState(person)"
+                                        :class="[
+                                            person.is_active
+                                                ? 'bg-indigo-600'
+                                                : 'bg-gray-200',
+                                            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
+                                        ]"
                                     >
+                                        <span class="sr-only">Use setting</span>
+                                        <span
+                                            :class="[
+                                                person.is_active
+                                                    ? 'translate-x-5'
+                                                    : 'translate-x-0',
+                                                'pointer-events-none relative inline-block size-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                                            ]"
+                                        >
+                                            <span
+                                                :class="[
+                                                    person.is_active
+                                                        ? 'opacity-0 duration-100 ease-out'
+                                                        : 'opacity-100 duration-200 ease-in',
+                                                    'absolute inset-0 flex size-full items-center justify-center transition-opacity',
+                                                ]"
+                                                aria-hidden="true"
+                                            >
+                                                <svg
+                                                    class="size-3 text-gray-400"
+                                                    fill="none"
+                                                    viewBox="0 0 12 12"
+                                                >
+                                                    <path
+                                                        d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2"
+                                                        stroke="currentColor"
+                                                        stroke-width="2"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span
+                                                :class="[
+                                                    person.is_active
+                                                        ? 'opacity-100 duration-200 ease-in'
+                                                        : 'opacity-0 duration-100 ease-out',
+                                                    'absolute inset-0 flex size-full items-center justify-center transition-opacity',
+                                                ]"
+                                                aria-hidden="true"
+                                            >
+                                                <svg
+                                                    class="size-3 text-indigo-600"
+                                                    fill="currentColor"
+                                                    viewBox="0 0 12 12"
+                                                >
+                                                    <path
+                                                        d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </span>
+                                    </Switch>
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
@@ -152,9 +212,10 @@
                                     {{ person.registration_date }}
                                 </td>
                                 <td
-                                    class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+                                    class="flex justify-around relative whitespace-nowrap py-5 text-right text-sm font-medium sm:pr-0"
                                 >
                                     <NewProperty :id="person.id" />
+                                    <ConfirmDelete />
                                 </td>
                             </tr>
                         </tbody>
@@ -169,6 +230,9 @@
 <script setup>
 import NewProperty from "./NewProperty.vue";
 import Pagination from "../../Components/Pagination.vue";
+import ConfirmDelete from "../../Components/ConfirmDelete.vue";
+import { Switch } from "@headlessui/vue";
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     data: {
@@ -180,7 +244,15 @@ const props = defineProps({
     },
 });
 
-// const handleClick = async () => {
-//     router.get(route("properties.show", { id: "01jg9tm7myjfbayjpxqktx188q" }));
-// };
+const togglePropertyState = (property) => {
+    const form = useForm({
+        ...property,
+        is_active: !property.is_active,
+    });
+    form.put(
+        route("properties.update", {
+            property: property.id,
+        })
+    );
+};
 </script>

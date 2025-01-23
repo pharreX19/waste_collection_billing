@@ -73,8 +73,8 @@ class PropertyController extends Controller
                 ->with('payments');
         }]);
 
-        // return response()->json($property, Response::HTTP_OK);
-        return Inertia::render('Properties/View', $property);
+        return response()->json($property, Response::HTTP_OK);
+        // return Inertia::render('Properties/View', $property);
     }
 
     /**

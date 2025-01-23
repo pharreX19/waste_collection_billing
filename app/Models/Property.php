@@ -47,7 +47,8 @@ class Property extends Model
 
     public function responsiblePersons()
     {
-        return $this->belongsToMany(Person::class, 'person_properties', 'property_id', 'responsible_person_id');
+        return $this->belongsToMany(Person::class, 'person_properties', 'property_id', 'responsible_person_id')
+            ->whereNull('person_properties.deleted_at');
     }
 
     public function category()

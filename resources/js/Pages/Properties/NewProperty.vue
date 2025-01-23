@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+    <div class="mt-4 sm:mt-0 sm:flex-none">
         <button
             v-if="!id"
             type="button"
@@ -9,13 +9,18 @@
             ގޭބިސި ރަޖިސްޓްރީ ކުރައްވާ
         </button>
 
-        <button
+        <!-- <button
             v-else
             @click="handleModalOpen"
             class="text-indigo-600 hover:text-indigo-900"
         >
-            Edit<span class="sr-only">Edit</span>
-        </button>
+            އަދާހަމަ ކުރުން<span class="sr-only">Edit</span>
+        </button> -->
+        <PencilSquareIcon
+            v-else
+            class="h-4 w-4 ml-2 hover:text-indigo-600 text-indigo-500"
+            @click="handleModalOpen"
+        />
     </div>
     <TransitionRoot as="template" :show="open">
         <Dialog class="relative z-10" @close="open = false">
@@ -45,6 +50,7 @@
 import { ref } from "vue";
 import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import NewEditPropertyForm from "../../Components/NewEditPropertyForm.vue";
+import { PencilIcon, PencilSquareIcon } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
     isEdit: {

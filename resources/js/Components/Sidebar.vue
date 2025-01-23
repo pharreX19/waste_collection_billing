@@ -13,7 +13,7 @@
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
-                        <li v-for="item in navigation" :key="item.name">
+                        <li v-for="item in currentNavigation" :key="item.name">
                             <a
                                 v-if="!item.children"
                                 :href="item.href"
@@ -114,7 +114,10 @@ import {
     UsersIcon,
 } from "@heroicons/vue/24/outline";
 import { DocumentCurrencyRupeeIcon } from "@heroicons/vue/24/solid";
+import { usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 
+const page = usePage();
 const navigation = [
     { name: "ޑޭޝްބޯޑް", href: "/", icon: Squares2X2Icon, current: true },
     {
@@ -150,4 +153,25 @@ const navigation = [
     // },
     { name: "ރިޕޯރޓް", href: "#", icon: ChartPieIcon, current: false },
 ];
+
+const isActive = (href) => {
+    const currentPath = page.url;
+
+    // if (href === "/") {
+    //     return currentPath === "/";
+    // } else if (href === "/properties") {
+    //     return currentPath === "/properties";
+    // } else if (href === "/properties/search") {
+    //     return currentPath === "/properties/search";
+    // }
+
+    return currentPath === href;
+};
+
+const currentNavigation = computed(() => {
+    return navigation.map((item) => ({
+        ...item,
+        current: isActive(item.href),
+    }));
+});
 </script>

@@ -60,7 +60,7 @@ onMounted(() => {
     for (let i = 4; i >= 0; i--) {
         tabs.push({
             name: currentYear - i,
-            href: route("properties.show", {
+            href: route("payments.index", {
                 property: "01jg9tm7myjfbayjpxqktx188q",
                 year: currentYear - i,
             }),

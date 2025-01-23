@@ -31,10 +31,11 @@ class PropertyAndResponsiblePeopleCreateService
 
     public function createResponsiblePeople($people, $property)
     {
+        $responsible_people = [];
         foreach ($people as $person) {
             $responsible_person = (new PersonCreateAction())->execute($person);
 
-            PersonProperty::updateOrCreate(
+            $responsible_people[] = PersonProperty::firstOrCreate(
                 [
                     'responsible_person_id' => $responsible_person->id,
                     'property_id' => $property->id
@@ -46,6 +47,19 @@ class PropertyAndResponsiblePeopleCreateService
                 ]
             );
         }
+
+        if (request()->method() === 'PUT') {
+            $this->removePreviousResponsiblePeople($responsible_people,  $property);
+        }
+    }
+
+    function removePreviousResponsiblePeople($responsible_people, $property)
+    {
+        $peopleIds = collect($responsible_people)->pluck('responsible_person_id')->toArray();
+
+        return PersonProperty::where('property_id', $property->id)
+            ->whereNotIn('responsible_person_id', $peopleIds)
+            ->delete();
     }
 
 

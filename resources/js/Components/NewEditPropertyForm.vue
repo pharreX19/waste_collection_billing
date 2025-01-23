@@ -52,10 +52,16 @@
                                                     name="national_id"
                                                     id="national_id"
                                                     v-model="person.national_id"
+                                                    :disabled="
+                                                        props.id && index === 0
+                                                    "
                                                     class="col-start-1 row-start-1 block w-full rounded-r-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                                                 />
                                             </div>
                                             <button
+                                                :disabled="
+                                                    props.id && index === 0
+                                                "
                                                 type="button"
                                                 class="flex shrink-0 items-center gap-x-1.5 rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50 focus:relative focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                                             >
@@ -93,6 +99,9 @@
                                                 name="name"
                                                 id="name"
                                                 v-model="person.name"
+                                                :disabled="
+                                                    props.id && index === 0
+                                                "
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -127,6 +136,9 @@
                                                 name="contact_no"
                                                 type="contact_no"
                                                 v-model="person.contact_no"
+                                                :disabled="
+                                                    props.id && index === 0
+                                                "
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -158,6 +170,9 @@
                                                 name="address"
                                                 id="address"
                                                 v-model="person.address"
+                                                :disabled="
+                                                    props.id && index === 0
+                                                "
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -250,6 +265,7 @@
                                                 name="name"
                                                 id="name"
                                                 v-model="form.name"
+                                                :disabled="props.id"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -278,6 +294,7 @@
                                                 name="registration_no"
                                                 id="registration_no"
                                                 v-model="form.registration_no"
+                                                :disabled="props.id"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>

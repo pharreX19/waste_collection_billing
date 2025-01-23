@@ -27,7 +27,8 @@ class PropertyRequest extends FormRequest
             'registration_date' => 'required|date',
             'property_category_id' => 'required|exists:property_categories,id',
             'address' => 'nullable|sometimes|string',
-            'owner_id' => 'required|exists:people,id'
+            'owner_id' => 'required|exists:people,id',
+            'is_active' => 'nullable|sometimes|boolean'
         ];
     }
 
