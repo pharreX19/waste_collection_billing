@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Redirect;
@@ -25,3 +26,6 @@ Route::post('properties', [PropertyController::class, 'store'])->name('propertie
 Route::get('properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
 Route::put('properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
+Route::delete('properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
+
+Route::get('properties/{property}/payments', [PaymentController::class, 'index'])->name('payments.index');

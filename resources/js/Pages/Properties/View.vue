@@ -17,7 +17,7 @@
                             <dd
                                 class="mt-1 text-base font-semibold text-gray-900"
                             >
-                                {{ due_amount }}
+                                {{ overdue_amount }}
                             </dd>
                         </div>
                         <div class="flex-none self-end px-6 pt-4">
@@ -252,6 +252,11 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    overdue_amount: {
+        type: String,
+        required: false,
+        default: 0,
+    },
     name: {
         type: String,
         required: true,
@@ -278,18 +283,6 @@ const url = new URL(window.location.href);
 const pathname = url.pathname;
 const params = Object.fromEntries(url.searchParams.entries());
 selectedYear.value = params.year;
-
-onMounted(() => {});
-
-const due_amount = computed(() => {
-    return props.payables.reduce((acc, payable) => {
-        console.log("payable", payable.state);
-        if (payable.state === "pending") {
-            return acc + parseFloat(payable.amount);
-        }
-        return acc;
-    }, 0);
-});
 
 const onPayableClick = (payable) => {
     selectedPayable.value = payable.id;
