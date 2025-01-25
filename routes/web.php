@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\PropertyController;
@@ -7,14 +9,16 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return Redirect()->route('login');
-});
 
 Route::get('login', function () {
-    return Inertia::render('Dashboard');
-    // return Inertia::render('Auth/Login');
+    return Inertia::render('Auth/Login');
 })->name('login');
+
+Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+
+Route::get('/', DashboardController::class)->name('dashboard');
 
 Route::get('properties/search', function () {
     return Inertia::render('Properties/Search');

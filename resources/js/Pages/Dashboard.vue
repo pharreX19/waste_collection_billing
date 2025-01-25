@@ -54,7 +54,7 @@
                                     }}
                                     by
                                 </span>
-                                {{ item.change }}
+                                {{ Math.abs(item.change) }}
                             </p>
                         </div>
                     </div>
@@ -71,8 +71,24 @@ import {
     EnvelopeOpenIcon,
     UsersIcon,
 } from "@heroicons/vue/24/outline";
+import { onMounted, reactive } from "vue";
 
-const stats = [
+const props = defineProps({
+    properties: {
+        type: Array,
+        required: true,
+    },
+    pending: {
+        type: Array,
+        required: true,
+    },
+    paid: {
+        type: Array,
+        required: true,
+    },
+});
+
+const stats = reactive([
     {
         id: 1,
         name: "ޖުމްލަ ރަޖިސްޓްރީ",
@@ -97,7 +113,48 @@ const stats = [
         change: "3.2%",
         changeType: "decrease",
     },
-];
+]);
+
+onMounted(() => {
+    const currentYear = new Date().getFullYear();
+    const pastYear = currentYear - 1;
+
+    const currentYearPropertyStat =
+        findStatForYear(props.properties, currentYear)?.count || 0;
+    const currentYearPendingStat =
+        findStatForYear(props.pending, currentYear)?.total_amount || 0;
+    const currentYearPaidStat =
+        findStatForYear(props.paid, currentYear)?.total_amount || 0;
+
+    const pastYearPropertyStat =
+        findStatForYear(props.properties, pastYear)?.count || 0;
+    const pastYearPendingStat =
+        findStatForYear(props.pending, pastYear)?.total_amount || 0;
+    const pastYearPaidStat =
+        findStatForYear(props.paid, pastYear)?.total_amount || 0;
+
+    console.log(pastYearPropertyStat);
+
+    stats[0].stat = currentYearPropertyStat + pastYearPropertyStat;
+    stats[0].change = currentYearPropertyStat;
+
+    stats[1].stat = currentYearPendingStat;
+    stats[1].change = (
+        ((currentYearPendingStat - pastYearPendingStat) / pastYearPendingStat) *
+        100
+    ).toFixed(2);
+    stats[1].changeType = stats[1].change > 0 ? "increase" : "decrease";
+
+    stats[2].stat = currentYearPaidStat;
+    stats[2].change = (
+        ((currentYearPaidStat - pastYearPaidStat) / pastYearPaidStat) *
+        100
+    ).toFixed(2);
+    stats[2].changeType = stats[1].change > 0 ? "increase" : "decrease";
+});
+
+const findStatForYear = (data, year) =>
+    data.find((item) => item.year === year) || null;
 </script>
 
 <style lang="scss" scoped></style>
