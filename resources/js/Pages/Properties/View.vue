@@ -65,7 +65,9 @@
                             </dt>
                             <dd class="text-sm/6 text-gray-500">
                                 <time datetime="2023-01-31">{{
-                                    registration_date
+                                    dayjs(registration_date).format(
+                                        "DD MMMM YYYY"
+                                    )
                                 }}</time>
                             </dd>
                         </div>
@@ -86,7 +88,10 @@
             <div
                 class="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 lg:col-span-2 lg:row-span-2 lg:row-end-2 overflow-x-scroll"
             >
-                <YearSelector :selectedYear="selectedYear" />
+                <YearSelector
+                    :selectedYear="selectedYear"
+                    :propertyId="responsible_persons[0].pivot.property_id"
+                />
                 <table
                     class="mt-10 w-full whitespace-nowrap text-left text-sm/6"
                 >
@@ -155,7 +160,11 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.billed_period }}
+                                {{
+                                    dayjs(item.billed_period).format(
+                                        "MMMM YYYY"
+                                    )
+                                }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
@@ -175,7 +184,9 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.due_date }}
+                                {{
+                                    dayjs(item.due_date).format("DD MMMM YYYY")
+                                }}
                             </td>
 
                             <td
@@ -222,7 +233,11 @@
                             <span class="font-medium text-gray-900">{{
                                 payment.amount
                             }}</span>
-                            {{ payment.payment_date }}
+                            {{
+                                dayjs(payment.payment_date).format(
+                                    "DD MMMM YYYY HH:MM"
+                                )
+                            }}
                         </p>
                         <time
                             :datetime="payment.dateTime"
@@ -246,6 +261,7 @@ import YearSelector from "../../Components/YearSelector.vue";
 import { BanknotesIcon } from "@heroicons/vue/24/outline";
 import { usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
+import dayjs from "../../utils/dayjs";
 
 const props = defineProps({
     payables: {
@@ -255,7 +271,7 @@ const props = defineProps({
     overdue_amount: {
         type: String,
         required: false,
-        default: 0,
+        default: "0",
     },
     name: {
         type: String,

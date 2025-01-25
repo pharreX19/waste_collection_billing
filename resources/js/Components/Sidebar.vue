@@ -151,7 +151,12 @@ const navigation = [
     //     icon: DocumentDuplicateIcon,
     //     current: false,
     // },
-    { name: "ރިޕޯރޓް", href: "#", icon: ChartPieIcon, current: false },
+    {
+        name: "ރިޕޯރޓް",
+        href: "/payments/reports",
+        icon: ChartPieIcon,
+        current: false,
+    },
 ];
 
 const isActive = (href) => {

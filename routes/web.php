@@ -20,6 +20,7 @@ Route::get('properties/search', function () {
     return Inertia::render('Properties/Search');
 })->name('properties.search');
 
+
 Route::get('categories', [PropertyCategoryController::class, 'index'])->name('categories.index');
 
 Route::post('properties', [PropertyController::class, 'store'])->name('properties.store');
@@ -29,3 +30,4 @@ Route::put('properties/{property}', [PropertyController::class, 'update'])->name
 Route::delete('properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
 
 Route::get('properties/{property}/payments', [PaymentController::class, 'index'])->name('payments.index');
+Route::get('payments/reports', [PaymentController::class, 'reports'])->name('payments.reports');

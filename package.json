@@ -20,6 +20,8 @@
         "@inertiajs/vue3": "^2.0.0",
         "@tailwindcss/forms": "^0.5.10",
         "@vitejs/plugin-vue": "^5.2.1",
+        "dayjs": "^1.11.13",
+        "thaana-keyboard-vue": "^1.0.1",
         "vue3-toastify": "^0.2.8",
         "ziggy-js": "^2.4.2"
     }

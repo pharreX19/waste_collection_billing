@@ -207,9 +207,13 @@
                                     </Switch>
                                 </td>
                                 <td
-                                    class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
+                                    class="whitespace-nowrap px-3 py-5 text-sm text-gray-500 text-right"
                                 >
-                                    {{ person.registration_date }}
+                                    {{
+                                        dayjs(person.registration_date).format(
+                                            "DD MMMM YYYY"
+                                        )
+                                    }}
                                 </td>
                                 <td
                                     class="flex justify-around relative whitespace-nowrap py-5 text-right text-sm font-medium sm:pr-0"
@@ -233,6 +237,7 @@ import Pagination from "../../Components/Pagination.vue";
 import ConfirmDelete from "../../Components/ConfirmDelete.vue";
 import { Switch } from "@headlessui/vue";
 import { useForm } from "@inertiajs/vue3";
+import dayjs from "../../utils/dayjs";
 
 const props = defineProps({
     data: {

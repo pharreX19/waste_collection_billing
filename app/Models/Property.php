@@ -32,7 +32,8 @@ class Property extends Model
 
 
     protected $casts = [
-        'registration_date' => 'date'
+        'registration_date' => 'date',
+        'billed_period' => 'date'
     ];
 
 

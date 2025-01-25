@@ -17,10 +17,17 @@
                 placeholder="ގޭގެ ނަން ނުވަތަ ރަޖިސްޓްރީ ކޯޑް"
             /> -->
 
-            <AutoComplete v-model="form.search" />
-
-            <input type="button" value="Submit" @click="onClick" />
+            <AutoComplete v-model="form.property" />
         </div>
+
+        <button
+            :disabled="!form.property?.id"
+            type="button"
+            class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            @click="onClick"
+        >
+            ތަފްޞީލް ދައްކާ
+        </button>
     </div>
 </template>
 
@@ -30,13 +37,17 @@ import { route } from "ziggy-js";
 import AutoComplete from "../../Components/AutoComplete.vue";
 
 const form = useForm({
-    search: null,
+    property: {
+        name: null,
+    },
 });
 
 const onClick = () => {
+    if (!form.property.id) return;
+
     router.visit(
         route("payments.index", {
-            property: "01jg9tm7myjfbayjpxqktx188q",
+            property: form.property.id,
             year: new Date().getFullYear(),
         })
     );

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Payment;
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,6 +34,11 @@ class Payable extends Model
         // static::addGlobalScope('userPayable', function (Builder $query) {
         //     return $query->where('property_id', request()->propertyId);
         // });
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
     }
 
     public function payments()

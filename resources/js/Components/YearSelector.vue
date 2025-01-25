@@ -51,6 +51,10 @@ const props = defineProps({
         required: false,
         default: new Date().getFullYear(),
     },
+    propertyId: {
+        type: String,
+        required: true,
+    },
 });
 
 const tabs = reactive([]);
@@ -61,7 +65,7 @@ onMounted(() => {
         tabs.push({
             name: currentYear - i,
             href: route("payments.index", {
-                property: "01jg9tm7myjfbayjpxqktx188q",
+                property: props.propertyId,
                 year: currentYear - i,
             }),
             // current: i == 0 ? true : false,
