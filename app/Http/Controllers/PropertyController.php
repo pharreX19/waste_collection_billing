@@ -68,10 +68,11 @@ class PropertyController extends Controller
      */
     public function show(Property $property, Request $request)
     {
-        $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request) {
-            $query->whereYear('billed_period', $request->year)
-                ->with('payments');
-        }]);
+        $property->load(['responsiblePersons', 'category', 'payables']);
+        //  => function ($query) use ($request) {
+        // $query->whereYear('billed_period', $request->year)
+        // ->with('payments');
+        // }]);
 
         return response()->json($property, Response::HTTP_OK);
         // return Inertia::render('Properties/View', $property);

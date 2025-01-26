@@ -46,10 +46,16 @@ const onClick = () => {
     if (!form.property.id) return;
 
     router.visit(
-        route("payments.index", {
+        route("payables.index", {
             property: form.property.id,
             year: new Date().getFullYear(),
-        })
+        }),
+        {
+            headers: {
+                Accept: "text/html",
+                "Content-type": "text/html",
+            },
+        }
     );
 };
 </script>

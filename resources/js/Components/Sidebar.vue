@@ -14,7 +14,7 @@
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
                         <li v-for="item in currentNavigation" :key="item.name">
-                            <a
+                            <Link
                                 v-if="!item.children"
                                 :href="item.href"
                                 :class="[
@@ -30,7 +30,7 @@
                                     aria-hidden="true"
                                 />
                                 {{ item.name }}
-                            </a>
+                            </Link>
                             <Disclosure as="div" v-else v-slot="{ open }">
                                 <DisclosureButton
                                     :class="[
@@ -194,7 +194,7 @@ const navigation = [
     // },
     {
         name: "ރިޕޯރޓް",
-        href: "/payments/reports",
+        href: route("payables.reports"),
         icon: ChartPieIcon,
         current: false,
     },

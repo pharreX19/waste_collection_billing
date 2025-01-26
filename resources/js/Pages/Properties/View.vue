@@ -73,13 +73,7 @@
                         </div>
                     </dl>
                     <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-                        <a
-                            href="#"
-                            class="text-sm/6 font-semibold text-gray-900"
-                        >
-                            <span aria-hidden="true">&rarr;</span>
-                            ފައިސާ ބަލައިގަތުން
-                        </a>
+                        <Create :id="id" />
                     </div>
                 </div>
             </div>
@@ -262,6 +256,7 @@ import { BanknotesIcon } from "@heroicons/vue/24/outline";
 import { usePage } from "@inertiajs/vue3";
 import { computed, onMounted, ref } from "vue";
 import dayjs from "../../utils/dayjs";
+import Create from "../Payment/Create.vue";
 
 const props = defineProps({
     payables: {
@@ -297,6 +292,9 @@ const selectedYear = ref(new Date().getFullYear());
 
 const url = new URL(window.location.href);
 const pathname = url.pathname;
+const parts = pathname.split("/");
+
+const id = parts[2];
 const params = Object.fromEntries(url.searchParams.entries());
 selectedYear.value = params.year;
 

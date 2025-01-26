@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Inertia\Inertia;
 use App\Models\Payable;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -13,11 +15,29 @@ class PayableController extends Controller
      */
     public function index(Request $request, Property $property)
     {
-        return Payable::where('property_id', $property->id)
-            ->when($request->state, function ($query) use ($request) {
-                $query->where('state', $request->state);
-            })
-            ->paginate();
+        $overdue_amount = Payable::where('property_id', $property->id)->where('state', 'pending')->sum('amount');
+
+        $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request) {
+            $query->when($request->state, function ($q) use ($request) {
+
+                $q->where('state', $request->state);
+            });
+
+            $query->when($request->year, function ($q) use ($request) {
+                $q->whereYear('billed_period', $request->year)
+                    ->with('payments');
+            });
+        }]);
+
+        if ($request->isJson()) {
+            return response()->json([
+                'property' => $property
+            ]);
+        }
+
+        $property->setAttribute('overdue_amount', $overdue_amount);
+
+        return Inertia::render('Properties/View', $property);
     }
 
     /**
@@ -51,4 +71,20 @@ class PayableController extends Controller
     // {
     //
     // }
+
+    /**
+     * Generate payment reporing.
+     */
+    public function reports(Request $request)
+    {
+        $start_date = $request->query('start_date') ?? Carbon::now()->startOfYear()->toDateString();
+        $end_date = $request->query('end_date') ?? Carbon::parse($request->query('start_date'))->addYear(1)->toDateString();
+
+        $payables = Payable::with('property')
+            ->whereDate('billed_period', '>=', $start_date)
+            ->whereDate('billed_period', '<', $end_date)
+            ->paginate();
+
+        return Inertia::render('Payable/Reports', $payables);
+    }
 }

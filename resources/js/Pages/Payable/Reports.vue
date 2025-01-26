@@ -273,7 +273,7 @@ const currentDate = new Date();
 const previousYear = currentDate.getFullYear() - 1;
 
 const reportLink = computed(() => {
-    return route("payments.reports", {
+    return route("payables.reports", {
         start_date:
             form.selectedOption.id == 2
                 ? `${previousYear}-01-01`

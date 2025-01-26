@@ -26,6 +26,10 @@
                     v-for="tab in tabs"
                     :key="tab.name"
                     :href="tab.href"
+                    :headers="{
+                        Accept: 'text/html',
+                        'Content-type': 'text/html',
+                    }"
                     :class="[
                         tab.name == selectedYear
                             ? 'bg-indigo-100 text-indigo-700'
@@ -64,7 +68,7 @@ onMounted(() => {
     for (let i = 4; i >= 0; i--) {
         tabs.push({
             name: currentYear - i,
-            href: route("payments.index", {
+            href: route("payables.index", {
                 property: props.propertyId,
                 year: currentYear - i,
             }),
