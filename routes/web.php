@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Redirect;
@@ -43,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('payables/reports', [PayableController::class, 'reports'])->name('payables.reports');
 
     Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
+
+    Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
 
     // Route::get('properties/{property}/payments', [PaymentController::class, 'index'])->name('payments.index');
     // Route::get('payments/reports', [PaymentController::class, 'reports'])->name('payments.reports');
