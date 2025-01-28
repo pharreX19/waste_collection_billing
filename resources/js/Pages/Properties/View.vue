@@ -25,7 +25,7 @@
                             <dd
                                 class="rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-600 ring-1 ring-inset ring-red-600/20"
                             >
-                                Overdue
+                                މުއްދަތުހަމަވެފައި
                             </dd>
                         </div>
                         <div
@@ -89,17 +89,11 @@
                 <table
                     class="mt-10 w-full whitespace-nowrap text-left text-sm/6"
                 >
-                    <colgroup>
-                        <col class="w-full" />
-                        <col />
-                        <col />
-                        <col />
-                    </colgroup>
                     <thead class="border-b border-gray-200 text-gray-900">
                         <tr>
                             <th
                                 scope="col"
-                                class="px-0 py-3 text-right font-semibold"
+                                class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
                                 ތަފްޞީލް
                             </th>

@@ -235,7 +235,6 @@
             </div>
         </div>
         <Pagination :links="links" />
-        {{ form.end_date }}
     </div>
 </template>
 
@@ -278,7 +277,7 @@ const reportLink = computed(() => {
             form.selectedOption.id == 2
                 ? `${previousYear}-01-01`
                 : form.start_date,
-        end_date: form.end_date,
+        end_date: form.selectedOption.id == 3 ? form.end_date : "",
     });
 });
 
@@ -294,5 +293,10 @@ onMounted(() => {
             : startDate && endDate
             ? options[2]
             : options[1];
+
+    if (form.selectedOption.id == 3) {
+        form.start_date = startDate;
+        form.end_date = endDate;
+    }
 });
 </script>
