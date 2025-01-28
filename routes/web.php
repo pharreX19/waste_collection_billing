@@ -42,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('properties/{property}/payables', [PayableController::class, 'index'])->name('payables.index');
     Route::get('payables/reports', [PayableController::class, 'reports'])->name('payables.reports');
 
+    Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
+
     // Route::get('properties/{property}/payments', [PaymentController::class, 'index'])->name('payments.index');
     // Route::get('payments/reports', [PaymentController::class, 'reports'])->name('payments.reports');
 });
