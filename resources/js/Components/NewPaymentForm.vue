@@ -38,19 +38,20 @@
                                                     class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                                     :checked="
                                                         indeterminate ||
-                                                        selectedPeople.length ===
+                                                        selectedPayables.length ===
                                                             payables.length
                                                     "
                                                     :indeterminate="
                                                         indeterminate
                                                     "
                                                     @change="
-                                                        selectedPeople = $event
-                                                            .target.checked
-                                                            ? payables.map(
-                                                                  (p) => p.id
-                                                              )
-                                                            : []
+                                                        selectedPayables =
+                                                            $event.target
+                                                                .checked
+                                                                ? payables.map(
+                                                                      (p) => p
+                                                                  )
+                                                                : []
                                                     "
                                                 />
                                                 <svg
@@ -77,31 +78,31 @@
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                         >
                                             މުއްދަތު
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                         >
                                             މަހުފީ
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                         >
                                             ޖޫރިމަނާ
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                         >
                                             މުއްދަތުހަމަވާ ތާރީޚް
                                         </th>
                                         <th
                                             scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                         >
                                             ޖުމްލަ
                                         </th>
@@ -114,8 +115,8 @@
                                         v-for="payable in payables"
                                         :key="payable.id"
                                         :class="[
-                                            selectedPeople.includes(
-                                                payable.id
+                                            selectedPayables.includes(
+                                                payable
                                             ) && 'bg-gray-50',
                                         ]"
                                     >
@@ -124,8 +125,8 @@
                                         >
                                             <div
                                                 v-if="
-                                                    selectedPeople.includes(
-                                                        payable.id
+                                                    selectedPayables.includes(
+                                                        payable
                                                     )
                                                 "
                                                 class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"
@@ -136,8 +137,8 @@
                                                 <input
                                                     type="checkbox"
                                                     class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                                                    :value="payable.id"
-                                                    v-model="selectedPeople"
+                                                    :value="payable"
+                                                    v-model="selectedPayables"
                                                 />
                                                 <svg
                                                     class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
@@ -164,8 +165,8 @@
                                         <td
                                             :class="[
                                                 'whitespace-nowrap py-4 pr-3 text-sm font-medium',
-                                                selectedPeople.includes(
-                                                    payable.id
+                                                selectedPayables.includes(
+                                                    payable
                                                 )
                                                     ? 'text-indigo-600'
                                                     : 'text-gray-900',
@@ -219,13 +220,8 @@
                                             class="whitespace-nowrap px-3 py-4 text-base font-bold text-black"
                                         >
                                             {{
-                                                payables.reduce(
-                                                    (acc, item) =>
-                                                        acc +
-                                                        parseFloat(
-                                                            item.grand_total
-                                                        ),
-                                                    0
+                                                NumberFormatter.format(
+                                                    total_due
                                                 )
                                             }}
                                         </td>
@@ -244,7 +240,6 @@
                                 Cancel
                             </button>
                             <button
-                                :disabled="form.processing"
                                 type="submit"
                                 class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
@@ -262,9 +257,10 @@
 import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
 import { onMounted } from "vue";
 import { DialogPanel, TransitionChild } from "@headlessui/vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import dayjs from "../utils/dayjs";
+import { NumberFormatter } from "../utils/numberFormatter";
 
 const props = defineProps({
     errors: {
@@ -278,35 +274,69 @@ const props = defineProps({
     },
 });
 
-// const people = [
-//     {
-//         name: "Lindsay Walton",
-//         title: "Front-end Developer",
-//         email: "lindsay.walton@example.com",
-//         role: "Member",
-//     },
-//     // More people...
-// ];
+const payables = ref([]);
+const selectedPayables = ref([]);
 
-const selectedPeople = ref([]);
 const indeterminate = computed(
     () =>
-        selectedPeople.value.length > 0 &&
-        selectedPeople.value.length < payables.value.length
+        selectedPayables.value.length > 0 &&
+        selectedPayables.value.length < payables.length
 );
 
-const emit = defineEmits(["submit:form", "cancel:form"]);
+const total_due = computed(() => {
+    return selectedPayables.value.reduce(
+        (acc, item) => acc + parseFloat(item.grand_total),
+        0
+    );
+});
 
-const form = useForm({});
+const emit = defineEmits(["cancel:form"]);
 
-const payables = ref([]);
+const page = usePage();
+// const form = useForm({
+//     selectedPayables: [],
+// });
 
 onMounted(() => {
     fetchProperty();
 });
 
-const onSubmit = function () {
-    emit("submit:form", form);
+const onSubmit = async () => {
+    if (selectedPayables.value.length == 0) return;
+
+    const body = selectedPayables.value.map((payable) => ({
+        payable_id: payable.id,
+        amount: payable.grand_total,
+    }));
+
+    try {
+        const response = await fetch(route("payments.store"), {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": page.props.csrf_token,
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Network response was not ok", response);
+        }
+
+        selectedPayables.value = [];
+        fetchProperty();
+    } catch (error) {
+        console.error("Error fetching companies", error);
+    }
+
+    // form.transform((data) =>
+    //     data.selectedPayables.map((payable) => ({
+    //         payable_id: payable.id,
+    //         amount: payable.grand_total,
+    //     }))
+    // ).post(route("payments.store"), {
+    //     onSuccess: () => fetchProperty(),
+    //     onError: (err) => console.log("error", error),
+    // });
 };
 
 const onCancel = function () {
