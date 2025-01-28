@@ -87,7 +87,7 @@ class PayableController extends Controller
 
         $payables->appends([
             'start_date' => $start_date,
-            'end_date' => $end_date,
+            'end_date' => $request->query('end_date'),
         ]);
 
         return Inertia::render('Payable/Reports', $payables);
