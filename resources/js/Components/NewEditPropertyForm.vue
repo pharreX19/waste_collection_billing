@@ -48,14 +48,14 @@
                                                 class="-mr-px grid grow grid-cols-1 focus-within:relative"
                                             >
                                                 <input
-                                                    type="text"
+                                                    class="col-start-1 row-start-1 block w-full rounded-r-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                                                     name="national_id"
                                                     id="national_id"
+                                                    maxlength="7"
                                                     v-model="person.national_id"
                                                     :disabled="
                                                         props.id && index === 0
                                                     "
-                                                    class="col-start-1 row-start-1 block w-full rounded-r-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                                                 />
                                             </div>
                                             <button
@@ -63,6 +63,7 @@
                                                     props.id && index === 0
                                                 "
                                                 type="button"
+                                                @click="searchPerson(index)"
                                                 class="flex shrink-0 items-center gap-x-1.5 rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50 focus:relative focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                                             >
                                                 <MagnifyingGlassIcon
@@ -94,15 +95,15 @@
                                             >ފުރިހަމަ ނަން</label
                                         >
                                         <div class="mt-2">
-                                            <input
-                                                type="text"
+                                            <ThaanaInput
+                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                                 name="name"
                                                 id="name"
                                                 v-model="person.name"
+                                                :value="person.name"
                                                 :disabled="
                                                     props.id && index === 0
                                                 "
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
                                         <div
@@ -134,7 +135,9 @@
                                             <input
                                                 id="contact_no"
                                                 name="contact_no"
-                                                type="contact_no"
+                                                type="text"
+                                                pattern="\d*"
+                                                maxlength="7"
                                                 v-model="person.contact_no"
                                                 :disabled="
                                                     props.id && index === 0
@@ -165,11 +168,12 @@
                                             >ދާއިމީ އެޑްރެސް</label
                                         >
                                         <div class="mt-2">
-                                            <input
+                                            <ThaanaInput
                                                 type="text"
                                                 name="address"
                                                 id="address"
                                                 v-model="person.address"
+                                                :value="person.address"
                                                 :disabled="
                                                     props.id && index === 0
                                                 "
@@ -260,7 +264,7 @@
                                             >ގޭގެ ނަން</label
                                         >
                                         <div class="mt-2">
-                                            <input
+                                            <ThaanaInput
                                                 type="text"
                                                 name="name"
                                                 id="name"
@@ -363,8 +367,9 @@
 import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
 import { onMounted } from "vue";
 import { DialogPanel, TransitionChild } from "@headlessui/vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
+import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
 
 const props = defineProps({
     errors: {
@@ -452,6 +457,26 @@ const fetchProperty = async () => {
         form.name = data.name;
         form.registration_no = data.registration_no;
         form.responsible_persons = data.responsible_persons;
+    } catch (error) {
+        console.error("Error fetching companies", error);
+    }
+};
+
+const searchPerson = async (index) => {
+    try {
+        const response = await fetch(
+            route("people.search", {
+                nid: form.responsible_persons[index].national_id,
+            })
+        );
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        form.responsible_persons[index].national_id = data.national_id;
+        form.responsible_persons[index].name = data.name;
+        form.responsible_persons[index].address = "ހެލޯވާރލްޑް";
+        form.responsible_persons[index].contact_no = data.contact_no;
     } catch (error) {
         console.error("Error fetching companies", error);
     }
