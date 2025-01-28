@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Payable;
 use Carbon\Carbon;
+use Illuminate\Http\Response;
+use Symfony\Component\Uid\Ulid;
 
 class PaymentController extends Controller
 {
@@ -22,7 +24,14 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        return Payment::create($request->validated());
+        collect($request->validated())->map(function ($item) {
+            Payment::create([
+                ...$item,
+                'state' => 'paid'
+            ]);
+        });
+
+        return response()->json('Payments created success', Response::HTTP_CREATED);
     }
 
     /**
