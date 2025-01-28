@@ -85,6 +85,11 @@ class PayableController extends Controller
             ->whereDate('billed_period', '<', $end_date)
             ->paginate();
 
+        $payables->appends([
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ]);
+
         return Inertia::render('Payable/Reports', $payables);
     }
 }
