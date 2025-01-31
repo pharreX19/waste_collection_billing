@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Auth\OTPForLoginAction;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -10,9 +11,14 @@ use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Constant\Role as ConstantRole;
+use App\Constants\Role as ConstantsRole;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Requests\OtpForLoginRequest;
 use App\Http\Requests\PublicLoginRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 
 class AuthController extends Controller
 {
@@ -23,33 +29,58 @@ class AuthController extends Controller
      */
     public function getOtpForLogin(OtpForLoginRequest $request)
     {
-        return response()->json((new Log));
+        $user = (new OTPForLoginAction())->handle($request->all());
+        return Inertia::render('Auth/Login', [
+            'name' => $user->name,
+            'property_id' => $user->property_id
+        ]);
     }
 
 
-    public function publicLogin(PublicLoginRequest $request)
+    public function login(OtpForLoginRequest $request)
     {
-        try {
-            $credentials = $request->only('name', 'otp');
 
-            if (Auth::attempt($credentials) && Auth::user()->is_active) {
-                return redirect('/');
-            }
+        // TODO: Verify whether the passed property id belongs to user
 
-            return redirect('/login')->withErrors(['error' => $this->errorMessage]);
-        } catch (\Exception $e) {
-            return redirect('/login')->withErrors(['error' => $this->errorMessage]);
+        $user = User::where('name', $request->name)
+            ->where('role_id', ConstantsRole::USER)
+            ->where('is_active', 1)
+            ->first();
+
+
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'name' => 'ތިޔަ ހޯއްދަވާ ޔޫޒަރ އެއް ނުފެނުނު'
+            ]);
         }
+
+        if (!Hash::check($request->otp, $user->otp) && $user->otp_expires_at > Carbon::now()) {
+            throw ValidationException::withMessages(['otp' => 'އޯޓީޕީ ރަނގަޅެއް ނޫން']);
+        }
+
+
+        Auth::login($user);
+
+        $user->otp = null;
+        $user->otp_expires_at = null;
+        $user->otp_verified_at = now();
+
+        $user->save();
+
+
+        return to_route('payables.index', [
+            'property' => $request->property_id
+        ]);
     }
 
 
-    public function login(LoginRequest $request)
+    public function adminLogin(LoginRequest $request)
     {
         try {
             $credentials = $request->only('email', 'password');
             $remember = $request->has('remember');
 
-            if (Auth::attempt($credentials, $remember) && Auth::user()->is_active && Auth::user()->role_id == ConstantRole::OFFICER) {
+            if (Auth::attempt($credentials, $remember) && Auth::user()->is_active && Auth::user()->role_id == ConstantsRole::OFFICER) {
                 return redirect('/');
             }
 

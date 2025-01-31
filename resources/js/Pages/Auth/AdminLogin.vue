@@ -11,7 +11,7 @@
             <h2
                 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
             >
-                ބިލަށް ފައިސާ ދެއްކެވުމަށް ލޮގިން ކުރައްވާ
+                އެކައުންޓަށް ލޮގިން ކުރައްވާ
             </h2>
         </div>
 
@@ -20,51 +20,75 @@
                 <form class="space-y-6" @submit.prevent="login">
                     <div>
                         <label
-                            for="name"
+                            for="email"
                             class="block text-sm font-medium leading-6 text-gray-900"
-                            >ގޭގެ ނަން ނުވަތަ ރަޖިސްޓްރީ ކޯޑް</label
+                            >އީމެއިލް އެޑްރެސް</label
                         >
                         <div class="mt-2">
                             <input
                                 dir="ltr"
-                                id="name"
-                                name="name"
-                                type="name"
-                                autocomplete="name"
-                                v-model="form.name"
+                                id="email"
+                                name="email"
+                                type="email"
+                                autocomplete="email"
+                                v-model="form.email"
                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                         <div
                             class="text-xs text-red-600 mt-1"
-                            v-if="errors.name"
+                            v-if="errors.email"
                         >
-                            {{ errors.name }}
+                            {{ errors.email }}
                         </div>
                     </div>
 
                     <div>
                         <label
-                            for="contact_no"
+                            for="password"
                             class="block text-sm font-medium leading-6 text-gray-900"
-                            >މޯބައިލް ނަންބަރ</label
+                            >ޕާސްވޯޑް</label
                         >
                         <div class="mt-2">
                             <input
                                 dir="ltr"
-                                id="contact_no"
-                                name="contact_no"
-                                type="contact_no"
-                                autocomplete="current-contact_no"
-                                v-model="form.contact_no"
+                                id="password"
+                                name="password"
+                                type="password"
+                                autocomplete="current-password"
+                                v-model="form.password"
                                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                         <div
                             class="text-xs text-red-600 mt-1"
-                            v-if="errors.contact_no"
+                            v-if="errors.password"
                         >
-                            {{ errors.contact_no }}
+                            {{ errors.password }}
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input
+                                id="remember-me"
+                                name="remember-me"
+                                type="checkbox"
+                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            />
+                            <label
+                                for="remember-me"
+                                class="mr-3 block text-sm leading-6 text-gray-900"
+                                >ލޮގިން ކުރަމަށްފަހު ބަހައްޓަވާ</label
+                            >
+                        </div>
+
+                        <div class="text-sm leading-6">
+                            <a
+                                href="#"
+                                class="font-semibold text-indigo-600 hover:text-indigo-500"
+                                >ޕާސްވާޑް ހަނދާނެއްނެތް</a
+                            >
                         </div>
                     </div>
 
@@ -93,17 +117,17 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 
 const form = useForm({
-    name: "",
-    contact_no: "",
+    email: "",
+    password: "",
 });
 
 const errors = ref({
-    name: null,
-    contact_no: null,
+    email: null,
+    password: null,
 });
 
 const login = () => {
-    form.post(route("auth.login"), {
+    form.post(route("auth.admin-login"), {
         onError: (errorMessages) => {
             errors.value = errorMessages;
         },

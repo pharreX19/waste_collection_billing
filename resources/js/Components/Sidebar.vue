@@ -149,7 +149,7 @@ import { Squares2X2Icon } from "@heroicons/vue/24/outline";
 import { CurrencyEuroIcon } from "@heroicons/vue/24/outline";
 import { ChartPieIcon, HomeIcon } from "@heroicons/vue/24/outline";
 import { Link, usePage } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const page = usePage();
@@ -159,7 +159,7 @@ const userNavigation = [
     { name: "ލޮގް އައުޓް", href: route("auth.logout"), method: "POST" },
 ];
 
-const navigation = [
+const navigation = reactive([
     { name: "ޑޭޝްބޯޑް", href: "/", icon: Squares2X2Icon, current: true },
     {
         name: "ގޭބިސީ ރަޖިސްޓްރީ",
@@ -173,32 +173,25 @@ const navigation = [
         icon: CurrencyEuroIcon,
         current: false,
     },
-
-    // {
-    //     name: "Projects",
-    //     icon: FolderIcon,
-    //     current: false,
-    //     children: [
-    //         { name: "GraphQL API", href: "#" },
-    //         { name: "iOS App", href: "#" },
-    //         { name: "Android App", href: "#" },
-    //         { name: "New Customer Portal", href: "#" },
-    //     ],
-    // },
-    // { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-    // {
-    //     name: "Documents",
-    //     href: "#",
-    //     icon: DocumentDuplicateIcon,
-    //     current: false,
-    // },
     {
         name: "ރިޕޯރޓް",
         href: route("payables.reports"),
         icon: ChartPieIcon,
         current: false,
     },
-];
+]);
+
+onMounted(() => {
+    if (page.props.auth.user.role_id === 1) {
+        navigation.splice(0);
+        navigation.push({
+            name: "ތަފްޞީލު",
+            href: "",
+            icon: CurrencyEuroIcon,
+            current: true,
+        });
+    }
+});
 
 const isActive = (href) => {
     const currentPath = page.url;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Constant;
+namespace App\Constants;
 
-use App\Constant\Constant;
+use App\Constants\Constant;
 
 class Role extends Constant
 {

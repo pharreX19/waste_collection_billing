@@ -23,7 +23,19 @@ class OtpForLoginRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'mobile_no' => ['required', 'numeric', 'regex:/\d{7}$/']
+            'contact_no' => ['required', 'numeric', 'regex:/\d{7}$/']
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'ތިބޭފުޅާގެ ގޭގެ ނަން ނުވަތަ ރަޖިސްޓްރީ ކޯޑް ލިޔުއްވާ',
+            'contact_no.required' => 'ތިބޭފުޅާގެ ފޯން ނަންބަރ ލިޔުއްވާ',
+
+            'name.string' => 'ގޭގެ ނަން ނުވަތަ ރަޖިސްޓްރޭޝަން ކޯޑް ރަނގަޅެއްނޫން',
+            'contact_no.required' => 'ފޯން ނަންބަރ ރަނގަޅެއް ނޫން',
         ];
     }
 }
