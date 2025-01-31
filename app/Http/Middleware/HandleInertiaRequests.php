@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
                 'data' => fn() => $request->session()->get('data')
             ],
             'auth.user' => fn() => $request->user()
-                ? $request->user()->only('email')
+                ? $request->user()->only('email', 'name')
                 : null,
             // 'role' =>
             // fn() => $request->user()

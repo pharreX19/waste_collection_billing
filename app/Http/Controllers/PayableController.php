@@ -92,4 +92,13 @@ class PayableController extends Controller
 
         return Inertia::render('Payable/Reports', $payables);
     }
+
+
+    public function print(Payable $payable)
+    {
+        $payable->load('property', 'payments');
+        return Inertia::render('Payment/Print', [
+            'payable' => $payable
+        ]);
+    }
 }

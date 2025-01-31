@@ -5,10 +5,7 @@
                 <h1 class="text-base font-semibold text-gray-900">
                     ގޭބިސީ ރަޖިސްޓްރީ
                 </h1>
-                <p class="mt-2 text-sm text-gray-700">
-                    A list of all the users in your account including their
-                    name, title, email and role.
-                </p>
+                <p class="mt-2 text-sm text-gray-700"></p>
             </div>
             <NewProperty />
         </div>

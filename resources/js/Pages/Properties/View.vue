@@ -23,9 +23,18 @@
                         <div class="flex-none self-end px-6 pt-4">
                             <dt class="sr-only">Status</dt>
                             <dd
-                                class="rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-600 ring-1 ring-inset ring-red-600/20"
+                                class="rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
+                                :class="[
+                                    overdue_amount > 0
+                                        ? 'text-red-600 bg-red-50 ring-red-600/20'
+                                        : 'text-green-600 bg-green-50 ring-green-600/20',
+                                ]"
                             >
-                                މުއްދަތުހަމަވެފައި
+                                {{
+                                    overdue_amount > 0
+                                        ? "މުއްދަތުހަމަވެފައި"
+                                        : "ފައިސާ ދައްކާފައި"
+                                }}
                             </dd>
                         </div>
                         <div
@@ -185,17 +194,25 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                <BanknotesIcon
-                                    class="h-6 w-5 text-green-400 mx-auto hover:text-green-600"
-                                    aria-hidden="true"
-                                />
+                                <Link
+                                    v-if="item.payments.length > 0"
+                                    :href="
+                                        route('payables.print', {
+                                            payable: item.id,
+                                        })
+                                    "
+                                >
+                                    <BanknotesIcon
+                                        class="h-6 w-5 text-green-400 mx-auto hover:text-green-600"
+                                        aria-hidden="true"
+                                /></Link>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="lg:col-start-3" v-if="payments">
+            <div class="lg:col-start-3" v-if="payments?.length > 0">
                 <h2 class="text-sm/6 font-semibold text-gray-900">
                     ދެއްކި ފައިސާގެ ތަފްޞީލް
                 </h2>
@@ -247,10 +264,10 @@ import {
 } from "@heroicons/vue/20/solid";
 import YearSelector from "../../Components/YearSelector.vue";
 import { BanknotesIcon } from "@heroicons/vue/24/outline";
-import { usePage } from "@inertiajs/vue3";
-import { computed, onMounted, ref } from "vue";
+import { ref } from "vue";
 import dayjs from "../../utils/dayjs";
 import Create from "../Payment/Create.vue";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     payables: {
@@ -279,6 +296,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+console.log("====", props.name);
 
 const payments = ref(null);
 const selectedPayable = ref(null);
