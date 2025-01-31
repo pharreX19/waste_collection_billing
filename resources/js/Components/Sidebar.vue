@@ -128,7 +128,7 @@
                                         active
                                             ? 'bg-gray-100 outline-none'
                                             : '',
-                                        'block px-4 py-2 text-sm text-gray-700',
+                                        'block w-full text-right px-4 py-2 text-sm text-gray-700',
                                     ]"
                                     >{{ item.name }}</Link
                                 >

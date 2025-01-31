@@ -47,20 +47,22 @@ class PropertyTableSeeder extends Seeder
 
                 $houseHoldCategory = PropertyCategory::where('name', 'like', 'Residential - Occupied')->value('id');
 
-                $property = Property::create([
-                    'name' => $line[1],
-                    'registration_no' => $line[2],
-                    'property_category_id' => $houseHoldCategory,
-                    'registration_date' => Carbon::now(),
-                    'registration_code' => $line[2] . "_" . fake()->countryCode(),
-                    'owner_id' => $person->id,
-                ]);
+                Property::withoutEvents(function () use ($line, $houseHoldCategory, $person) {
+                    $property =  Property::create([
+                        'name' => $line[1],
+                        'registration_no' => $line[2],
+                        'property_category_id' => $houseHoldCategory,
+                        'registration_date' => Carbon::now(),
+                        'registration_code' => $line[2] . "_" . fake()->countryCode(),
+                        'owner_id' => $person->id,
+                    ]);
 
-                PersonProperty::create([
-                    'id' => Ulid::generate(),
-                    'property_id' => $property->id,
-                    'responsible_person_id' => $person->id
-                ]);
+                    PersonProperty::create([
+                        'id' => Ulid::generate(),
+                        'property_id' => $property->id,
+                        'responsible_person_id' => $person->id
+                    ]);
+                });
             }
         }
     }

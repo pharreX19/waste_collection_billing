@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Role;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -17,7 +18,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('contact_no')->unique()->nullable();
+            $table->string('otp')->nullable();
+            $table->string('otp_expires_at')->nullable();
+            $table->string('otp_verified_at')->nullable();
             $table->tinyInteger('is_active')->default(1);
+            $table->foreignIdFor(Role::class);
             $table->rememberToken();
             $table->timestamps();
         });
