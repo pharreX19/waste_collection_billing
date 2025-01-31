@@ -60,8 +60,8 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                             <tr
-                                v-for="person in data"
-                                :key="person.email"
+                                v-for="property in data"
+                                :key="property.email"
                                 class="cursor-pointer hover:bg-gray-50"
                                 @click="handleClick"
                             >
@@ -72,7 +72,7 @@
                                         <div class="size-11 shrink-0">
                                             <!-- <img
                                                 class="size-11 rounded-full"
-                                                :src="person.image"
+                                                :src="property.image"
                                                 alt=""
                                             /> -->
                                             <template>
@@ -96,10 +96,10 @@
                                             <div
                                                 class="font-medium text-gray-900"
                                             >
-                                                {{ person.name }}
+                                                {{ property.name }}
                                             </div>
                                             <div class="mt-1 text-gray-500">
-                                                {{ person.registration_no }}
+                                                {{ property.registration_no }}
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                         class="flex items-center text-gray-900"
                                         v-for="(
                                             rp, index
-                                        ) in person.responsible_persons"
+                                        ) in property.responsible_persons"
                                     >
                                         <span
                                             :class="[
@@ -126,7 +126,7 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
                                 >
-                                    {{ person.category.name }}
+                                    {{ property.category.name }}
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500"
@@ -134,16 +134,16 @@
                                     <!-- <span
                                         class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
                                         >{{
-                                            person.is_active
+                                            property.is_active
                                                 ? "Active"
                                                 : "Inactive"
                                         }}</span
                                     > -->
                                     <Switch
                                         dir="ltr"
-                                        @click="togglePropertyState(person)"
+                                        @click="togglePropertyState(property)"
                                         :class="[
-                                            person.is_active
+                                            property.is_active
                                                 ? 'bg-indigo-600'
                                                 : 'bg-gray-200',
                                             'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
@@ -152,7 +152,7 @@
                                         <span class="sr-only">Use setting</span>
                                         <span
                                             :class="[
-                                                person.is_active
+                                                property.is_active
                                                     ? 'translate-x-5'
                                                     : 'translate-x-0',
                                                 'pointer-events-none relative inline-block size-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
@@ -160,7 +160,7 @@
                                         >
                                             <span
                                                 :class="[
-                                                    person.is_active
+                                                    property.is_active
                                                         ? 'opacity-0 duration-100 ease-out'
                                                         : 'opacity-100 duration-200 ease-in',
                                                     'absolute inset-0 flex size-full items-center justify-center transition-opacity',
@@ -183,7 +183,7 @@
                                             </span>
                                             <span
                                                 :class="[
-                                                    person.is_active
+                                                    property.is_active
                                                         ? 'opacity-100 duration-200 ease-in'
                                                         : 'opacity-0 duration-100 ease-out',
                                                     'absolute inset-0 flex size-full items-center justify-center transition-opacity',
@@ -207,16 +207,16 @@
                                     class="whitespace-nowrap px-3 py-5 text-sm text-gray-500 text-right"
                                 >
                                     {{
-                                        dayjs(person.registration_date).format(
-                                            "DD MMMM YYYY"
-                                        )
+                                        dayjs(
+                                            property.registration_date
+                                        ).format("DD MMMM YYYY")
                                     }}
                                 </td>
                                 <td
                                     class="flex justify-around relative whitespace-nowrap py-5 text-right text-sm font-medium sm:pr-0"
                                 >
-                                    <NewProperty :id="person.id" />
-                                    <ConfirmDelete />
+                                    <NewProperty :id="property.id" />
+                                    <ConfirmDelete :property_id="property.id" />
                                 </td>
                             </tr>
                         </tbody>

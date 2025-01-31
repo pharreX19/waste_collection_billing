@@ -275,7 +275,7 @@ const props = defineProps({
         required: true,
     },
     overdue_amount: {
-        type: String,
+        type: Number,
         required: false,
         default: "0",
     },

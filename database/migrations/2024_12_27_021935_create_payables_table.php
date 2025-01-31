@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payables', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('property_id')->constrained();
+            $table->foreignUlid('property_category_id')->constrained();
             $table->string('reference_no');
             $table->string('billed_period')->nullable();
             $table->datetime('due_date');

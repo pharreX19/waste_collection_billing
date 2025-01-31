@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUlid('property_category_id')->constrained();
             $table->foreignUlid('owner_id')->nullable()->references('id')->on('people')->nullOnDelete();
             $table->string('name');
-            $table->string('address')->nullable();
+            // $table->string('address')->nullable();
             $table->string('registration_no');
             $table->string('registration_code')->unique();
             $table->timestamp('registration_date')->default(now());

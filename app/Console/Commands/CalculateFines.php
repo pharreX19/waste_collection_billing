@@ -33,6 +33,7 @@ class CalculateFines extends Command
             ->where('state', 'pending')
             ->where('due_date', '<', Carbon::now())
             ->whereDoesntHave('payments')
+            ->where('fine', '=', 0)
             ->get();
 
 

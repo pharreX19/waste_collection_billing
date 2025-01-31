@@ -1,17 +1,18 @@
 <?php
 
+use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Middleware\isAdmin;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PayableController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PersonController;
-use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\PropertyController;
-use App\Http\Middleware\isAdmin;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PropertyCategoryController;
 
 Route::get('login', function () {
     return Inertia::render('Auth/Login');
@@ -39,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
 
-    Route::middleware([isAdmin::class])->group(function () {
+    Route::middleware([])->group(function () {
         Route::get('properties/search', function () {
             return Inertia::render('Properties/Search');
         })->name('properties.search');
@@ -56,6 +57,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('payables/{payable}/print', [PayableController::class, 'print'])->name('payables.print');
 
         Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
+
+        Route::get('generate-payables/{date}', function (String $date) {
+            Artisan::call('payables:generate', [
+                'date' => $date,
+            ]);
+        })->name('payables.generate');
+
+
+        Route::get('generate-fines', function () {
+            Artisan::call('payables:calculate-fines');
+        })->name('fines.generate');
     });
 
     // Route::get('properties/{property}/payments', [PaymentController::class, 'index'])->name('payments.index');

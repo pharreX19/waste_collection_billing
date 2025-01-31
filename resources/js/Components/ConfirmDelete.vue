@@ -99,7 +99,7 @@ import { toast } from "vue3-toastify";
 
 const props = defineProps({
     property_id: {
-        type: Number,
+        type: String,
         required: true,
     },
 });

@@ -17,7 +17,7 @@ class GenerateMonthlyPayables extends Command
      *
      * @var string
      */
-    protected $signature = 'payables:generate';
+    protected $signature = 'payables:generate {date? : Start of the month}';
 
     /**
      * The console command description.
@@ -33,8 +33,9 @@ class GenerateMonthlyPayables extends Command
      */
     public function handle()
     {
-        $currentMonth = Carbon::now()->startOfMonth();
-        $dueDate = Carbon::now()->startOfMonth()->addDays(40);
+        $date = Carbon::parse($this->argument('date')) ?? Carbon::now();
+        $currentMonth = $date->startOfMonth();
+        $dueDate = $currentMonth->copy()->addDays(40);
         $households = Property::with('category')->get();
 
         $payablesCreated = 0;
@@ -47,6 +48,7 @@ class GenerateMonthlyPayables extends Command
             if (!$existingPayable) {
                 Payable::create([
                     'property_id' => $household->id,
+                    'property_category_id' => $household->property_category_id,
                     'billed_period' => $currentMonth,
                     'reference_no' => (new ReferenceNoGeneratorService())->generate(),
                     'due_date' => $dueDate,

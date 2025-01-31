@@ -19,6 +19,7 @@ class Payable extends Model
 
     protected $fillable = [
         'property_id',
+        'property_category_id',
         'reference_no',
         'billed_period',
         'due_date',
