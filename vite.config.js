@@ -10,6 +10,9 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: "0.0.0.0",
+    },
     resolve: {
         alias: {
             "@/images": "/resources/images",
