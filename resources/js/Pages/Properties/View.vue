@@ -189,7 +189,11 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.hours }}
+                                {{
+                                    dayjs(item.updated_at).format(
+                                        "DD MMMM YYYY"
+                                    )
+                                }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
@@ -223,9 +227,9 @@
                         class="relative flex gap-x-4"
                     >
                         <div
-                            class="absolute left-0 top-0 flex w-6 justify-center text-xs/5 text-gray-500"
+                            class="absolute left-0 top-0 flex w-20 justify-center text-xs/5 text-gray-500"
                         >
-                            {{ payment.state }}
+                            {{ stateMappings[payment.state] }}
                         </div>
                         <div
                             class="relative flex size-6 flex-none items-center justify-center bg-white"
@@ -268,6 +272,7 @@ import { ref } from "vue";
 import dayjs from "../../utils/dayjs";
 import Create from "../Payment/Create.vue";
 import { Link } from "@inertiajs/vue3";
+import { stateMappings } from "../../utils/stateMapping";
 
 const props = defineProps({
     payables: {
@@ -296,8 +301,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-console.log("====", props.name);
 
 const payments = ref(null);
 const selectedPayable = ref(null);

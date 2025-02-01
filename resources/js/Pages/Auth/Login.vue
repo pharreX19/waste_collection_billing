@@ -148,7 +148,6 @@ const errors = ref({
 const onSubmit = () => {
     // requestedOtp.value = true;
     if (props.name && props.property_id) {
-        console.log("coming here");
         login();
     } else {
         requestOtp();

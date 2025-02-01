@@ -454,7 +454,6 @@ const fetchProperty = async () => {
             throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log("====", data.name);
         form.property_category_id = data.property_category_id;
         form.name = data.name;
         form.registration_no = data.registration_no;

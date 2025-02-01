@@ -30,9 +30,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PropertyCategoryTableSeeder::class,
-            PropertyTableSeeder::class,
-            DhanaaluPropertyTableSeeder::class,
-            BusinessPropertyTableSeeder::class,
+            // PropertyTableSeeder::class,
+            // DhanaaluPropertyTableSeeder::class,
+            // BusinessPropertyTableSeeder::class,
         ]);
 
         DB::statement('ALTER TABLE people MODIFY contact_no varchar(255);');

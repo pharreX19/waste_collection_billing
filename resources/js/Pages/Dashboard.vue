@@ -159,8 +159,6 @@ onMounted(() => {
     const pastYearPaidStat =
         findStatForYear(props.paid, pastYear)?.total_amount || 0;
 
-    console.log(pastYearPropertyStat);
-
     stats[0].stat = currentYearPropertyStat + pastYearPropertyStat;
     stats[0].change = currentYearPropertyStat;
 

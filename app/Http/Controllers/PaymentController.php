@@ -27,7 +27,8 @@ class PaymentController extends Controller
         collect($request->validated())->map(function ($item) {
             Payment::create([
                 ...$item,
-                'state' => 'paid'
+                'payment_date' => now(),
+                'state' => 'confirmed'
             ]);
         });
 
