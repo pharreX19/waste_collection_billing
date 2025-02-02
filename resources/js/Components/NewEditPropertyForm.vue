@@ -17,6 +17,97 @@
                 >
                     <form @submit.prevent="onSubmit">
                         <div class="space-y-12 text-right">
+                            <div class="border-b border-gray-900/10 pb-12">
+                                <h2
+                                    class="text-base/7 font-semibold text-gray-900"
+                                >
+                                    ގޭބިސީގެ މަޢުލޫމާތު
+                                </h2>
+
+                                <div
+                                    class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
+                                >
+                                    <div class="sm:col-span-4">
+                                        <label
+                                            for="name"
+                                            class="block text-sm/6 font-medium text-gray-900"
+                                            >ގޭގެ ނަން</label
+                                        >
+                                        <div class="mt-2">
+                                            <ThaanaInput
+                                                type="text"
+                                                name="name"
+                                                id="name"
+                                                v-model="form.name"
+                                                :value="form.name"
+                                                :disabled="props.id"
+                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-xs text-red-600 mt-1"
+                                            v-if="
+                                                errors.name
+                                                // && errors.name.indexOf(
+                                                // 'property name'
+                                                // ) > 0
+                                            "
+                                        >
+                                            {{ errors.name }}
+                                        </div>
+                                    </div>
+
+                                    <div class="sm:col-span-4">
+                                        <label
+                                            for="registration_no"
+                                            class="block text-sm/6 font-medium text-gray-900"
+                                            >ރަޖިސްޓްރޭޝަން ނަންބަރ</label
+                                        >
+                                        <div class="mt-2">
+                                            <input
+                                                type="text"
+                                                name="registration_no"
+                                                id="registration_no"
+                                                v-model="form.registration_no"
+                                                :disabled="props.id"
+                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-xs text-red-600 mt-1"
+                                            v-if="errors.registration_no"
+                                        >
+                                            {{ errors.registration_no }}
+                                        </div>
+                                    </div>
+
+                                    <div class="sm:col-span-4">
+                                        <label
+                                            for="property_category_id"
+                                            class="block text-sm/6 font-medium text-gray-900"
+                                            >ގޭގެ ކެޓަގަރީ</label
+                                        >
+                                        <div class="mt-2">
+                                            <select
+                                                id="property_category_id"
+                                                name="property_category_id"
+                                                v-model="
+                                                    form.property_category_id
+                                                "
+                                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            >
+                                                <option
+                                                    v-for="category in categories"
+                                                    :value="category.id"
+                                                >
+                                                    {{ category.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div
                                 class="border-b border-gray-900/10 pb-12"
                                 v-for="(
@@ -37,7 +128,13 @@
                                 <div
                                     class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
                                 >
-                                    <div class="sm:col-span-4">
+                                    <div
+                                        class="sm:col-span-4"
+                                        v-if="
+                                            !isGovernmentProperty ||
+                                            (isGovernmentProperty && index > 0)
+                                        "
+                                    >
                                         <label
                                             for="national_id"
                                             class="block text-sm/6 font-medium text-gray-900"
@@ -87,6 +184,7 @@
                                             }}
                                         </div>
                                     </div>
+                                    <br v-if="!isGovernmentProperty" />
 
                                     <div class="sm:col-span-4">
                                         <label
@@ -161,7 +259,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="sm:col-span-4">
+                                    <!-- <div class="sm:col-span-4">
                                         <label
                                             for="address"
                                             class="block text-sm/6 font-medium text-gray-900"
@@ -194,7 +292,7 @@
                                                 ]
                                             }}
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="flex gap-3 mt-3" v-if="index === 0">
@@ -246,97 +344,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="border-b border-gray-900/10 pb-12">
-                                <h2
-                                    class="text-base/7 font-semibold text-gray-900"
-                                >
-                                    ގޭބިސީގެ މަޢުލޫމާތު
-                                </h2>
-
-                                <div
-                                    class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
-                                >
-                                    <div class="sm:col-span-4">
-                                        <label
-                                            for="name"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ނަން</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                v-model="form.name"
-                                                :value="form.name"
-                                                :disabled="props.id"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="
-                                                errors.name &&
-                                                errors.name.indexOf(
-                                                    'property name'
-                                                ) > 0
-                                            "
-                                        >
-                                            {{ errors.name }}
-                                        </div>
-                                    </div>
-
-                                    <div class="sm:col-span-4">
-                                        <label
-                                            for="registration_no"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ރަޖިސްޓްރޭޝަން ނަންބަރ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="registration_no"
-                                                id="registration_no"
-                                                v-model="form.registration_no"
-                                                :disabled="props.id"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.registration_no"
-                                        >
-                                            {{ errors.registration_no }}
-                                        </div>
-                                    </div>
-
-                                    <div class="sm:col-span-4">
-                                        <label
-                                            for="property_category_id"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ކެޓަގަރީ</label
-                                        >
-                                        <div class="mt-2">
-                                            <select
-                                                id="property_category_id"
-                                                name="property_category_id"
-                                                v-model="
-                                                    form.property_category_id
-                                                "
-                                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            >
-                                                <option
-                                                    v-for="category in categories"
-                                                    :value="category.id"
-                                                >
-                                                    {{ category.name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         <div
@@ -369,7 +376,7 @@ import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
 import { onMounted } from "vue";
 import { DialogPanel, TransitionChild } from "@headlessui/vue";
 import { router, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
 
 const props = defineProps({
@@ -397,8 +404,8 @@ const form = useForm({
             name: null,
             national_id: null,
             contact_no: null,
-            address: null,
-            island: "Eydhafushi",
+            // address: null,
+            // island: "Eydhafushi",
         },
     ],
 });
@@ -412,10 +419,14 @@ onMounted(() => {
 
 const onSubmit = function () {
     emit("submit:form", form);
+    if (!props.errors) {
+        form.reset();
+    }
 };
 
 const onCancel = function () {
     emit("cancel:form");
+    form.reset();
 };
 
 const addResponsiblePersons = (event) => {
@@ -424,13 +435,20 @@ const addResponsiblePersons = (event) => {
             name: null,
             national_id: null,
             contact_no: null,
-            address: null,
-            island: "Eydhafushi",
+            // address: null,
+            // island: "Eydhafushi",
         });
     } else {
         form.responsible_persons.pop();
     }
 };
+
+const isGovernmentProperty = computed(
+    () =>
+        categories.value.find(
+            (category) => category.id === form.property_category_id
+        )?.is_government === 1 || false
+);
 
 const fetchPropertyCategories = async () => {
     try {
@@ -476,10 +494,9 @@ const searchPerson = async (index) => {
         const data = await response.json();
         form.responsible_persons[index].national_id = data.national_id;
         form.responsible_persons[index].name = data.name;
-        form.responsible_persons[index].address = "ހެލޯވާރލްޑް";
         form.responsible_persons[index].contact_no = data.contact_no;
     } catch (error) {
-        console.error("Error fetching companies", error);
+        console.error("Error fetching person ", error);
     }
 };
 </script>

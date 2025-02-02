@@ -41,8 +41,8 @@ class PropertyTableSeeder extends Seeder
                     'name' => $responsible_person_name,
                     'contact_no' => '',
                     'national_id' => '',
-                    'address' => $responsible_person_address,
-                    'island' => 'B.Eydhafushi'
+                    // 'address' => $responsible_person_address,
+                    // 'island' => 'B.Eydhafushi'
                 ]);
 
                 $houseHoldCategory = PropertyCategory::where('name', 'like', 'Residential - Occupied')->value('id');
