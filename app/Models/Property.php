@@ -27,7 +27,8 @@ class Property extends Model
         'property_category_id',
         // 'address',
         'registration_code',
-        'is_active'
+        'is_active',
+        'owner_id'
     ];
 
 
