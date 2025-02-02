@@ -36,7 +36,7 @@ class GenerateMonthlyPayables extends Command
         $date = Carbon::parse($this->argument('date')) ?? Carbon::now();
         $currentMonth = $date->startOfMonth();
         $dueDate = $currentMonth->copy()->addDays(40);
-        $households = Property::with('category')->get();
+        $households = Property::with('category')->where('is_active', 1)->get();
 
         $payablesCreated = 0;
 
