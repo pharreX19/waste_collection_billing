@@ -14,6 +14,14 @@
                 </select>
             </div>
 
+            <div class="w-80">
+                <AutoComplete
+                    v-model="form.property"
+                    :value="form.property.name"
+                    placeholder="ގޭގެ ނަން"
+                />
+            </div>
+
             <div v-if="form.selectedOption.id === 3">
                 <input
                     id="start"
@@ -226,7 +234,7 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                 >
-                                    {{ payable.state }}
+                                    {{ stateMappings[payable.state] }}
                                 </td>
                             </tr>
                         </tbody>
@@ -243,8 +251,9 @@ import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import dayjs from "../../utils/dayjs";
 import Pagination from "../../Components/Pagination.vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import { router } from "@inertiajs/vue3";
+import AutoComplete from "../../Components/AutoComplete.vue";
 import { computed, onMounted } from "vue";
+import { payableStates, stateMappings } from "../../utils/stateMapping";
 
 const props = defineProps({
     data: {
@@ -266,6 +275,9 @@ const form = useForm({
     selectedOption: options[0],
     start_date: null,
     end_date: null,
+    property: {
+        name: null,
+    },
 });
 
 const currentDate = new Date();
@@ -278,6 +290,7 @@ const reportLink = computed(() => {
                 ? `${previousYear}-01-01`
                 : form.start_date,
         end_date: form.selectedOption.id == 3 ? form.end_date : "",
+        name: form.property.name,
     });
 });
 
@@ -286,6 +299,7 @@ onMounted(() => {
 
     const startDate = url.searchParams.get("start_date");
     const endDate = url.searchParams.get("end_date");
+    const name = url.searchParams.get("name");
 
     form.selectedOption =
         !startDate && !endDate
@@ -293,6 +307,8 @@ onMounted(() => {
             : startDate && endDate
             ? options[2]
             : options[1];
+
+    form.property.name = name;
 
     if (form.selectedOption.id == 3) {
         form.start_date = startDate;
