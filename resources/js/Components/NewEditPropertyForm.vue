@@ -349,20 +349,9 @@
                         <div
                             class="mt-6 flex items-center justify-start gap-x-6"
                         >
-                            <button
-                                @click="onCancel"
-                                type="button"
-                                class="text-sm/6 font-semibold text-gray-900"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                :disabled="form.processing"
-                                type="submit"
-                                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                Save
-                            </button>
+                            <Button @click="onCancel" variant="cancel" />
+
+                            <Button type="submit" variant="submit" />
                         </div>
                     </form>
                 </DialogPanel>
@@ -378,6 +367,7 @@ import { DialogPanel, TransitionChild } from "@headlessui/vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
+import Button from "./button.vue";
 
 const props = defineProps({
     errors: {

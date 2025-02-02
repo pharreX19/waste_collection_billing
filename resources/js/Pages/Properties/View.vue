@@ -12,12 +12,13 @@
                     <dl class="flex flex-wrap">
                         <div class="flex-auto pr-6 pt-6">
                             <dt class="text-sm/6 font-semibold text-gray-900">
-                                މިހާތަނަށް ދައްކަންޖެހޭ ޢަދަދު
+                                {{ selectedYear }}
+                                ވަނަ އަހަރު ދައްކަންޖެހޭ
                             </dt>
                             <dd
                                 class="mt-1 text-base font-semibold text-gray-900"
                             >
-                                {{ overdue_amount }}
+                                {{ NumberFormatter.format(dueAmount) }}
                             </dd>
                         </div>
                         <div class="flex-none self-end px-6 pt-4">
@@ -32,8 +33,10 @@
                             >
                                 {{
                                     overdue_amount > 0
-                                        ? "މުއްދަތުހަމަވެފައި"
-                                        : "ފައިސާ ދައްކާފައި"
+                                        ? NumberFormatter.format(
+                                              overdue_amount
+                                          ) + " މުއްދަތުހަމަވެފައި"
+                                        : "މުއްދަތުހަމަވެފައެއް ނެތް"
                                 }}
                             </dd>
                         </div>
@@ -166,17 +169,17 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.amount }}
+                                {{ NumberFormatter.format(item.amount) }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.fine }}
+                                {{ NumberFormatter.format(item.fine) }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                {{ item.grand_total }}
+                                {{ NumberFormatter.format(item.grand_total) }}
                             </td>
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
@@ -190,9 +193,13 @@
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
                                 {{
-                                    dayjs(item.updated_at).format(
-                                        "DD MMMM YYYY"
+                                    payableStates.completed.includes(
+                                        item.state.toLowerCase()
                                     )
+                                        ? dayjs(item.updated_at).format(
+                                              "DD MMMM YYYY"
+                                          )
+                                        : ""
                                 }}
                             </td>
                             <td
@@ -268,11 +275,12 @@ import {
 } from "@heroicons/vue/20/solid";
 import YearSelector from "../../Components/YearSelector.vue";
 import { BanknotesIcon } from "@heroicons/vue/24/outline";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import dayjs from "../../utils/dayjs";
 import Create from "../Payment/Create.vue";
 import { Link } from "@inertiajs/vue3";
-import { stateMappings } from "../../utils/stateMapping";
+import { payableStates, stateMappings } from "../../utils/stateMapping";
+import { NumberFormatter } from "../../utils/numberFormatter";
 
 const props = defineProps({
     payables: {
@@ -296,10 +304,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    payables: {
-        type: Array,
-        required: true,
-    },
+    // payables: {
+    //     type: Array,
+    //     required: true,
+    // },
 });
 
 const payments = ref(null);
@@ -313,6 +321,21 @@ const parts = pathname.split("/");
 const id = parts[2];
 const params = Object.fromEntries(url.searchParams.entries());
 selectedYear.value = params.year;
+
+const dueAmount = computed(() => {
+    return props.payables.reduce(
+        (acc, payable) => acc + parseFloat(payable.grand_total),
+        0
+    );
+});
+
+// const overDueAmount = computed(() => {
+//     return props.payables.reduce((acc, payable) => {
+//         return payable.due_date < new Date().toISOString().split("T")[0]
+//             ? acc + parseFloat(payable.grand_total)
+//             : acc;
+//     }, 0);
+// });
 
 const onPayableClick = (payable) => {
     selectedPayable.value = payable.id;

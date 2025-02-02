@@ -74,7 +74,6 @@ const handleModalOpen = () => {
 
 const onCancel = () => {
     open.value = false;
-    form.reset();
 };
 
 const onSubmit = (form) => {
