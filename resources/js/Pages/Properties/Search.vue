@@ -8,7 +8,10 @@
             ގޭބިސީ ހޯދާ
         </h2>
         <div class="mt-8 flex w-96 h-12">
-            <AutoComplete v-model="form.property" />
+            <AutoComplete
+                v-model="form.property"
+                placeholder="ގޭގެ ނަން ޖައްސަވާ"
+            />
         </div>
 
         <Button label="ތަފްޞީލް ދައްކާ" @click="onClick" variant="submit" />
@@ -30,9 +33,14 @@ const form = useForm({
 const onClick = () => {
     if (!form.property.id) return;
 
+    const id = form.property.id;
+    form.property = {
+        name: null,
+    };
+
     router.visit(
         route("payables.index", {
-            property: form.property.id,
+            property: id,
             year: new Date().getFullYear(),
         }),
         {

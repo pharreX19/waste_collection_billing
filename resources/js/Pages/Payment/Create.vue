@@ -6,7 +6,8 @@
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
             <span aria-hidden="true">&rarr;</span>
-            ފައިސާ ބަލައިގަތުން
+
+            {{ isOfficer ? "ފައިސާ ބަލައިގަތުން" : "ފައިސާ ދެއްކުން" }}
         </button>
     </div>
     <TransitionRoot as="template" :show="open">
@@ -23,22 +24,17 @@
                 <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
             </TransitionChild>
 
-            <NewPaymentForm
-                :errors="errors"
-                :id="id"
-                @submit:form="onSubmit"
-                @cancel:form="onCancel"
-            />
+            <NewPaymentForm :errors="errors" :id="id" @cancel:form="onCancel" />
         </Dialog>
     </TransitionRoot>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
-import NewEditPropertyForm from "../../Components/NewEditPropertyForm.vue";
-import { PencilIcon, PencilSquareIcon } from "@heroicons/vue/24/outline";
 import NewPaymentForm from "../../Components/NewPaymentForm.vue";
+import { usePage } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     isEdit: {
@@ -53,6 +49,7 @@ const props = defineProps({
     },
 });
 
+const page = usePage();
 const open = ref(false);
 const errors = ref({});
 
@@ -61,40 +58,21 @@ const handleModalOpen = () => {
 };
 
 const onCancel = () => {
+    router.visit(
+        route("payables.index", {
+            property: props.id,
+            year: new Date().getFullYear(),
+        }),
+        {
+            headers: {
+                Accept: "text/html",
+                "Content-type": "text/html",
+            },
+        }
+    );
+
     open.value = false;
 };
 
-const onSubmit = (form) => {
-    if (!props.id) {
-        createProperty(form);
-    } else {
-        updateProperty(form);
-    }
-};
-
-const createProperty = async (form) => {
-    form.post(route("properties.store"), {
-        preserveScroll: true,
-        onSuccess: () => {
-            form.reset();
-            open.value = false;
-        },
-        onError: (errorMessages) => {
-            errors.value = errorMessages;
-        },
-    });
-};
-
-const updateProperty = async (form) => {
-    form.put(route("properties.update", props.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            form.reset();
-            open.value = false;
-        },
-        onError: (errorMessages) => {
-            errors.value = errorMessages;
-        },
-    });
-};
+const isOfficer = computed(() => page.props.auth.user.role_id === 2);
 </script>

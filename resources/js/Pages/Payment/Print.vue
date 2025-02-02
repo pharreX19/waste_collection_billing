@@ -68,9 +68,9 @@
                 <div class="grid grid-cols-2 w-full text-smr">
                     <div class="col-start-2 text-center">
                         <p class="font-bold">ފައިސާ ބަލައިގަތް</p>
-                        <p class="text-base font-normal">
+                        <!-- <p class="text-base font-normal">
                             {{ page.props.auth.user.name }}
-                        </p>
+                        </p> -->
                     </div>
                 </div>
 
@@ -86,6 +86,7 @@
 import { onMounted } from "vue";
 import dayjs from "../../utils/dayjs";
 import { usePage } from "@inertiajs/vue3";
+import { router } from "@inertiajs/vue3";
 
 const page = usePage();
 
@@ -100,7 +101,26 @@ const emit = defineEmits(["cancel:form"]);
 
 onMounted(() => {
     window.addEventListener("afterprint", () => {
-        window.history.back();
+        const year = props.payable.billed_period.split("-")[0];
+
+        window.location.replace(
+            route("payables.index", {
+                property: props.payable.property_id,
+                year,
+            })
+        );
+        // router.visit(
+        //     route("payables.index", {
+        //         property: props.payable.property_id,
+        //         year: "2021",
+        //     }),
+        //     {
+        //         headers: {
+        //             Accept: "text/html",
+        //             "Content-type": "text/html",
+        //         },
+        //     }
+        // );
     });
     window.print();
 });

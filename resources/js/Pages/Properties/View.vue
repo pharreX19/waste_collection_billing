@@ -140,6 +140,7 @@
                                 ފައިސާ ދެއްކި ތާރީޚް
                             </th>
                             <th
+                                v-if="isOfficer"
                                 scope="col"
                                 class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
@@ -203,10 +204,11 @@
                                 }}
                             </td>
                             <td
+                                v-if="isOfficer"
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
                                 <Link
-                                    v-if="item.payments.length > 0"
+                                    v-if="item.payments?.length > 0"
                                     :href="
                                         route('payables.print', {
                                             payable: item.id,
@@ -278,7 +280,7 @@ import { BanknotesIcon } from "@heroicons/vue/24/outline";
 import { computed, ref } from "vue";
 import dayjs from "../../utils/dayjs";
 import Create from "../Payment/Create.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import { payableStates, stateMappings } from "../../utils/stateMapping";
 import { NumberFormatter } from "../../utils/numberFormatter";
 
@@ -288,7 +290,7 @@ const props = defineProps({
         required: true,
     },
     overdue_amount: {
-        type: Number,
+        type: String,
         required: false,
         default: "0",
     },
@@ -310,6 +312,8 @@ const props = defineProps({
     // },
 });
 
+const page = usePage();
+
 const payments = ref(null);
 const selectedPayable = ref(null);
 const selectedYear = ref(new Date().getFullYear());
@@ -323,10 +327,12 @@ const params = Object.fromEntries(url.searchParams.entries());
 selectedYear.value = params.year;
 
 const dueAmount = computed(() => {
-    return props.payables.reduce(
-        (acc, payable) => acc + parseFloat(payable.grand_total),
-        0
-    );
+    return props.payables.reduce((acc, payable) => {
+        return payable.due_date < new Date().toISOString().split("T")[0] &&
+            payableStates.pending.includes(payable.state.toLowerCase())
+            ? acc + parseFloat(payable.grand_total)
+            : acc;
+    }, 0);
 });
 
 // const overDueAmount = computed(() => {
@@ -341,4 +347,6 @@ const onPayableClick = (payable) => {
     selectedPayable.value = payable.id;
     payments.value = payable.payments;
 };
+
+const isOfficer = computed(() => page.props.auth.user.role_id === 2);
 </script>
