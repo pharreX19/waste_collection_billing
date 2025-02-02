@@ -15,7 +15,6 @@ class PersonCreateAction
             'national_id' => $data['national_id']
         ], [
             ...$data,
-            'island' => 'B.Eydhafushi',
         ]);
     }
 }

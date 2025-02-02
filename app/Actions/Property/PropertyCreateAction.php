@@ -28,7 +28,16 @@ class PropertyCreateAction
         $validator = Validator::make(
             $data,
             (new PropertyRequest())->rules(),
-            [],
+            [
+                'name.required' => 'ގޭބިސީގެ ނަން ލިޔުއްވާ',
+                'name.string' => 'ގޭބިސީގެ ނަމުގައި ހަމައެކަނި ތާނަ އަކުރު ލިޔުއްވާ',
+                'registration_no.required' => 'ގޭބިސީގެ ރަޖިސްޓްރޭޝަން ނަންބަރު ލިޔުއްވާ',
+                'registration_no.string' => 'ގޭބިސީގެ ރަޖިސްޓްރޭޝަން ނަންބަރުގައި ހަމައެކަނި ތާނަ އަކުރު ލިޔުއްވާ',
+                'property_category_id.required' => 'ގޭބިސީގެ ކެޓަގަރީ އިޚްތިޔާރު ކުރައްވާ',
+                'property_category_id.exists' => 'އިޚްތިޔާރުކުރެއްވި ގޭބިސީގެ ކެޓަގަރީ ރަނގަޅެއް ނޫން',
+                'owner_id.required' => 'ގޭބިސީގެ ޒިންމާދާރުވެރި ފަރާާތުގެ ނަން ލިޔުއްވާ',
+                'owner_id.exists' => 'އިޚްތިޔާރު ކުރެއްވި ޒިންމާދާރުވެރި ފަރާތް ރަނގަޅެއްނޫން',
+            ],
             [
                 'name' => 'property name'
             ]

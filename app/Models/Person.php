@@ -19,8 +19,8 @@ class Person extends Model
         'name',
         'national_id',
         'contact_no',
-        'address',
-        'island'
+        // 'address',
+        // 'island'
     ];
 
 
