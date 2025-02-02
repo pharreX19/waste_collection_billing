@@ -232,19 +232,8 @@
                         <div
                             class="mt-3 flex items-center justify-start gap-x-6"
                         >
-                            <button
-                                @click="onCancel"
-                                type="button"
-                                class="text-sm/6 font-semibold text-gray-900"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                Save
-                            </button>
+                            <Button variant="cancel" @click="onCancel" />
+                            <Button variant="submit" type="submit" />
                         </div>
                     </form>
                 </DialogPanel>
@@ -261,6 +250,7 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import dayjs from "../utils/dayjs";
 import { NumberFormatter } from "../utils/numberFormatter";
+import Button from "./button.vue";
 
 const props = defineProps({
     errors: {
