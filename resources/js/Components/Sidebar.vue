@@ -160,16 +160,21 @@ const userNavigation = [
 ];
 
 const navigation = reactive([
-    { name: "ޑޭޝްބޯޑް", href: "/", icon: Squares2X2Icon, current: true },
+    {
+        name: "ޑޭޝްބޯޑް",
+        href: route("dashboard"),
+        icon: Squares2X2Icon,
+        current: true,
+    },
     {
         name: "ގޭބިސީ ރަޖިސްޓްރީ",
-        href: "/properties",
+        href: route("properties.index"),
         icon: HomeIcon,
         current: false,
     },
     {
         name: "ފައިސާ ބަލައިގަތުން",
-        href: "/properties/search",
+        href: route("properties.search"),
         icon: CurrencyEuroIcon,
         current: false,
     },
@@ -195,16 +200,9 @@ onMounted(() => {
 
 const isActive = (href) => {
     const currentPath = page.url;
+    const url = new URL(href);
 
-    // if (href === "/") {
-    //     return currentPath === "/";
-    // } else if (href === "/properties") {
-    //     return currentPath === "/properties";
-    // } else if (href === "/properties/search") {
-    //     return currentPath === "/properties/search";
-    // }
-
-    return currentPath === href;
+    return currentPath.split("?")[0] === url.pathname;
 };
 
 const currentNavigation = computed(() => {
