@@ -15,7 +15,9 @@ class PayableController extends Controller
      */
     public function index(Request $request, Property $property)
     {
-        $overdue_amount = Payable::where('property_id', $property->id)->where('state', 'pending')->sum('amount');
+        $overdue_amount = Payable::where('property_id', $property->id)
+            ->where('due_date', '<', Carbon::now()->toDateString())
+            ->where('state', 'pending')->sum('amount');
 
         $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request) {
             $query->when($request->state, function ($q) use ($request) {
