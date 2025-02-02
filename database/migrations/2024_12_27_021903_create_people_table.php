@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('national_id')->unique()->nullable();
             $table->integer('contact_no');
-            $table->string('address')->nullable();
-            $table->string('island')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

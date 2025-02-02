@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->decimal('service_fee');
+            $table->tinyInteger('is_government')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
