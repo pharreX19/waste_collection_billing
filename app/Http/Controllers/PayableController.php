@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Role;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use App\Models\Payable;
@@ -31,7 +32,7 @@ class PayableController extends Controller
             });
         }]);
 
-        if ($request->isJson()) {
+        if ($request->isJson() && auth()->user()->role_id == Role::OFFICER) {
             return response()->json([
                 'property' => $property
             ]);
@@ -81,10 +82,16 @@ class PayableController extends Controller
     {
         $start_date = $request->query('start_date') ?? Carbon::now()->startOfYear()->toDateString();
         $end_date = $request->query('end_date') ?? Carbon::parse($request->query('start_date'))->addYear(1)->toDateString();
+        $name = $request->query('name') ?? null;
 
         $payables = Payable::with('property')
             ->whereDate('billed_period', '>=', $start_date)
             ->whereDate('billed_period', '<', $end_date)
+            ->when(isset($name), function ($query) use ($name) {
+                $query->whereHas('property', function ($q) use ($name) {
+                    $q->where('name', $name);
+                });
+            })
             ->paginate();
 
         $payables->appends([
