@@ -53,7 +53,7 @@ const props = defineProps({
     selectedYear: {
         type: String,
         required: false,
-        default: new Date().getFullYear(),
+        default: new Date().getFullYear().toString(),
     },
     propertyId: {
         type: String,
