@@ -7,12 +7,16 @@ use Symfony\Component\Uid\Ulid;
 use Illuminate\Support\Facades\Validator;
 use App\Actions\Person\PersonCreateAction;
 use App\Actions\Property\PropertyCreateAction;
+use App\Models\PropertyCategory;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 class PropertyAndResponsiblePeopleCreateService
 {
     public function execute($data)
     {
+        $this->validateNIdIfNotAGovernmentProperty($data);
+
         $validated_data = $this->validate($data);
         $owner = $this->createOwner($validated_data['responsible_persons'][0]);
 
@@ -21,7 +25,16 @@ class PropertyAndResponsiblePeopleCreateService
             'owner_id' => $owner->id
         ]);
 
-        return $this->createResponsiblePeople($validated_data['responsible_persons'], $property);
+        $responsible_people = [];
+        foreach ($validated_data['responsible_persons'] as $person) {
+            $responsible_person =  $this->createResponsiblePerson($person);
+            $responsible_people[] = $responsible_person;
+            $this->attachPersonToProperty($responsible_person, $property);
+        }
+
+        if (request()->method() === 'PUT') {
+            $this->removePreviousResponsiblePeople($responsible_people,  $property);
+        }
     }
 
     public function createOwner($data)
@@ -29,28 +42,24 @@ class PropertyAndResponsiblePeopleCreateService
         return (new PersonCreateAction())->execute($data);
     }
 
-    public function createResponsiblePeople($people, $property)
+    public function createResponsiblePerson($person)
     {
-        $responsible_people = [];
-        foreach ($people as $person) {
-            $responsible_person = (new PersonCreateAction())->execute($person);
+        return (new PersonCreateAction())->execute($person);
+    }
 
-            $responsible_people[] = PersonProperty::firstOrCreate(
-                [
-                    'responsible_person_id' => $responsible_person->id,
-                    'property_id' => $property->id
-                ],
-                [
-                    'id' => Ulid::generate(),
-                    'responsible_person_id' => $responsible_person->id,
-                    'property_id' => $property->id,
-                ]
-            );
-        }
-
-        if (request()->method() === 'PUT') {
-            $this->removePreviousResponsiblePeople($responsible_people,  $property);
-        }
+    public function attachPersonToProperty($responsible_person, $property)
+    {
+        return PersonProperty::firstOrCreate(
+            [
+                'responsible_person_id' => $responsible_person->id,
+                'property_id' => $property->id
+            ],
+            [
+                'id' => Ulid::generate(),
+                'responsible_person_id' => $responsible_person->id,
+                'property_id' => $property->id,
+            ]
+        );
     }
 
     function removePreviousResponsiblePeople($responsible_people, $property)
@@ -74,14 +83,15 @@ class PropertyAndResponsiblePeopleCreateService
         $validator = Validator::make($data, [
             'responsible_persons' => 'required|array',
             'responsible_persons.*.name' => 'required|string',
-            'responsible_persons.*.national_id' => 'required|regex:/^A\d{6}$/',
+            'responsible_persons.*.national_id' => 'nullable|string|regex:/^A\d{6}$/',
             'responsible_persons.*.contact_no' => 'required|regex:/^\d{7}$/',
-            'responsible_persons.*.address' => 'required|string'
-        ], [], [
-            'responsible_persons.*.national_id' => 'responsible person national id',
-            'responsible_persons.*.name' => 'responsible person name',
-            'responsible_persons.*.contact_no' => 'responsible person contact no',
-            'responsible_persons.*.address' => 'responsible person address'
+        ], [
+            'responsible_persons.*.name.required' => 'ފުރިހަމަ ނަން ލިޔުއްވާ',
+            'responsible_persons.*.name.string' => 'ނަމުގައި ތާނަ އަކުރު އެކަނި ބޭނުންކުރައްވާ',
+            'responsible_persons.*.national_id.string' => 'އައިޑި ކާޑް ނަންބަރު ރަނގަޅެއް ނޫން',
+            'responsible_persons.*.national_id.regex' => 'އައިޑި ކާޑް ނަންބަރު ރަނގަޅެއް ނޫން',
+            'responsible_persons.*.contact_no.required' => 'ފޯން ނަންބަރު ލިޔުއްވާ',
+            'responsible_persons.*.contact_no.regex' => 'ފޯން ނަންބަރު ރަނގަޅެއް ނޫން',
         ]);
 
         if ($validator->fails()) {
@@ -89,5 +99,44 @@ class PropertyAndResponsiblePeopleCreateService
         }
 
         return $validator->validated();
+    }
+
+
+    function validateNIdIfNotAGovernmentProperty($data)
+    {
+        $government_categories = Cache::remember('government_properties', 1440, function () {
+            return PropertyCategory::where('is_government', 1)->pluck('id')->toArray();
+        });
+
+        $rules = ['responsible_persons.*.national_id' => 'required|string|regex:/^A\d{6}$/'];
+
+        $messages = [
+            'responsible_persons.*.national_id.required' => 'އައިޑި ކާޑް ނަންބަރު ލިޔުއްވާ',
+            'responsible_persons.*.national_id.string' => 'އައިޑި ކާޑް ނަންބަރު ރަނގަޅެއް ނޫން',
+            'responsible_persons.*.national_id.regex' => 'އައިޑި ކާޑް ނަންބަރު ރަނގަޅެއް ނޫން',
+        ];
+
+
+        if (in_array($data['property_category_id'], $government_categories)) {
+            $rules['responsible_persons.*.national_id'] = [
+                'sometimes',
+                function ($attribute, $value, $fail) use ($data) {
+                    preg_match('/\d+/', $attribute, $matches);
+
+                    $index = $matches[0] ?? 0;
+                    if ($index == 1 && empty($value)) {
+                        return $fail('އައިޑީ ކާޑް ނަންބަރު ލިޔުއްވާ');
+                    } else if ($index == 1 && !preg_match('/^A\d{6}$/', $value)) {
+                        return $fail('އައިޑީ ކާޑް ނަންބަރު ރަނގަޅެއް ނޫން');
+                    }
+                },
+            ];
+        }
+
+        $validator = Validator::make($data, $rules, $messages);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
     }
 }
