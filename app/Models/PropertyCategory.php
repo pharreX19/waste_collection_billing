@@ -17,6 +17,7 @@ class PropertyCategory extends Model
     protected $fillable = [
         'name',
         'description',
-        'service_fee'
+        'service_fee',
+        'is_government'
     ];
 }
