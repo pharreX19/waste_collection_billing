@@ -330,7 +330,7 @@ const dueAmount = computed(() => {
     return props.payables.reduce((acc, payable) => {
         return payable.due_date < new Date().toISOString().split("T")[0] &&
             payableStates.pending.includes(payable.state.toLowerCase())
-            ? acc + parseFloat(payable.grand_total)
+            ? acc + parseFloat(payable.balance)
             : acc;
     }, 0);
 });

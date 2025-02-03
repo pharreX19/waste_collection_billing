@@ -10,7 +10,7 @@ export const stateMappings = {
 
 export const payableStates = {
     completed: ["paid", "cancelled", "written_off"],
-    pending: ["pending", "partially_paid", "written_off"],
+    pending: ["pending", "partially_paid", "overdue"],
     overdue: ["overdue"],
 };
 
