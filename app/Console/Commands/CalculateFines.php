@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Constants\Payable as ConstantsPayable;
 use Illuminate\Console\Command;
 use App\Models\Payable;
 use Carbon\Carbon;
@@ -28,12 +29,13 @@ class CalculateFines extends Command
     public function handle()
     {
         $this->info('Calculating fines for overdue payables...');
+        $fine_amount = 10;
 
         $overduePayables = Payable::withoutGlobalScope('userPayable')
-            ->where('state', 'pending')
+            ->whereIn('state', [ConstantsPayable::PENDING])
             ->where('due_date', '<', Carbon::now())
-            ->whereDoesntHave('payments')
             ->where('fine', '=', 0)
+            ->where('balance', '>', 0)
             ->get();
 
 
@@ -42,14 +44,16 @@ class CalculateFines extends Command
             return Command::SUCCESS;
         }
 
-        foreach ($overduePayables as $payable) {
-            $payable->fine += 10;
+        $updatedPayables = $overduePayables->each(function ($payable) use ($fine_amount) {
+            $payable->increment('fine', $fine_amount);
+            $payable->increment('balance', $fine_amount);
+            $payable->increment('grand_total', $fine_amount);
+            $payable->state = ConstantsPayable::OVERDUE;
             $payable->save();
+        });
 
-            $this->info("Fine applied to payable ID: {$payable->id}");
-        }
+        $this->info("Fine applied and state updated for " . $updatedPayables->count() . " payables.");
 
-        $this->info('Fines calculation completed.');
         return Command::SUCCESS;
     }
 }
