@@ -262,7 +262,7 @@ import { useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import dayjs from "../utils/dayjs";
 import { NumberFormatter } from "../utils/numberFormatter";
-import Button from "./button.vue";
+import Button from "@/components/Button.vue";
 
 const props = defineProps({
     errors: {

@@ -367,7 +367,7 @@ import { DialogPanel, TransitionChild } from "@headlessui/vue";
 import { router, useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
-import Button from "./button.vue";
+import Button from "@/components/Button.vue";
 
 const props = defineProps({
     errors: {
