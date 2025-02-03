@@ -106,6 +106,12 @@
                                         >
                                             ޖުމްލަ
                                         </th>
+                                        <th
+                                            scope="col"
+                                            class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                        >
+                                            ނުަދައްކާ
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody
@@ -202,11 +208,17 @@
                                         >
                                             {{ payable.grand_total }}
                                         </td>
+                                        <td
+                                            class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                        >
+                                            {{ payable.balance }}
+                                        </td>
                                     </tr>
                                 </tbody>
 
                                 <tfoot>
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -275,7 +287,7 @@ const indeterminate = computed(
 
 const total_due = computed(() => {
     return selectedPayables.value.reduce(
-        (acc, item) => acc + parseFloat(item.grand_total),
+        (acc, item) => acc + parseFloat(item.balance),
         0
     );
 });
@@ -296,7 +308,7 @@ const onSubmit = async () => {
 
     const body = selectedPayables.value.map((payable) => ({
         payable_id: payable.id,
-        amount: payable.grand_total,
+        amount: payable.balance,
     }));
 
     try {

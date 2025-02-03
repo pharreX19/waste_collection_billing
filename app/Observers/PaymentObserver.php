@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Payment;
+use Illuminate\Support\Facades\DB;
 
 class PaymentObserver
 {
@@ -11,10 +12,17 @@ class PaymentObserver
      */
     public function created(Payment $payment): void
     {
-        $payable = $payment->payable;
-        if ($payable->grand_total == $payable->payments->sum('amount')) {
-            $payable->state = 'paid';
-            $payable->save();
+        if ($payment->state === 'confirmed') {
+            DB::transaction(function () use ($payment) {
+                $payable = $payment->payable;
+                $payable->balance = $payable->balance - $payment->amount;
+                if ($payable->grand_total == $payable->payments()->sum('amount')) {
+                    $payable->state = 'paid';
+                } else {
+                    $payable->state = 'partially_paid';
+                }
+                $payable->save();
+            });
         }
     }
 
@@ -23,10 +31,10 @@ class PaymentObserver
      */
     public function updated(Payment $payment): void
     {
-        if ($payment->state === 'confirmed') {
-            $payable = $payment->payable;
-            $payable->decrement('grand_total', $payment->amount);
-        }
+        // if ($payment->state === 'confirmed') {
+        //     $payable = $payment->payable;
+        //     $payable->decrement('grand_total', $payment->amount);
+        // }
     }
 
     /**

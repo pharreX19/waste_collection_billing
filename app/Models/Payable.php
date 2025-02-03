@@ -27,6 +27,7 @@ class Payable extends Model
         'discount',
         'fine',
         'grand_total',
+        'balance',
         'state'
     ];
 

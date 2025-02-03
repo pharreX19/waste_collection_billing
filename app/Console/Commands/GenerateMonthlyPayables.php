@@ -53,7 +53,8 @@ class GenerateMonthlyPayables extends Command
                     'reference_no' => (new ReferenceNoGeneratorService())->generate(),
                     'due_date' => $dueDate,
                     'amount' => $household->category->service_fee,
-                    'grand_total' => 0.00,
+                    'grand_total' => $household->category->service_fee,
+                    'balance' => $household->category->service_fee,
                     'fine' => 0.00,
                     'status' => 'pending',
                 ]);

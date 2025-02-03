@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        Payable::observe(PayableObserver::class);
         Payment::observe(PaymentObserver::class);
     }
 }

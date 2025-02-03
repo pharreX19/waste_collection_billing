@@ -157,7 +157,23 @@
                                     class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                 >
                                     <a href="#" class="group inline-flex">
-                                        ޖުމްލަ
+                                        ދައްކަންޖެހޭ ޖުމްލަ
+                                        <span
+                                            class="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                                        >
+                                            <ChevronDownIcon
+                                                class="invisible ml-2 size-5 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
+                                                aria-hidden="true"
+                                            />
+                                        </span>
+                                    </a>
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
+                                >
+                                    <a href="#" class="group inline-flex">
+                                        ދެއްކި ޖުމްލަ
                                         <span
                                             class="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible"
                                         >
@@ -230,6 +246,11 @@
                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                 >
                                     {{ payable.grand_total }}
+                                </td>
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{ payable.grand_total - payable.balance }}
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"

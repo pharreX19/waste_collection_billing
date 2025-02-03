@@ -47,21 +47,44 @@
                         ގެ ކުނިނެގުމުގެ ފީ
                     </p>
 
-                    <p class="font-bold">ޖޫރިމަނާ</p>
+                    <p class="font-bold">މަހު ފީ</p>
                     <p class="col-span-4 text-base font-normal">
-                        {{ payable.fine == 0 ? "-" : payable.fine }}
+                        {{ NumberFormatter.format(payable.amount) }}
                     </p>
 
-                    <p class="font-bold">ފައިސާގެ ޢަދަދު</p>
+                    <p class="font-bold">ޖޫރިމަނާ</p>
+                    <p class="col-span-4 text-base font-normal">
+                        {{
+                            payable.fine == 0
+                                ? "-"
+                                : NumberFormatter.format(payable.fine)
+                        }}
+                    </p>
+
+                    <p class="font-bold">ޖުމްލަ ދައްކަންޖެހޭ</p>
+                    <p class="col-span-4 text-base font-normal">
+                        {{ NumberFormatter.format(payable.grand_total) }}
+                    </p>
+
+                    <p class="font-bold">ޖުމްލަ ދެއްކި</p>
                     <div class="col-span-4">
-                        <p
-                            v-for="(payment, index) in payable.payments"
-                            :key="index"
-                            class="text-base font-normal"
-                        >
-                            {{ payment.amount }}
+                        <p class="col-span-4 text-base font-normal">
+                            {{
+                                NumberFormatter.format(
+                                    payable.grand_total - payable.balance
+                                )
+                            }}
                         </p>
                     </div>
+
+                    <p class="font-bold">ފައިސާ ދެއްކި ތާރީޚް</p>
+                    <p class="col-span-4 text-base font-normal">
+                        {{
+                            dayjs(payable.updated_at).format(
+                                "DD MMMM YYYY HH:MM"
+                            )
+                        }}
+                    </p>
                 </div>
 
                 <!-- Footer Section -->
@@ -87,6 +110,7 @@ import { onMounted } from "vue";
 import dayjs from "../../utils/dayjs";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
+import { NumberFormatter } from "../../utils/numberFormatter";
 
 const page = usePage();
 
