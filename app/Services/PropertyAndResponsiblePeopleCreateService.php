@@ -64,7 +64,7 @@ class PropertyAndResponsiblePeopleCreateService
 
     function removePreviousResponsiblePeople($responsible_people, $property)
     {
-        $peopleIds = collect($responsible_people)->pluck('responsible_person_id')->toArray();
+        $peopleIds = collect($responsible_people)->pluck('id')->toArray();
 
         return PersonProperty::where('property_id', $property->id)
             ->whereNotIn('responsible_person_id', $peopleIds)
