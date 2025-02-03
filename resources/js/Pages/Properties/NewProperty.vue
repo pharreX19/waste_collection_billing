@@ -49,7 +49,7 @@
 <script setup>
 import { ref } from "vue";
 import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
-import NewEditPropertyForm from "../../Components/NewEditPropertyForm.vue";
+import NewEditPropertyForm from "@/components/NewEditPropertyForm.vue";
 import { PencilIcon, PencilSquareIcon } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
