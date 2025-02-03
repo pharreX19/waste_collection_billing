@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('fine')->default(0);
             $table->decimal('grand_total');
             $table->decimal('balance');
-            $table->enum('state', ['pending', 'paid', 'overdue', 'partially_paid', 'cancelled', 'written_off']);
+            $table->enum('state', ['pending', 'paid', 'overdue', 'cancelled']);
             $table->timestamps();
             $table->softDeletes();
         });
