@@ -32,7 +32,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
-import NewPaymentForm from "../../Components/NewPaymentForm.vue";
+import NewPaymentForm from "@/components/NewPaymentForm.vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 

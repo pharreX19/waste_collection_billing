@@ -230,8 +230,8 @@
 
 <script setup>
 import NewProperty from "./NewProperty.vue";
-import Pagination from "../../Components/Pagination.vue";
-import ConfirmDelete from "../../Components/ConfirmDelete.vue";
+import Pagination from "@/components/Pagination.vue";
+import ConfirmDelete from "@/components/ConfirmDelete.vue";
 import { Switch } from "@headlessui/vue";
 import { useForm } from "@inertiajs/vue3";
 import dayjs from "../../utils/dayjs";

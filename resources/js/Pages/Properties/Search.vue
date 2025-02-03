@@ -21,8 +21,8 @@
 <script setup>
 import { router, useForm } from "@inertiajs/vue3";
 import { route } from "ziggy-js";
-import AutoComplete from "../../Components/AutoComplete.vue";
-import Button from "../../Components/button.vue";
+import AutoComplete from "@/components/AutoComplete.vue";
+import Button from "@/components/Button.vue";
 
 const form = useForm({
     property: {

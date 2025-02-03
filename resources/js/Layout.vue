@@ -15,7 +15,7 @@
 
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-import Sidebar from "./Components/Sidebar.vue";
+import Sidebar from "@/components/Sidebar.vue";
 
 const page = usePage();
 </script>

@@ -275,9 +275,9 @@
 <script setup>
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import dayjs from "../../utils/dayjs";
-import Pagination from "../../Components/Pagination.vue";
+import Pagination from "@/components/Pagination.vue";
 import { Link, useForm } from "@inertiajs/vue3";
-import AutoComplete from "../../Components/AutoComplete.vue";
+import AutoComplete from "@/components/AutoComplete.vue";
 import { computed, onMounted } from "vue";
 import { payableStates, stateMappings } from "../../utils/stateMapping";
 import { NumberFormatter } from "../../utils/numberFormatter";

@@ -275,7 +275,7 @@ import {
     HomeIcon,
     UserCircleIcon,
 } from "@heroicons/vue/20/solid";
-import YearSelector from "../../Components/YearSelector.vue";
+import YearSelector from "@/components/YearSelector.vue";
 import { BanknotesIcon } from "@heroicons/vue/24/outline";
 import { computed, ref } from "vue";
 import dayjs from "../../utils/dayjs";
