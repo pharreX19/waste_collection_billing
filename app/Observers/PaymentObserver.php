@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Constants\Payable;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 
@@ -17,9 +18,7 @@ class PaymentObserver
                 $payable = $payment->payable;
                 $payable->balance = $payable->balance - $payment->amount;
                 if ($payable->grand_total == $payable->payments()->sum('amount')) {
-                    $payable->state = 'paid';
-                } else {
-                    $payable->state = 'partially_paid';
+                    $payable->state = Payable::PAID;
                 }
                 $payable->save();
             });
