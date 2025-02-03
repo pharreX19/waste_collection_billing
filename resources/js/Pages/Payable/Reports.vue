@@ -250,7 +250,12 @@
                                 <td
                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                 >
-                                    {{ payable.grand_total - payable.balance }}
+                                    {{
+                                        NumberFormatter.format(
+                                            payable.grand_total -
+                                                payable.balance
+                                        )
+                                    }}
                                 </td>
                                 <td
                                     class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
@@ -275,6 +280,7 @@ import { Link, useForm } from "@inertiajs/vue3";
 import AutoComplete from "../../Components/AutoComplete.vue";
 import { computed, onMounted } from "vue";
 import { payableStates, stateMappings } from "../../utils/stateMapping";
+import { NumberFormatter } from "../../utils/numberFormatter";
 
 const props = defineProps({
     data: {
