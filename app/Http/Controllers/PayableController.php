@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Payable as ConstantsPayable;
 use App\Constants\Role;
 use Carbon\Carbon;
 use Inertia\Inertia;
@@ -16,19 +17,21 @@ class PayableController extends Controller
      */
     public function index(Request $request, Property $property)
     {
+        $state = (isset($request->state) ? [$request->state]  : $request->state === ConstantsPayable::PENDING) ? ConstantsPayable::PENDING_STATES : [];
+
         $overdue_amount = Payable::where('property_id', $property->id)
-            ->where('due_date', '<', Carbon::now()->toDateString())
-            ->where('state', 'pending')->sum('amount');
+            ->where('state', ConstantsPayable::OVERDUE)
+            ->sum('balance');
 
-        $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request) {
-            $query->when($request->state, function ($q) use ($request) {
-
-                $q->where('state', $request->state);
+        $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request, $state) {
+            $query->when(count($state) > 0, function ($q) use ($state) {
+                $q->whereIn('state', $state);
             });
 
             $query->when($request->year, function ($q) use ($request) {
                 $q->whereYear('billed_period', $request->year)
-                    ->with('payments');
+                    ->with('payments')
+                    ->orderBy('billed_period', 'desc');
             });
         }]);
 

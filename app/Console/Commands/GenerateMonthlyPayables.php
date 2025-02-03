@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Constants\Payable as ConstantsPayable;
 use Illuminate\Console\Command;
 use App\Models\Household;
 use App\Models\Payable;
@@ -56,7 +57,7 @@ class GenerateMonthlyPayables extends Command
                     'grand_total' => $household->category->service_fee,
                     'balance' => $household->category->service_fee,
                     'fine' => 0.00,
-                    'status' => 'pending',
+                    'status' => ConstantsPayable::PENDING,
                 ]);
 
                 $payablesCreated++;
