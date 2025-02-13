@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\Payable as ConstantsPayable;
-use App\Constants\Role;
 use Carbon\Carbon;
 use Inertia\Inertia;
+use App\Constants\Role;
 use App\Models\Payable;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Constants\Payable as ConstantsPayable;
 
 class PayableController extends Controller
 {
@@ -19,9 +20,13 @@ class PayableController extends Controller
     {
         $state = (isset($request->state) ? [$request->state]  : $request->state === ConstantsPayable::PENDING) ? ConstantsPayable::PENDING_STATES : [];
 
-        $overdue_amount = Payable::where('property_id', $property->id)
-            ->where('state', ConstantsPayable::OVERDUE)
-            ->sum('balance');
+        $total_pending = DB::table('payables')
+            ->select('state')
+            ->selectRaw('SUM(balance) as total_balance')
+            ->where('property_id', $property->id)
+            ->whereIn('state', ConstantsPayable::PENDING_STATES)
+            ->groupBy('state')
+            ->get();
 
         $property->load(['responsiblePersons', 'category', 'payables' => function ($query) use ($request, $state) {
             $query->when(count($state) > 0, function ($q) use ($state) {
@@ -41,7 +46,9 @@ class PayableController extends Controller
             ]);
         }
 
-        $property->setAttribute('overdue_amount', $overdue_amount);
+        $property->setAttribute('total_pending', $total_pending);
+
+        Inertia::share('property_id', $property->id);
 
         return Inertia::render('Properties/View', $property);
     }
