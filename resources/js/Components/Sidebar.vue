@@ -6,7 +6,7 @@
             <img
                 class="h-8 w-auto"
                 src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                alt="Your Company"
+                alt="Profile picture"
             />
         </div>
         <nav class="flex flex-1 flex-col">
@@ -188,10 +188,10 @@ const navigation = reactive([
 
 onMounted(() => {
     if (page.props.auth.user.role_id === 1) {
-        navigation.splice(0);
+        navigation.length = 0;
         navigation.push({
-            name: "ތަފްޞީލު",
-            href: "",
+            name: "ފައިސާ ދެއްކުން",
+            href: route("payables.index", page.props.property_id),
             icon: CurrencyEuroIcon,
             current: true,
         });
