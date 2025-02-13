@@ -12,8 +12,7 @@
                     <dl class="flex flex-wrap">
                         <div class="flex-auto pr-6 pt-6">
                             <dt class="text-sm/6 font-semibold text-gray-900">
-                                {{ selectedYear }}
-                                ވަނަ އަހަރު ދައްކަންޖެހޭ
+                                ޖުމްލަ ދައްކަންޖެހޭ
                             </dt>
                             <dd
                                 class="mt-1 text-base font-semibold text-gray-900"
@@ -26,15 +25,15 @@
                             <dd
                                 class="rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
                                 :class="[
-                                    overdue_amount > 0
+                                    overDueAmount > 0
                                         ? 'text-red-600 bg-red-50 ring-red-600/20'
                                         : 'text-green-600 bg-green-50 ring-green-600/20',
                                 ]"
                             >
                                 {{
-                                    overdue_amount > 0
+                                    overDueAmount > 0
                                         ? NumberFormatter.format(
-                                              overdue_amount
+                                              overDueAmount
                                           ) + " މުއްދަތުހަމަވެފައި"
                                         : "މުއްދަތުހަމަވެފައެއް ނެތް"
                                 }}
@@ -140,7 +139,6 @@
                                 ފައިސާ ދެއްކި ތާރީޚް
                             </th>
                             <th
-                                v-if="isOfficer"
                                 scope="col"
                                 class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
@@ -204,7 +202,6 @@
                                 }}
                             </td>
                             <td
-                                v-if="isOfficer"
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
                                 <Link
@@ -289,10 +286,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
-    overdue_amount: {
-        type: String,
+    total_pending: {
+        type: Array,
         required: false,
-        default: "0",
+        default: [],
     },
     name: {
         type: String,
@@ -327,26 +324,25 @@ const params = Object.fromEntries(url.searchParams.entries());
 selectedYear.value = params.year;
 
 const dueAmount = computed(() => {
-    return props.payables.reduce((acc, payable) => {
-        return payable.due_date < new Date().toISOString().split("T")[0] &&
-            payableStates.pending.includes(payable.state.toLowerCase())
+    return props.total_pending.reduce((acc, payable) => {
+        return payableStates.pending.includes(payable.state.toLowerCase())
             ? acc + parseFloat(payable.balance)
             : acc;
     }, 0);
 });
 
-// const overDueAmount = computed(() => {
-//     return props.payables.reduce((acc, payable) => {
-//         return payable.due_date < new Date().toISOString().split("T")[0]
-//             ? acc + parseFloat(payable.grand_total)
-//             : acc;
-//     }, 0);
-// });
+const overDueAmount = computed(() => {
+    return props.total_pending.reduce((acc, payable) => {
+        return payable.due_date < new Date().toISOString().split("T")[0]
+            ? acc + parseFloat(payable.balance)
+            : acc;
+    }, 0);
+});
 
 const onPayableClick = (payable) => {
     selectedPayable.value = payable.id;
     payments.value = payable.payments;
 };
 
-const isOfficer = computed(() => page.props.auth.user.role_id === 2);
+// const isOfficer = computed(() => page.props.auth.user.role_id === 2);
 </script>
