@@ -326,15 +326,15 @@ selectedYear.value = params.year;
 const dueAmount = computed(() => {
     return props.total_pending.reduce((acc, payable) => {
         return payableStates.pending.includes(payable.state.toLowerCase())
-            ? acc + parseFloat(payable.balance)
+            ? acc + parseFloat(payable.total_balance)
             : acc;
     }, 0);
 });
 
 const overDueAmount = computed(() => {
     return props.total_pending.reduce((acc, payable) => {
-        return payable.due_date < new Date().toISOString().split("T")[0]
-            ? acc + parseFloat(payable.balance)
+        return payableStates.overdue.includes(payable.state.toLowerCase())
+            ? acc + parseFloat(payable.total_balance)
             : acc;
     }, 0);
 });
