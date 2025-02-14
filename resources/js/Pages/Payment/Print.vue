@@ -1,7 +1,7 @@
 <template>
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div
-            class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+            class="flex flex-col min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
         >
             <div
                 id="printable-content"
@@ -101,18 +101,21 @@
                     {{ dayjs(payable.updated_at).format("DD MMMM YYYY") }}
                 </div>
             </div>
+            <div
+                class="mt-10 flex flex-row items-center justify-around min-w-80"
+            >
+                <Button label="ޕްރިންޓް ކުރައްވާ" @click="onPrint" />
+                <Button label="ފަހަތަށް" variant="cancel" @click="onCancel" />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import dayjs from "../../utils/dayjs";
-import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 import { NumberFormatter } from "../../utils/numberFormatter";
-
-const page = usePage();
+import Button from "@/components/Button.vue";
 
 const props = defineProps({
     payable: {
@@ -121,33 +124,25 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["cancel:form"]);
-
-onMounted(() => {
-    window.addEventListener("afterprint", () => {
-        const year = props.payable.billed_period.split("-")[0];
-
-        window.location.replace(
-            route("payables.index", {
-                property: props.payable.property_id,
-                year,
-            })
-        );
-        // router.visit(
-        //     route("payables.index", {
-        //         property: props.payable.property_id,
-        //         year: "2021",
-        //     }),
-        //     {
-        //         headers: {
-        //             Accept: "text/html",
-        //             "Content-type": "text/html",
-        //         },
-        //     }
-        // );
-    });
+const onPrint = () => {
     window.print();
-});
+};
+
+const onCancel = () => {
+    const year = props.payable.billed_period.split("-")[0];
+    router.visit(
+        route("payables.index", {
+            property: props.payable.property_id,
+            year: year,
+        }),
+        {
+            headers: {
+                Accept: "text/html",
+                "Content-type": "text/html",
+            },
+        }
+    );
+};
 </script>
 
 <style scoped>
