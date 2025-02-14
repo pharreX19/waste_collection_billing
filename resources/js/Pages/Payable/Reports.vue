@@ -93,7 +93,7 @@
                                     class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900"
                                 >
                                     <a href="#" class="group inline-flex">
-                                        އިންވޮއިސް ނަންބަރ
+                                        ރަސީދު ނަންބަރ
                                         <span
                                             class="mr-3 flex-none rounded bg-gray-100 text-gray-900 group-hover:bg-gray-200"
                                         >
