@@ -10,6 +10,7 @@ use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Payable as ConstantsPayable;
+use App\Http\Requests\PayableRequest;
 
 class PayableController extends Controller
 {
@@ -72,10 +73,12 @@ class PayableController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, Payable $payable)
-    // {
-    //
-    // }
+    public function update(PayableRequest $request, Payable $payable)
+    {
+        $payable->viya_reference_no = $request->viya_reference_no;
+        $payable->save();
+        return back();
+    }
 
     /**
      * Remove the specified resource from storage.
