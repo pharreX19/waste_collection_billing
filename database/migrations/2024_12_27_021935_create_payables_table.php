@@ -15,7 +15,8 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('property_id')->constrained();
             $table->foreignUlid('property_category_id')->constrained();
-            $table->string('reference_no');
+            $table->string('viya_reference_no')->nullable()->unique();
+            $table->string('receipt_no')->unique();
             $table->string('billed_period')->nullable();
             $table->datetime('due_date');
             $table->decimal('amount')->default(0);

@@ -23,7 +23,7 @@ class ReferenceNoGeneratorService
             ->orderBy('id', 'desc')
             ->first();
 
-        $nextSequence = $lastInvoice ? intval(substr($lastInvoice->reference_number, -4)) + 1 : 1;
+        $nextSequence = $lastInvoice ? intval(substr($lastInvoice->receipt_no, -4)) + 1 : 1;
 
         $sequence = str_pad($nextSequence, 4, '0', STR_PAD_LEFT);
 

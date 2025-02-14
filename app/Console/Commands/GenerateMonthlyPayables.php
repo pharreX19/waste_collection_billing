@@ -51,7 +51,7 @@ class GenerateMonthlyPayables extends Command
                     'property_id' => $household->id,
                     'property_category_id' => $household->property_category_id,
                     'billed_period' => $currentMonth,
-                    'reference_no' => (new ReferenceNoGeneratorService())->generate(),
+                    'receipt_no' => (new ReferenceNoGeneratorService())->generate(),
                     'due_date' => $dueDate,
                     'amount' => $household->category->service_fee,
                     'grand_total' => $household->category->service_fee,

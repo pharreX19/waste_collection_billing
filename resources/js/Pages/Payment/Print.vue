@@ -17,8 +17,8 @@
                     </div>
                     <div class="text-left w-full">
                         <h1 class="text-base font-bold">
-                            ރިފަރެންސް ނަންބަރ:
-                            <span>{{ payable.reference_no }}</span>
+                            ރަސީދު ނަންބަރ:
+                            <span>{{ payable.receipt_no }}</span>
                         </h1>
                         <p class="text-xs">
                             ތާރީޚް:
