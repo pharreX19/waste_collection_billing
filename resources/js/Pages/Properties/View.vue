@@ -1,10 +1,10 @@
 <template>
-    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl py-16">
         <div
-            class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+            class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-4"
         >
             <!-- Invoice summary -->
-            <div class="lg:col-start-3 lg:row-end-1">
+            <div class="lg:col-start-4 lg:row-end-1">
                 <h2 class="sr-only">Summary</h2>
                 <div
                     class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5"
@@ -91,7 +91,7 @@
 
             <!-- Invoice -->
             <div
-                class="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 lg:col-span-2 lg:row-span-2 lg:row-end-2 overflow-x-scroll"
+                class="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 lg:col-span-3 lg:row-span-2 lg:row-end-2 overflow-x-scroll"
             >
                 <YearSelector
                     :selectedYear="selectedYear"
@@ -142,7 +142,13 @@
                                 scope="col"
                                 class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell"
                             >
-                                ރަސީދު ޕްރިންޓް ކުރުން
+                                ވިޔަ ރެފަރެންސް ނަންބަރ
+                            </th>
+                            <th
+                                scope="col"
+                                class="hidden py-3 pr-0 text-center font-semibold sm:table-cell"
+                            >
+                                އެކްޝަން
                             </th>
                         </tr>
                     </thead>
@@ -204,25 +210,37 @@
                             <td
                                 class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
                             >
-                                <Link
+                                {{ item.viya_reference_no }}
+                            </td>
+                            <td
+                                class="flex items-center justify-around py-5 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell"
+                                style="display: flex"
+                            >
+                                <!-- <Link
                                     v-if="item.payments?.length > 0"
+                                    class="h-6 w-5 inline-block"
                                     :href="
                                         route('payables.print', {
                                             payable: item.id,
                                         })
                                     "
-                                >
-                                    <BanknotesIcon
-                                        class="h-6 w-5 text-green-400 mx-auto hover:text-green-600"
-                                        aria-hidden="true"
-                                /></Link>
+                                > -->
+                                <BanknotesIcon
+                                    v-if="item.payments?.length > 0"
+                                    class="h-6 w-5 text-green-400 hover:text-green-600"
+                                    aria-hidden="true"
+                                    @click.stop="onPrint(item)"
+                                />
+                                <!-- </Link> -->
+
+                                <EditPayable :payable="item" />
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="lg:col-start-3" v-if="payments?.length > 0">
+            <div class="lg:col-start-4" v-if="payments?.length > 0">
                 <h2 class="text-sm/6 font-semibold text-gray-900">
                     ދެއްކި ފައިސާގެ ތަފްޞީލް
                 </h2>
@@ -277,9 +295,10 @@ import { BanknotesIcon } from "@heroicons/vue/24/outline";
 import { computed, ref } from "vue";
 import dayjs from "../../utils/dayjs";
 import Create from "../Payment/Create.vue";
-import { Link, usePage } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import { payableStates, stateMappings } from "../../utils/stateMapping";
 import { NumberFormatter } from "../../utils/numberFormatter";
+import EditPayable from "../Payable/EditPayable.vue";
 
 const props = defineProps({
     payables: {
@@ -342,6 +361,14 @@ const overDueAmount = computed(() => {
 const onPayableClick = (payable) => {
     selectedPayable.value = payable.id;
     payments.value = payable.payments;
+};
+
+const onPrint = (item) => {
+    router.get(
+        route("payables.print", {
+            payable: item.id,
+        })
+    );
 };
 
 // const isOfficer = computed(() => page.props.auth.user.role_id === 2);

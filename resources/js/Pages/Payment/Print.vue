@@ -104,8 +104,8 @@
             <div
                 class="mt-10 flex flex-row items-center justify-around min-w-80"
             >
-                <Button label="ޕްރިންޓް ކުރައްވާ" @click="onPrint" />
                 <Button label="ފަހަތަށް" variant="cancel" @click="onCancel" />
+                <Button label="ޕްރިންޓް ކުރައްވާ" @click="onPrint" />
             </div>
         </div>
     </div>
