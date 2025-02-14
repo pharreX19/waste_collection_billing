@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('payables/reports', [PayableController::class, 'reports'])->name('payables.reports');
         Route::get('payables/{payable}/print', [PayableController::class, 'print'])->name('payables.print');
+        Route::put('payables/{payable}', [PayableController::class, 'update'])->name('payables.update');
 
         Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
 
