@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PropertyCategoryController;
+use App\Http\Controllers\SettingController;
 
 Route::get('login', function () {
     return Inertia::render('Auth/Login');
@@ -54,10 +55,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
 
         Route::get('payables/reports', [PayableController::class, 'reports'])->name('payables.reports');
+        Route::get('payables/reports/print', [PayableController::class, 'downloadReport'])->name('payables.download-reports');
         Route::get('payables/{payable}/print', [PayableController::class, 'print'])->name('payables.print');
         Route::put('payables/{payable}', [PayableController::class, 'update'])->name('payables.update');
 
         Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
+
+        Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
 
         Route::get('generate-payables/{date}', function (String $date) {
             Artisan::call('payables:generate', [
