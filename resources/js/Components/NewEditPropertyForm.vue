@@ -70,6 +70,7 @@
                                                 id="registration_no"
                                                 v-model="form.registration_no"
                                                 :disabled="props.id"
+                                                dir="ltr"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -103,6 +104,35 @@
                                                     {{ category.name }}
                                                 </option>
                                             </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="sm:col-span-4">
+                                        <label
+                                            for="registration_date"
+                                            class="block text-sm/6 font-medium text-gray-900"
+                                            >ރަޖިސްޓްރީކުރެވުނު ތާރީޚް</label
+                                        >
+                                        <div class="mt-2">
+                                            <input
+                                                type="date"
+                                                name="registration_date"
+                                                id="registration_date"
+                                                v-model="form.registration_date"
+                                                :disabled="props.id"
+                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            />
+                                        </div>
+                                        <div
+                                            class="text-xs text-red-600 mt-1"
+                                            v-if="
+                                                errors.name
+                                                // && errors.name.indexOf(
+                                                // 'property name'
+                                                // ) > 0
+                                            "
+                                        >
+                                            {{ errors.name }}
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +175,8 @@
                                                 class="-mr-px grid grow grid-cols-1 focus-within:relative"
                                             >
                                                 <input
-                                                    class="col-start-1 row-start-1 block w-full rounded-r-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
+                                                    class="col-start-1 row-start-1 block w-full rounded-r-md bg-white py-1.5 pr-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                                    dir="ltr"
                                                     name="national_id"
                                                     id="national_id"
                                                     maxlength="7"
@@ -240,6 +271,7 @@
                                                 :disabled="
                                                     props.id && index === 0
                                                 "
+                                                dir="ltr"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                             />
                                         </div>
@@ -383,12 +415,16 @@ const props = defineProps({
 
 const emit = defineEmits(["submit:form", "cancel:form"]);
 const categories = ref([]);
+const currentDate = new Date();
+const registration_date = `${currentDate.getFullYear()}-${String(
+    currentDate.getMonth() + 1
+).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
 
 const form = useForm({
     property_category_id: null,
     name: null,
     registration_no: null,
-    registration_date: new Date(),
+    registration_date: registration_date,
     responsible_persons: [
         {
             name: null,
@@ -465,6 +501,7 @@ const fetchProperty = async () => {
         form.property_category_id = data.property_category_id;
         form.name = data.name;
         form.registration_no = data.registration_no;
+        form.registration_date = data.registration_date.split("T")[0];
         form.responsible_persons = data.responsible_persons;
     } catch (error) {
         console.error("Error fetching companies", error);
