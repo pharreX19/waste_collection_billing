@@ -43,7 +43,7 @@ class Property extends Model
         parent::boot();
         static::creating(function ($model) {
             $model->registration_code = 'REG' . rand(1000, 9999) . time();
-            $model->registration_date = Carbon::now();
+            // $model->registration_date = $model->registration_date ??  Carbon::now();
         });
     }
 
