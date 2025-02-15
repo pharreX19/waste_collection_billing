@@ -1,6 +1,7 @@
 <template>
     <PencilSquareIcon
         class="h-4 w-4 mr-4 hover:text-indigo-600 text-indigo-400"
+        v-if="payable.payments.length > 0"
         @click.stop="handleModalOpen"
     />
     <TransitionRoot as="template" :show="open">

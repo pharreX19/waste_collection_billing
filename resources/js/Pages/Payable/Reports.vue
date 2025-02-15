@@ -44,9 +44,64 @@
                 type="button"
                 class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 :href="reportLink"
+                :headers="{ Accept: 'text/html', 'Content-Type': 'text/html' }"
             >
                 ރިޕޯރޓް ދައްކާ
             </Link>
+
+            <Menu as="div" class="relative inline-block text-left">
+                <div>
+                    <MenuButton
+                        class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    >
+                        ޑައުންލޯޑް ކުރައްވާ
+                        <ChevronDownIcon
+                            class="-mr-1 size-5 text-gray-400"
+                            aria-hidden="true"
+                        />
+                    </MenuButton>
+                </div>
+
+                <transition
+                    enter-active-class="transition ease-out duration-100"
+                    enter-from-class="transform opacity-0 scale-95"
+                    enter-to-class="transform opacity-100 scale-100"
+                    leave-active-class="transition ease-in duration-75"
+                    leave-from-class="transform opacity-100 scale-100"
+                    leave-to-class="transform opacity-0 scale-95"
+                >
+                    <MenuItems
+                        class="absolute right-0 z-10 mt-2 w-36 text-right origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+                    >
+                        <div class="py-1">
+                            <MenuItem v-slot="{ active }">
+                                <a
+                                    :href="`${reportDownloadLink}&format=csv`"
+                                    :class="[
+                                        active
+                                            ? 'bg-gray-100 text-gray-900 outline-none'
+                                            : 'text-gray-700',
+                                        'block px-4 py-2 text-sm',
+                                    ]"
+                                    >ސީ އެސް ވީ</a
+                                >
+                            </MenuItem>
+                            <MenuItem v-slot="{ active }">
+                                <a
+                                    :href="`${reportDownloadLink}&format=pdf`"
+                                    :class="[
+                                        active
+                                            ? 'bg-gray-100 text-gray-900 outline-none'
+                                            : 'text-gray-700',
+                                        'block px-4 py-2 text-sm',
+                                    ]"
+                                    >ޕީޑީއެފް</a
+                                >
+                            </MenuItem>
+                        </div>
+                    </MenuItems>
+                </transition>
+            </Menu>
         </div>
         <div class="mt-8 flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -281,6 +336,7 @@ import AutoComplete from "@/components/AutoComplete.vue";
 import { computed, onMounted } from "vue";
 import { payableStates, stateMappings } from "../../utils/stateMapping";
 import { NumberFormatter } from "../../utils/numberFormatter";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 
 const props = defineProps({
     data: {
@@ -311,14 +367,33 @@ const currentDate = new Date();
 const previousYear = currentDate.getFullYear() - 1;
 
 const reportLink = computed(() => {
-    return route("payables.reports", {
-        start_date:
-            form.selectedOption.id == 2
-                ? `${previousYear}-01-01`
-                : form.start_date,
-        end_date: form.selectedOption.id == 3 ? form.end_date : "",
-        name: form.property.name,
-    });
+    return route(
+        "payables.reports",
+        {
+            start_date:
+                form.selectedOption.id == 2
+                    ? `${previousYear}-01-01`
+                    : form.start_date,
+            end_date: form.selectedOption.id == 3 ? form.end_date : "",
+            name: form.property.name,
+        },
+        {}
+    );
+});
+
+const reportDownloadLink = computed(() => {
+    return route(
+        "payables.download-reports",
+        {
+            start_date:
+                form.selectedOption.id == 2
+                    ? `${previousYear}-01-01`
+                    : form.start_date,
+            end_date: form.selectedOption.id == 3 ? form.end_date : "",
+            name: form.property.name,
+        },
+        {}
+    );
 });
 
 onMounted(() => {
