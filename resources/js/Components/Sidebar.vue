@@ -147,7 +147,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronLeftIcon } from "@heroicons/vue/20/solid";
 import { Squares2X2Icon } from "@heroicons/vue/24/outline";
 import { CurrencyEuroIcon } from "@heroicons/vue/24/outline";
-import { ChartPieIcon, HomeIcon } from "@heroicons/vue/24/outline";
+import { ChartPieIcon, HomeIcon, WrenchIcon } from "@heroicons/vue/24/outline";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, reactive } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
@@ -182,6 +182,12 @@ const navigation = reactive([
         name: "ރިޕޯރޓް",
         href: route("payables.reports"),
         icon: ChartPieIcon,
+        current: false,
+    },
+    {
+        name: "ސެޓިންގްސް",
+        href: route("settings.index", { type: "users" }),
+        icon: WrenchIcon,
         current: false,
     },
 ]);
