@@ -65,15 +65,15 @@ const onCancel = () => {
 };
 
 const onSubmit = (form) => {
-    if (!props.id) {
-        createProperty(form);
+    if (!props.user) {
+        createUser(form);
     } else {
-        updateProperty(form);
+        updateUser(form);
     }
 };
 
-const createProperty = async (form) => {
-    form.post(route("properties.store"), {
+const createUser = async (form) => {
+    form.post(route("users.store"), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
@@ -85,8 +85,8 @@ const createProperty = async (form) => {
     });
 };
 
-const updateProperty = async (form) => {
-    form.put(route("properties.update", props.id), {
+const updateUser = async (form) => {
+    form.put(route("users.update", props.user.id), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
