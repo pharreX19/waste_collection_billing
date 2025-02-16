@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="mt-10">
-                <component :is="activeComp" :data="users"></component>
+                <component :is="activeComp" :data="data"></component>
             </div>
         </div>
     </div>
@@ -51,19 +51,19 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import { ChevronDownIcon } from "@heroicons/vue/16/solid";
-import { computed, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import Users from "./Users.vue";
 import Categories from "./Categories.vue";
 import Payables from "./Payables.vue";
 
 const props = defineProps({
-    users: {
-        type: Array,
+    data: {
+        type: Object,
         required: true,
     },
 });
 
-const tabs = [
+const tabs = reactive([
     { name: "ސްޓާފް ލިސްޓް", href: "settings?type=users", current: true },
     {
         name: "ގޭބިސީ ކެޓަގަރީ",
@@ -71,11 +71,19 @@ const tabs = [
         current: false,
     },
     { name: "ބިލްތަކާއި ބެހޭ", href: "settings?type=payables", current: false },
-];
+]);
 
 const activeComp = computed(() => {
     const url = new URL(window.location.href);
     const selectedTab = url.searchParams.get("type");
+
+    tabs.find((tab) => {
+        if (tab.href.indexOf(selectedTab) > 0) {
+            tab.current = true;
+        } else {
+            tab.current = false;
+        }
+    });
 
     switch (selectedTab) {
         case "users":
