@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
+use App\Constants\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -14,6 +16,14 @@ class UserRequest extends FormRequest
         return true;
     }
 
+
+    public function prepareForValidation()
+    {
+        return $this->merge([
+            'role_id' => Role::OFFICER,
+            'email_verified_at' => Carbon::now()
+        ]);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +36,9 @@ class UserRequest extends FormRequest
             'email' => 'required|email|unique:users,email,' . $this->route('user')?->id,
             'password' => 'required_if:method,POST|nullable|string|min:5|max:20|confirmed',
             'password_confirmation' => 'required_with:password',
-            'is_active' => 'sometimes|nullable|boolean'
+            'is_active' => 'sometimes|nullable|boolean',
+            'role_id' => 'exists:roles,id',
+            'email_verified_at' => 'sometimes|nullable'
         ];
     }
 

@@ -24,7 +24,9 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         User::create($request->validated());
-        return to_route('settings.index');
+        return to_route('settings.index', [
+            'type' => 'users'
+        ]);
     }
 
     /**

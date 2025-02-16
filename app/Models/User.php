@@ -29,7 +29,8 @@ class User extends Authenticatable
         'contact_no',
         'otp',
         'otp_expires_at',
-        'otp_verified_at'
+        'otp_verified_at',
+        'email_verified_at'
     ];
 
     /**
@@ -55,12 +56,12 @@ class User extends Authenticatable
         ];
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            $model->role_id = Role::OFFICER;
-            $model->email_verified_at = Carbon::now();
-        });
-    }
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::creating(function ($model) {
+    //         $model->role_id = Role::OFFICER;
+    //         $model->email_verified_at = Carbon::now();
+    //     });
+    // }
 }
