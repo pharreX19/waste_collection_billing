@@ -14,6 +14,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserController;
 
 Route::get('login', function () {
     return Inertia::render('Auth/Login');
@@ -62,7 +63,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
-        Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
+
+        Route::post('users', [UserController::class, 'store'])->name('users.store');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+
+        Route::post('categories', [PropertyCategoryController::class, 'store'])->name('categories.store');
+        Route::put('categories/{category}', [PropertyCategoryController::class, 'update'])->name('categories.update');
 
         Route::get('generate-payables/{date}', function (String $date) {
             Artisan::call('payables:generate', [
