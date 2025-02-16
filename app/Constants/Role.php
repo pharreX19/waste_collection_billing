@@ -6,6 +6,7 @@ use App\Constants\Constant;
 
 class Role extends Constant
 {
-    const USER = '1';
+    const ADMIN = '1';
     const OFFICER = '2';
+    const USER = '3';
 }
