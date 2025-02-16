@@ -86,9 +86,9 @@ class AuthController extends Controller
 
             Auth::logout();
 
-            return redirect('/login')->withErrors(['error' => $this->errorMessage]);
+            return redirect('/admin/login')->withErrors(['error' => $this->errorMessage]);
         } catch (\Exception $e) {
-            return redirect('/login')->withErrors(['error' => $this->errorMessage]);
+            return redirect('/admin/login')->withErrors(['error' => $this->errorMessage]);
         }
     }
 
