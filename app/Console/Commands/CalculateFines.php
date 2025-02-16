@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Constants\Payable as ConstantsPayable;
-use Illuminate\Console\Command;
-use App\Models\Payable;
 use Carbon\Carbon;
+use App\Models\Payable;
+use App\Models\Setting;
+use Illuminate\Console\Command;
+use App\Constants\Payable as ConstantsPayable;
+use App\Constants\Setting as ConstantsSetting;
 
 class CalculateFines extends Command
 {
@@ -29,7 +31,7 @@ class CalculateFines extends Command
     public function handle()
     {
         $this->info('Calculating fines for overdue payables...');
-        $fine_amount = 10;
+        $fine_amount = (float) Setting::where('key', ConstantsSetting::FINE_AMOUNT)->value('value');
 
         $overduePayables = Payable::withoutGlobalScope('userPayable')
             ->whereIn('state', [ConstantsPayable::PENDING])

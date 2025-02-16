@@ -3,11 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Constants\Payable as ConstantsPayable;
+use App\Constants\Setting as ConstantsSetting;
 use Illuminate\Console\Command;
 use App\Models\Household;
 use App\Models\Payable;
 use App\Models\Category;
 use App\Models\Property;
+use App\Models\Setting;
 use App\Services\ReferenceNoGeneratorService;
 use Carbon\Carbon;
 
@@ -34,9 +36,11 @@ class GenerateMonthlyPayables extends Command
      */
     public function handle()
     {
+        $validity_period = (int) Setting::where('key', ConstantsSetting::VALIDITY_PERIOD)->value('value');
+
         $date = Carbon::parse($this->argument('date')) ?? Carbon::now();
         $currentMonth = $date->startOfMonth();
-        $dueDate = $currentMonth->copy()->addDays(40);
+        $dueDate = $currentMonth->copy()->addDays($validity_period);
         $households = Property::with('category')->where('is_active', 1)->get();
 
         $payablesCreated = 0;
