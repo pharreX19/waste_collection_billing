@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\Role;
 use App\Models\PropertyCategory;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,7 +28,7 @@ class SettingController extends Controller
                 break;
 
             case 'payables':
-                // $data = User::where('role_id', Role::OFFICER)->paginate();
+                $data = Setting::all();
                 break;
         }
 
@@ -55,9 +56,13 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $data = $request->all();
+
+        foreach ($data as $item) {
+            Setting::where('id', $item['id'])->update(['value' => $item['value']]);
+        }
     }
 
     /**
