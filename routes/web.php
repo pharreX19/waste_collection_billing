@@ -63,12 +63,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
 
         Route::post('users', [UserController::class, 'store'])->name('users.store');
         Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
 
         Route::post('categories', [PropertyCategoryController::class, 'store'])->name('categories.store');
         Route::put('categories/{category}', [PropertyCategoryController::class, 'update'])->name('categories.update');
+
 
         Route::get('generate-payables/{date}', function (String $date) {
             Artisan::call('payables:generate', [
