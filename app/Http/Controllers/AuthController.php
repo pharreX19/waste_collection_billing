@@ -80,7 +80,7 @@ class AuthController extends Controller
             $credentials = $request->only('email', 'password');
             $remember = $request->has('remember');
 
-            if (Auth::attempt($credentials, $remember) && Auth::user()->is_active && Auth::user()->role_id == ConstantsRole::OFFICER) {
+            if (Auth::attempt($credentials, $remember) && Auth::user()->is_active && Auth::user()->role_id != ConstantsRole::USER) {
                 return redirect('/');
             }
 
