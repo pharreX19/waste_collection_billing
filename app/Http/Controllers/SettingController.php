@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Role;
+use App\Models\PropertyCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -12,11 +13,26 @@ class SettingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('role_id', Role::OFFICER)->paginate();
+        $data = [];
+
+        switch ($request->query('type')) {
+            case 'users':
+                $data = User::where('role_id', Role::OFFICER)->paginate();
+                break;
+
+            case 'categories':
+                $data = PropertyCategory::paginate();
+                break;
+
+            case 'payables':
+                // $data = User::where('role_id', Role::OFFICER)->paginate();
+                break;
+        }
+
         return Inertia::render('Settings/Index', [
-            'users' => $users
+            'data' => $data,
         ]);
     }
 
