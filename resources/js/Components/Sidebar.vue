@@ -193,7 +193,7 @@ const navigation = reactive([
 ]);
 
 onMounted(() => {
-    if (page.props.auth.user.role_id === 1) {
+    if (page.props.auth.user.role_id === 3) {
         navigation.length = 0;
         navigation.push({
             name: "ފައިސާ ދެއްކުން",

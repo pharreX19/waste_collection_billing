@@ -233,7 +233,10 @@
                                 />
                                 <!-- </Link> -->
 
-                                <EditPayable :payable="item" />
+                                <EditPayable
+                                    :payable="item"
+                                    v-if="page.props.auth.user.role_id != 3"
+                                />
                             </td>
                         </tr>
                     </tbody>

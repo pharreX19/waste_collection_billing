@@ -7,7 +7,7 @@
         >
             <span aria-hidden="true">&rarr;</span>
 
-            {{ isOfficer ? "ފައިސާ ބަލައިގަތުން" : "ފައިސާ ދެއްކުން" }}
+            {{ isUser ? "ފައިސާ ދެއްކުން" : "ފައިސާ ބަލައިގަތުން" }}
         </button>
     </div>
     <TransitionRoot as="template" :show="open">
@@ -74,5 +74,5 @@ const onCancel = () => {
     open.value = false;
 };
 
-const isOfficer = computed(() => page.props.auth.user.role_id === 2);
+const isUser = computed(() => page.props.auth.user.role_id === 3);
 </script>
