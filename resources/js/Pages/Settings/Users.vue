@@ -77,9 +77,9 @@
                                 >
                                     <Switch
                                         dir="ltr"
-                                        @click="togglePropertyState(property)"
+                                        @click="toggleUserState(user)"
                                         :class="[
-                                            true //property.is_active
+                                            user.is_active
                                                 ? 'bg-indigo-600'
                                                 : 'bg-gray-200',
                                             'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
@@ -88,7 +88,7 @@
                                         <span class="sr-only">Use setting</span>
                                         <span
                                             :class="[
-                                                true //property.is_active
+                                                user.is_active
                                                     ? 'translate-x-5'
                                                     : 'translate-x-0',
                                                 'pointer-events-none relative inline-block size-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
@@ -96,7 +96,7 @@
                                         >
                                             <span
                                                 :class="[
-                                                    true //property.is_active
+                                                    user.is_active
                                                         ? 'opacity-0 duration-100 ease-out'
                                                         : 'opacity-100 duration-200 ease-in',
                                                     'absolute inset-0 flex size-full items-center justify-center transition-opacity',
@@ -119,7 +119,7 @@
                                             </span>
                                             <span
                                                 :class="[
-                                                    true //property.is_active
+                                                    user.is_active
                                                         ? 'opacity-100 duration-200 ease-in'
                                                         : 'opacity-0 duration-100 ease-out',
                                                     'absolute inset-0 flex size-full items-center justify-center transition-opacity',
@@ -143,7 +143,9 @@
                                     class="flex justify-around relative whitespace-nowrap py-5 text-sm font-medium sm:pr-0 text-center px-auto"
                                 >
                                     <NewUser :user="user" />
-                                    <ConfirmDelete :property_id="user.id" />
+                                    <ConfirmDelete
+                                        :property_id="`${user.id}`"
+                                    />
                                 </td>
                             </tr>
                         </tbody>
@@ -151,7 +153,7 @@
                 </div>
             </div>
         </div>
-        <Pagination :links="links" />
+        <Pagination :links="data.links" />
     </div>
 </template>
 
@@ -159,13 +161,28 @@
 import NewUser from "./NewUser.vue";
 import ConfirmDelete from "@/components/ConfirmDelete.vue";
 import dayjs from "../../utils/dayjs";
+import { useForm } from "@inertiajs/vue3";
+import { Switch } from "@headlessui/vue";
+import Pagination from "@/components/Pagination.vue";
 
 const props = defineProps({
     data: {
-        type: Array,
+        type: Object,
         required: true,
     },
 });
+
+const toggleUserState = async (user) => {
+    const form = useForm({
+        ...user,
+        is_active: !user.is_active,
+    });
+    form.put(
+        route("users.update", {
+            user: user.id,
+        })
+    );
+};
 </script>
 
 <style lang="scss" scoped></style>
