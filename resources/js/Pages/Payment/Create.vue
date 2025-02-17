@@ -35,6 +35,7 @@ import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import NewPaymentForm from "@/components/NewPaymentForm.vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
+import { useUserRole } from "@/composables/useUserRole";
 
 const props = defineProps({
     isEdit: {
@@ -49,7 +50,7 @@ const props = defineProps({
     },
 });
 
-const page = usePage();
+const { isUser } = useUserRole();
 const open = ref(false);
 const errors = ref({});
 
@@ -73,6 +74,4 @@ const onCancel = () => {
 
     open.value = false;
 };
-
-const isUser = computed(() => page.props.auth.user.role_id === 3);
 </script>

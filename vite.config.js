@@ -21,6 +21,10 @@ export default defineConfig({
             // "@/*": "/resources/js/*",
             "@/images": path.resolve(__dirname, "resources/images"),
             "@/components": path.resolve(__dirname, "resources/js/Components"),
+            "@/composables": path.resolve(
+                __dirname,
+                "resources/js/Composables"
+            ),
             "@": path.resolve(__dirname, "resources/js"),
         },
     },

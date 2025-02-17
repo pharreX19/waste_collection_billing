@@ -233,10 +233,7 @@
                                 />
                                 <!-- </Link> -->
 
-                                <EditPayable
-                                    :payable="item"
-                                    v-if="page.props.auth.user.role_id != 3"
-                                />
+                                <EditPayable :payable="item" v-if="!isUser" />
                             </td>
                         </tr>
                     </tbody>
@@ -302,6 +299,7 @@ import { Link, router, usePage } from "@inertiajs/vue3";
 import { payableStates, stateMappings } from "../../utils/stateMapping";
 import { NumberFormatter } from "../../utils/numberFormatter";
 import EditPayable from "../Payable/EditPayable.vue";
+import { useUserRole } from "@/composables/useUserRole";
 
 const props = defineProps({
     payables: {
@@ -332,6 +330,7 @@ const props = defineProps({
 });
 
 const page = usePage();
+const { isUser } = useUserRole();
 
 const payments = ref(null);
 const selectedPayable = ref(null);

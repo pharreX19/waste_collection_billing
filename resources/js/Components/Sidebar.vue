@@ -151,8 +151,11 @@ import { ChartPieIcon, HomeIcon, WrenchIcon } from "@heroicons/vue/24/outline";
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, onMounted, reactive } from "vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { useUserRole } from "@/composables/useUserRole";
 
 const page = usePage();
+const { isUser } = useUserRole();
+
 const userNavigation = [
     { name: "ޔޫޒަރ ޕުރޮފައިލް", href: "#", method: "GET" },
     // { name: "Settings", href: "#" },
@@ -193,7 +196,7 @@ const navigation = reactive([
 ]);
 
 onMounted(() => {
-    if (page.props.auth.user.role_id === 3) {
+    if (isUser.value) {
         navigation.length = 0;
         navigation.push({
             name: "ފައިސާ ދެއްކުން",
