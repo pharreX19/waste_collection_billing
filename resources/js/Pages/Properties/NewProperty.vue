@@ -1,21 +1,11 @@
 <template>
     <div class="mt-4 sm:mt-0 sm:flex-none">
-        <button
+        <Button
             v-if="!id"
-            type="button"
+            label="ގޭބިސި ރަޖިސްޓްރީ ކުރައްވާ"
             @click="handleModalOpen"
-            class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-            ގޭބިސި ރަޖިސްޓްރީ ކުރައްވާ
-        </button>
+        />
 
-        <!-- <button
-            v-else
-            @click="handleModalOpen"
-            class="text-indigo-600 hover:text-indigo-900"
-        >
-            އަދާހަމަ ކުރުން<span class="sr-only">Edit</span>
-        </button> -->
         <PencilSquareIcon
             v-else
             class="h-4 w-4 ml-2 hover:text-indigo-600 text-indigo-500"
@@ -50,7 +40,8 @@
 import { ref } from "vue";
 import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import NewEditPropertyForm from "@/components/NewEditPropertyForm.vue";
-import { PencilIcon, PencilSquareIcon } from "@heroicons/vue/24/outline";
+import { PencilSquareIcon } from "@heroicons/vue/24/outline";
+import Button from "@/components/Button.vue";
 
 const props = defineProps({
     isEdit: {
