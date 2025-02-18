@@ -46,7 +46,7 @@ class PayableController extends Controller
             });
         }]);
 
-        if ($request->isJson() && auth()->user()->role_id == Role::OFFICER) {
+        if ($request->isJson() && auth()->user()->role_id !== Role::USER) {
             return response()->json([
                 'property' => $property
             ]);

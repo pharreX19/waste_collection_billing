@@ -1,10 +1,13 @@
 <template>
     <div class="w-full relative">
-        <ThaanaInput
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            :value="modelValue.name"
-            @input="handleInput"
+        <TextInput
+            name="name"
+            label=""
             :placeholder="placeholder"
+            v-model="modelValue.name"
+            @update:modelValue="handleInput"
+            dir="rtl"
+            lang="dv"
         />
         <ul
             class="mt-1 w-full max-h-60 border border-gray-200 rounded-md bg-white absolute overflow-y-auto z-20"
@@ -24,7 +27,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
+import TextInput from "@/components/UI/TextInput.vue";
 
 const props = defineProps({
     modelValue: {
@@ -75,9 +78,9 @@ const setSelected = (item) => {
     emit("update:modelValue", item);
 };
 
-const handleInput = async (event) => {
+const handleInput = async (value) => {
     isOpen.value = true;
-    search.value = event.target.value;
+    search.value = value;
     emit("update:modelValue", { name: search.value, id: null });
     await debounceSearch();
 };

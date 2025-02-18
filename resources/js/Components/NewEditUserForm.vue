@@ -28,104 +28,45 @@
                                     class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
                                 >
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="name"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ނަން</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                v-model="form.name"
-                                                :value="form.name"
-                                                :disabled="props.user"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.name"
-                                        >
-                                            {{ errors.name }}
-                                        </div>
+                                        <TextInput
+                                            name="name"
+                                            label="ނަން"
+                                            v-model="form.name"
+                                            :errors="errors"
+                                            dir="rtl"
+                                            lang="dv"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="email"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >އީމެއިލް</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="email"
-                                                id="email"
-                                                v-model="form.email"
-                                                :disabled="props.user"
-                                                dir="ltr"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.email"
-                                        >
-                                            {{ errors.email }}
-                                        </div>
+                                        <TextInput
+                                            name="email"
+                                            label="އީމެއިލް"
+                                            v-model="form.email"
+                                            :errors="errors"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="password"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ޕާސްވާރޑް</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                id="password"
-                                                v-model="form.password"
-                                                :disabled="props.id"
-                                                dir="ltr"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.password"
-                                        >
-                                            {{ errors.password }}
-                                        </div>
+                                        <TextInput
+                                            type="password"
+                                            name="password"
+                                            label="ޕާސްވާރޑް"
+                                            v-model="form.password"
+                                            :errors="errors"
+                                            :disabled="!!props.id"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="password_confirmation"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ޕާސްވާރޑް ކޮންފާރމޭޝަން</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="password"
-                                                name="password_confirmation"
-                                                id="password_confirmation"
-                                                v-model="
-                                                    form.password_confirmation
-                                                "
-                                                dir="ltr"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.password_confirmation"
-                                        >
-                                            {{ errors.password_confirmation }}
-                                        </div>
+                                        <TextInput
+                                            type="password"
+                                            name="password_confirmation"
+                                            label="ޕާސްވާރޑް ކޮންފާރމޭޝަން"
+                                            v-model="form.password_confirmation"
+                                            :errors="errors"
+                                            :disabled="!!props.id"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -148,8 +89,8 @@
 <script setup>
 import { DialogPanel, TransitionChild } from "@headlessui/vue";
 import { useForm } from "@inertiajs/vue3";
-import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
 import Button from "@/components/Button.vue";
+import TextInput from "@/components/UI/TextInput.vue";
 
 const props = defineProps({
     errors: {

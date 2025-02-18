@@ -34,7 +34,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $this->route('user')?->id,
-            'password' => 'required_if:method,POST|nullable|string|min:5|max:20|confirmed',
+            'password' => 'required_if:method,POST|string|min:5|max:20|confirmed',
             'password_confirmation' => 'required_with:password',
             'is_active' => 'sometimes|nullable|boolean',
             'role_id' => 'exists:roles,id',
@@ -52,11 +52,11 @@ class UserRequest extends FormRequest
             'email.email' => 'އީމެއިލް ރަނގަޅެއް ނޫން',
             'email.unique' => 'އީމެއިލް ވަނީ ކުރިން ރަޖިސްޓަރ ކޮށްފައި',
 
-            'password_confirmation.required' => 'ޕާސްވާރޑް ލިޔުއްވާ',
+            'password_confirmation.required_with' => 'ޕާސްވާރޑް ލިޔުއްވާ',
 
             'password.required' => 'ޕާސްވާރޑް ލިޔުއްވާ',
             'password.confirmed' => 'ޕާސްވާރޑް އަދި ޕާސްވާރޑް ކޮންފަރމޭޝަން ދިމައެއް ނުވޭ',
-            'password.string' => 'ޕާސްވާރޑް ނޫން',
+            'password.string' => 'ޕާސްވާރޑް ލިޔުއްވާ',
             'password.min' => 'ޕާސްވާރޑްގެ ދިގުމިން އަދި ރަނގަޅެއްނޫން',
             'password.max' => 'ޕާސްވާރޑްގެ ދިގުމިން އަދި ރަނގަޅެއްނޫން'
         ];

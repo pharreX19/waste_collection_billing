@@ -1,8 +1,6 @@
 <template>
     <div class="flex h-6 shrink-0 items-center">
         <div class="group grid size-4 grid-cols-1">
-            <!-- :checked="modelValue" -->
-            <!-- @change="onChange" -->
             <input
                 :id="name"
                 :name="name"
@@ -31,9 +29,11 @@
                 />
             </svg>
         </div>
-    </div>
-    <div class="text-sm/6">
-        <span id="comments-description" class="text-gray-500">{{ label }}</span>
+        <div class="text-sm/6 mr-2">
+            <span id="comments-description" class="text-gray-500">{{
+                label
+            }}</span>
+        </div>
     </div>
 </template>
 

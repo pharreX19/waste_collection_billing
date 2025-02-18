@@ -28,112 +28,46 @@
                                     class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
                                 >
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="name"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ނަން</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                v-model="form.name"
-                                                :value="form.name"
-                                                :disabled="props.id"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="
-                                                errors.name
-                                                // && errors.name.indexOf(
-                                                // 'property name'
-                                                // ) > 0
-                                            "
-                                        >
-                                            {{ errors.name }}
-                                        </div>
+                                        <TextInput
+                                            name="name"
+                                            label="ގޭގެ ނަން"
+                                            :disabled="!!props.id"
+                                            v-model="form.name"
+                                            :errors="errors"
+                                            dir="rtl"
+                                            lang="dv"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="registration_no"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ރަޖިސްޓްރޭޝަން ނަންބަރ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="registration_no"
-                                                id="registration_no"
-                                                v-model="form.registration_no"
-                                                :disabled="props.id"
-                                                dir="ltr"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.registration_no"
-                                        >
-                                            {{ errors.registration_no }}
-                                        </div>
+                                        <TextInput
+                                            name="registration_no"
+                                            label="ރަޖިސްޓްރޭޝަން ނަންބަރ"
+                                            :disabled="!!props.id"
+                                            v-model="form.registration_no"
+                                            :errors="errors"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="property_category_id"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ކެޓަގަރީ</label
-                                        >
-                                        <div class="mt-2">
-                                            <select
-                                                id="property_category_id"
-                                                name="property_category_id"
-                                                v-model="
-                                                    form.property_category_id
-                                                "
-                                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            >
-                                                <option
-                                                    v-for="category in categories"
-                                                    :value="category.id"
-                                                >
-                                                    {{ category.name }}
-                                                </option>
-                                            </select>
-                                        </div>
+                                        <SelectInput
+                                            label="ގޭގެ ކެޓަގަރީ"
+                                            name="property_category_id"
+                                            v-model="form.property_category_id"
+                                            :options="categories"
+                                            :errors="errors"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="registration_date"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ރަޖިސްޓްރީކުރެވުނު ތާރީޚް</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="date"
-                                                name="registration_date"
-                                                id="registration_date"
-                                                v-model="form.registration_date"
-                                                :disabled="props.id"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="
-                                                errors.name
-                                                // && errors.name.indexOf(
-                                                // 'property name'
-                                                // ) > 0
-                                            "
-                                        >
-                                            {{ errors.name }}
-                                        </div>
+                                        <TextInput
+                                            type="date"
+                                            name="registration_date"
+                                            label="ރަޖިސްޓްރީކުރެވުނު ތާރީޚް"
+                                            :disabled="!!props.id"
+                                            v-model="form.registration_date"
+                                            :errors="errors"
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -218,23 +152,16 @@
                                     <br v-if="!isGovernmentProperty" />
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="name"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ފުރިހަމަ ނަން</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                                name="name"
-                                                id="name"
-                                                v-model="person.name"
-                                                :value="person.name"
-                                                :disabled="
-                                                    props.id && index === 0
-                                                "
-                                            />
-                                        </div>
+                                        <TextInput
+                                            name="name"
+                                            label="ފުރިހަމަ ނަން"
+                                            :disabled="
+                                                !!props.id && index === 0
+                                            "
+                                            v-model="person.name"
+                                            dir="rtl"
+                                            lang="dv"
+                                        />
                                         <div
                                             class="text-xs text-red-600 mt-1"
                                             v-if="
@@ -255,26 +182,16 @@
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="contact_no"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >މޯބައިލް ނަންބަރ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                id="contact_no"
-                                                name="contact_no"
-                                                type="text"
-                                                pattern="\d*"
-                                                maxlength="7"
-                                                v-model="person.contact_no"
-                                                :disabled="
-                                                    props.id && index === 0
-                                                "
-                                                dir="ltr"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
+                                        <TextInput
+                                            name="contact_no"
+                                            label="މޯބައިލް ނަންބަރ"
+                                            :disabled="
+                                                !!props.id && index === 0
+                                            "
+                                            v-model="person.contact_no"
+                                            pattern="\d*"
+                                            maxlength="7"
+                                        />
                                         <div
                                             class="text-xs text-red-600 mt-1"
                                             v-if="
@@ -290,90 +207,19 @@
                                             }}
                                         </div>
                                     </div>
-
-                                    <!-- <div class="sm:col-span-4">
-                                        <label
-                                            for="address"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ދާއިމީ އެޑްރެސް</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                type="text"
-                                                name="address"
-                                                id="address"
-                                                v-model="person.address"
-                                                :value="person.address"
-                                                :disabled="
-                                                    props.id && index === 0
-                                                "
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="
-                                                errors[
-                                                    `responsible_persons.${index}.address`
-                                                ]
-                                            "
-                                        >
-                                            {{
-                                                errors[
-                                                    `responsible_persons.${index}.address`
-                                                ]
-                                            }}
-                                        </div>
-                                    </div> -->
                                 </div>
 
                                 <div class="flex gap-3 mt-3" v-if="index === 0">
-                                    <div class="flex h-6 shrink-0 items-center">
-                                        <div
-                                            class="group grid size-4 grid-cols-1"
-                                        >
-                                            <input
-                                                id="responsible_person"
-                                                aria-describedby="responsible_person"
-                                                name="responsible_person"
-                                                type="checkbox"
-                                                :checked="
-                                                    form.responsible_persons
-                                                        .length > 1
-                                                "
-                                                @change="addResponsiblePersons"
-                                                class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                                            />
-                                            <svg
-                                                class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
-                                                viewBox="0 0 14 14"
-                                                fill="none"
-                                            >
-                                                <path
-                                                    class="opacity-0 group-has-[:checked]:opacity-100"
-                                                    d="M3 8L6 11L11 3.5"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                                <path
-                                                    class="opacity-0 group-has-[:indeterminate]:opacity-100"
-                                                    d="M3 7H11"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="text-sm/6">
-                                        <span
-                                            id="comments-description"
-                                            class="text-gray-500"
-                                            >މަސްއޫލުވެރިފަރާތަކީ
-                                            ވެރިފަރާތްކަމުގައި ނުވާނަމަ</span
-                                        >
-                                    </div>
+                                    <CheckboxInput
+                                        name="responsible_person"
+                                        @update:modelValue="
+                                            addResponsiblePersons
+                                        "
+                                        label="މަސްއޫލުވެރިފަރާތަކީ ވެރިފަރާތްކަމުގައި ނުވާނަމަ"
+                                        :modelValue="
+                                            responsiblePersonIsNotOwner
+                                        "
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -396,10 +242,12 @@
 import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
 import { onMounted } from "vue";
 import { DialogPanel, TransitionChild } from "@headlessui/vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
-import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
 import Button from "@/components/Button.vue";
+import TextInput from "@/components/UI/TextInput.vue";
+import SelectInput from "@/components/UI/SelectInput.vue";
+import CheckboxInput from "@/components/UI/CheckboxInput.vue";
 
 const props = defineProps({
     errors: {
@@ -430,11 +278,13 @@ const form = useForm({
             name: null,
             national_id: null,
             contact_no: null,
-            // address: null,
-            // island: "Eydhafushi",
         },
     ],
 });
+
+const responsiblePersonIsNotOwner = computed(
+    () => form.responsible_persons.length > 1
+);
 
 onMounted(() => {
     fetchPropertyCategories();
@@ -455,14 +305,12 @@ const onCancel = function () {
     form.reset();
 };
 
-const addResponsiblePersons = (event) => {
-    if (event.target.checked) {
+const addResponsiblePersons = (value) => {
+    if (value) {
         form.responsible_persons.push({
             name: null,
             national_id: null,
             contact_no: null,
-            // address: null,
-            // island: "Eydhafushi",
         });
     } else {
         form.responsible_persons.pop();

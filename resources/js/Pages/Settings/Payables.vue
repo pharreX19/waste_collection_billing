@@ -25,15 +25,12 @@
                             }}
 
                             <transition name="slide">
-                                <input
+                                <TextInput
                                     v-if="activeIndex === index"
                                     type="number"
                                     step="0.1"
                                     name="fine_amount"
-                                    id="fine_amount"
-                                    dir="ltr"
                                     v-model="form[index].value"
-                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </transition>
                         </div>
@@ -60,6 +57,7 @@
 import { ref } from "vue";
 import { NumberFormatter } from "../../utils/numberFormatter";
 import { useForm } from "@inertiajs/vue3";
+import TextInput from "@/components/UI/TextInput.vue";
 const props = defineProps({
     data: {
         type: Array,

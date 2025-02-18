@@ -28,176 +28,67 @@
                                     class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
                                 >
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="name"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ވިޔަ ރެފަރެންސް ނަންބަރ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                id="name"
-                                                dir="ltr"
-                                                v-model="form.viya_reference_no"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                        <div
-                                            class="text-xs text-red-600 mt-1"
-                                            v-if="errors.viya_reference_no"
-                                        >
-                                            {{ errors.viya_reference_no }}
-                                        </div>
+                                        <TextInput
+                                            type="password"
+                                            name="viya_reference_no"
+                                            label="ވިޔަ ރެފަރެންސް ނަންބަރ"
+                                            v-model="form.viya_reference_no"
+                                            :errors="errors"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="registration_no"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ބިލް ކުރެވުނު މުއްދަތު</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="registration_no"
-                                                id="registration_no"
-                                                :value="
-                                                    dayjs(
-                                                        payable.billed_period
-                                                    ).format('MMMM YYYY')
-                                                "
-                                                disabled
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
+                                        <TextInput
+                                            name="billed_period"
+                                            label="ބިލް ކުރެވުނު މުއްދަތު"
+                                            :modelValue="
+                                                dayjs(
+                                                    payable.billed_period
+                                                ).format('MMMM YYYY')
+                                            "
+                                            dir="rtl"
+                                            :disabled="true"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="property_category_id"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >މަހު ފީ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="registration_no"
-                                                id="registration_no"
-                                                :value="payable.amount"
-                                                disabled
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
+                                        <TextInput
+                                            name="payable_amount"
+                                            label="މަހު ފީ"
+                                            :modelValue="payable.amount"
+                                            :disabled="true"
+                                            dir="rtl"
+                                        />
                                     </div>
 
                                     <div class="sm:col-span-4">
-                                        <label
-                                            for="property_category_id"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ޖޫރިމަނާ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="registration_no"
-                                                id="registration_no"
-                                                :value="payable.fine"
-                                                disabled
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
+                                        <TextInput
+                                            name="fine"
+                                            label="ޖޫރިމަނާ"
+                                            :modelValue="payable.fine"
+                                            :disabled="true"
+                                            dir="rtl"
+                                        />
                                     </div>
 
                                     <div
                                         class="sm:col-span-4"
                                         v-if="payable.payments.length > 0"
                                     >
-                                        <label
-                                            for="property_category_id"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ބިލް ދެއްކި ތާރީޚް</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                type="text"
-                                                name="registration_no"
-                                                id="registration_no"
-                                                :value="
-                                                    dayjs(
-                                                        payable.updated_at
-                                                    ).format('DD MMMM YYYY')
-                                                "
-                                                disabled
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
+                                        <TextInput
+                                            name="updated_at"
+                                            label="ބިލް ދެއްކި ތާރީޚް"
+                                            dir="rtl"
+                                            :modelValue="
+                                                dayjs(
+                                                    payable.updated_at
+                                                ).format('DD MMMM YYYY')
+                                            "
+                                            :disabled="true"
+                                        />
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="border-b border-gray-900/10 pb-12">
-                                <h2
-                                    class="text-base/7 font-semibold text-gray-900"
-                                >
-                                    ގޭގެ ތަފްޞީލު
-                                </h2>
-
-                                <div
-                                    class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8"
-                                >
-                                    <div class="sm:col-span-4">
-                                        <label
-                                            for="national_id"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ނަން</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                                name="name"
-                                                id="name"
-                                                disabled
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="sm:col-span-4">
-                                        <label
-                                            for="name"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ރަޖިސްޓްރޭޝަން ނަންބަރ</label
-                                        >
-                                        <div class="mt-2">
-                                            <ThaanaInput
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                                name="name"
-                                                id="name"
-                                                :disabled="
-                                                    props.id && index === 0
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="sm:col-span-4">
-                                        <label
-                                            for="contact_no"
-                                            class="block text-sm/6 font-medium text-gray-900"
-                                            >ގޭގެ ކެޓަގަރީ</label
-                                        >
-                                        <div class="mt-2">
-                                            <input
-                                                id="contact_no"
-                                                name="contact_no"
-                                                type="text"
-                                                pattern="\d*"
-                                                maxlength="7"
-                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
 
                         <div
@@ -215,13 +106,11 @@
 </template>
 
 <script setup>
-import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
 import { DialogPanel, TransitionChild } from "@headlessui/vue";
 import { useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
-import ThaanaInput from "thaana-keyboard-vue/src/ThaanaInput.vue";
 import Button from "@/components/Button.vue";
 import dayjs from "../utils/dayjs";
+import TextInput from "@/components/UI/TextInput.vue";
 
 const props = defineProps({
     payable: {

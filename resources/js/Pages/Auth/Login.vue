@@ -19,91 +19,43 @@
             <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
                 <form class="space-y-6" @submit.prevent="onSubmit">
                     <div>
-                        <label
-                            for="name"
-                            class="block text-sm font-medium leading-6 text-gray-900"
-                            >ގޭގެ ނަން ނުވަތަ ރަޖިސްޓްރީ ކޯޑް</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                dir="ltr"
-                                id="name"
-                                name="name"
-                                type="name"
-                                autocomplete="name"
-                                v-model="form.name"
-                                :disabled="requestedOtp"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div
-                            class="text-xs text-red-600 mt-1"
-                            v-if="errors.name"
-                        >
-                            {{ errors.name }}
-                        </div>
+                        <TextInput
+                            name="name"
+                            label="ގޭގެ ނަން ނުވަތަ ރަޖިސްޓްރީ ކޯޑް"
+                            :disabled="requestedOtp"
+                            v-model="form.name"
+                            :errors="errors"
+                        />
                     </div>
 
                     <div>
-                        <label
-                            for="contact_no"
-                            class="block text-sm font-medium leading-6 text-gray-900"
-                            >މޯބައިލް ނަންބަރ</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                dir="ltr"
-                                id="contact_no"
-                                name="contact_no"
-                                type="contact_no"
-                                autocomplete="current-contact_no"
-                                v-model="form.contact_no"
-                                :disabled="requestedOtp"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div
-                            class="text-xs text-red-600 mt-1"
-                            v-if="errors.contact_no"
-                        >
-                            {{ errors.contact_no }}
-                        </div>
+                        <TextInput
+                            name="contact_no"
+                            label="މޯބައިލް ނަންބަރ"
+                            :disabled="requestedOtp"
+                            v-model="form.contact_no"
+                            :errors="errors"
+                        />
                     </div>
 
                     <div v-if="requestedOtp">
-                        <label
-                            for="otp"
-                            class="block text-sm font-medium leading-6 text-gray-900"
-                            >އޯޓީޕީ</label
-                        >
-                        <div class="mt-2">
-                            <input
-                                dir="ltr"
-                                id="otp"
-                                name="otp"
-                                type="text"
-                                maxlength="6"
-                                pattern="\d*"
-                                autocomplete="current-otp"
-                                v-model="form.otp"
-                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                        <div
-                            class="text-xs text-red-600 mt-1"
-                            v-if="errors.otp"
-                        >
-                            {{ errors.otp }}
-                        </div>
+                        <TextInput
+                            name="otp"
+                            label="އޯޓީޕީ"
+                            maxlength="6"
+                            pattern="\d*"
+                            v-model="form.otp"
+                            :errors="errors"
+                        />
                     </div>
 
                     <div>
-                        <button
+                        <Button
                             type="submit"
-                            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                            ލޮގިން ކުރައްވާ
-                        </button>
+                            variant="submit"
+                            label=" ލޮގިން ކުރައްވާ"
+                            class="w-full"
+                        />
                         <div
                             class="text-xs text-red-600 mt-3 text-center"
                             v-if="errors?.error"
@@ -118,8 +70,10 @@
 </template>
 
 <script setup>
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
+import TextInput from "@/components/UI/TextInput.vue";
+import Button from "@/components/Button.vue";
 
 const props = defineProps({
     property_id: {
