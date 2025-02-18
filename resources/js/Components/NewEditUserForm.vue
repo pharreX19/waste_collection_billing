@@ -35,6 +35,7 @@
                                             :errors="errors"
                                             dir="rtl"
                                             lang="dv"
+                                            :disabled="!!props.user"
                                         />
                                     </div>
 
@@ -44,6 +45,7 @@
                                             label="އީމެއިލް"
                                             v-model="form.email"
                                             :errors="errors"
+                                            :disabled="!!props.user"
                                         />
                                     </div>
 
@@ -54,7 +56,6 @@
                                             label="ޕާސްވާރޑް"
                                             v-model="form.password"
                                             :errors="errors"
-                                            :disabled="!!props.id"
                                         />
                                     </div>
 
@@ -65,7 +66,6 @@
                                             label="ޕާސްވާރޑް ކޮންފާރމޭޝަން"
                                             v-model="form.password_confirmation"
                                             :errors="errors"
-                                            :disabled="!!props.id"
                                         />
                                     </div>
                                 </div>

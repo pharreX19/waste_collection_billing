@@ -35,6 +35,7 @@
                                             :errors="errors"
                                             dir="rtl"
                                             lang="dv"
+                                            :disabled="!!props.category"
                                         />
                                     </div>
 
