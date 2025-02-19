@@ -55,7 +55,11 @@ class AuthController extends Controller
         }
 
         if (!Hash::check($request->otp, $user->otp) && $user->otp_expires_at > Carbon::now()) {
-            throw ValidationException::withMessages(['otp' => 'އޯޓީޕީ ރަނގަޅެއް ނޫން']);
+            return Inertia::render('Auth/Login', [
+                'name' => $user->name,
+                'property_id' => $request->property_id,
+                'errors' => ['otp' => 'އޯޓީޕީ ރަނގަޅެއް ނޫން']
+            ]);
         }
 
 

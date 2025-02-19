@@ -39,14 +39,7 @@
                     </div>
 
                     <div v-if="requestedOtp">
-                        <TextInput
-                            name="otp"
-                            label="އޯޓީޕީ"
-                            maxlength="6"
-                            pattern="\d*"
-                            v-model="form.otp"
-                            :errors="errors"
-                        />
+                        <OtpInput :errors="errors" v-model="form.otp" />
                     </div>
 
                     <div>
@@ -74,6 +67,7 @@ import { useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import TextInput from "@/components/UI/TextInput.vue";
 import Button from "@/components/Button.vue";
+import OtpInput from "../../Components/OtpInput.vue";
 
 const props = defineProps({
     property_id: {
@@ -89,7 +83,7 @@ const props = defineProps({
 const form = useForm({
     name: "",
     contact_no: "",
-    otp: "",
+    otp: ref(new Array(6).fill("")),
 });
 
 const requestedOtp = ref(false);
@@ -130,6 +124,7 @@ const login = () => {
         ...data,
         name: props.name,
         property_id: props.property_id,
+        otp: Object.values(form.otp).join(""),
     })).post(route("auth.login"), {
         onError: (errorMessages) => {
             errors.value = errorMessages;
