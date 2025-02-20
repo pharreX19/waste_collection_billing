@@ -16,6 +16,8 @@ use Spatie\Browsershot\Browsershot;
 use App\Http\Requests\PayableRequest;
 use Illuminate\Support\Facades\Response;
 use App\Constants\Payable as ConstantsPayable;
+use App\Services\GenerateReport;
+use App\Services\GenerateReports;
 
 class PayableController extends Controller
 {
@@ -123,83 +125,7 @@ class PayableController extends Controller
 
     public function downloadReport(Request $request)
     {
-
-        $start_date = $request->query('start_date') ?? Carbon::now()->startOfYear()->toDateString();
-        $end_date = $request->query('end_date') ?? Carbon::parse($request->query('start_date'))->addYear(1)->toDateString();
-        $name = $request->query('name') ?? null;
-
-        $data = Payable::with('property:id,name')
-            ->whereDate('billed_period', '>=', $start_date)
-            ->whereDate('billed_period', '<', $end_date)
-            ->when(isset($name), function ($query) use ($name) {
-                $query->whereHas('property', function ($q) use ($name) {
-                    $q->where('name', $name);
-                });
-            })
-            ->get();
-
-        if ($request->format === 'csv') {
-            $csvFileName = 'payables.csv';
-            $csvFile = fopen($csvFileName, 'w');
-            $headers = [
-                'ސްޓޭޓަސް',
-                'ދެއްކި ޖުމްލަ',
-                'ދައްކަންޖެހޭ ޖުމްލަ',
-                'ޖޫރިމަނާ',
-                'މަހުފީ',
-                'މުއްދަތުހަމަވާ ތާރީޚް',
-                'ވިޔަ ރެފަރެންސް ނަންބަރ',
-                'ބިލްކުރެވުނު މުއްދަތު',
-                'ގޭގެ ނަން',
-            ];
-
-            fputcsv($csvFile, $headers);
-
-            foreach ($data as $row) {
-                fputcsv($csvFile, [
-                    $stateLabels[$row['state']] ?? 'މުއްދަތު ހަމަވެފައި',
-                    $row['grand_total'] - $row['balance'],
-                    $row['balance'],
-                    $row['fine'],
-                    $row['amount'],
-                    (new FormatDhivehiDate())->formatDhivehiDate($row['due_date']),
-                    $row['viya_reference_no'],
-                    (new FormatDhivehiDate())->formatDhivehiMonthYear($row['billed_period']),
-                    $row->property->name,
-                ]);
-            }
-
-            fclose($csvFile);
-            return Response::download(public_path($csvFileName))->deleteFileAfterSend(true);
-        } else {
-
-            // $pdf = PDF::loadView('PayableReport', array('users' =>  $data))
-            //     ->setPaper('a4', 'landscape');
-
-            // $template = (new \Spatie\Browsershot\Browsershot())
-            // ->bodyHtml('<h1>Hello World</h1>');
-
-            // $template->savePdf('hello-world.pdf');
-
-            $html = view('PayableReport', ['users' => $data])->render();
-            return $html;
-
-            $pdfPath = public_path('example.pdf');
-            Browsershot::html($html)->save($pdfPath);
-
-            // return response()->download($pdfPath)->deleteFileAfterSend(true);
-
-            // Browsershot::html($html)->save('example.pdf');
-
-            // $pdf = Pdf::view('PayableReport', ['users' => $data])
-            //     ->format('a4')
-            //     ->save('invoice.pdf');
-
-            // return $pdf->stream();
-            // return $pdf->download('report.pdf');
-        }
-
-        // dd($data);
+        return (new GenerateReports())->handle($request);
     }
 
 

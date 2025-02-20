@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="dv" dir="rtl">
+<html>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <link href="{{ public_path('tailwind-pdf.css') }}" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 
     <style>
     @font-face {
@@ -17,49 +17,80 @@
     * {
         font-family: 'Faruma';
         direction: rtl;
-        unicode-bidi: bidi-override;
+        /* unicode-bidi: bidi-override; */
+    }
+
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-after: auto;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: right;
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+        background-color: #f3f4f6;
+        margin-top: 20px;
+        page-break-before: avoid;
+    }
+
+    tbody {
+        page-break-before: auto;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        page-break-before: avoid;
     }
 </style>
 </head>
 
-<body class="bg-gray-50 p-8" dir="rtl">
-    {{-- <div class="w-11/12 mx-auto flex justify-between items-center"> --}}
-        {{-- <img src="{{ public_path('assets/images/logo.png') }}" class="w-24" alt="Logo"> --}}
-        {{-- <h1 class="text-2xl font-bold text-teal-700">All User Details</h1> --}}
-    {{-- </div> --}}
-
-    <div class="overflow-x-auto mt-6">
-        <table class="w-full border border-gray-300 bg-white shadow-lg">
-            <thead class="bg-blue-600 text-white">
-                <tr>
-                    <th class="px-4 py-2 text-right" style="direction: ltr; unicode-bidi: embed;">ނަން</th>
-
-                    <th class="px-4 py-2">ބިލްކުރެވުނު މުއްދަތު</th>
-                    <th class="px-4 py-2">ވިޔަ ރެފަރެންސް ނަންބަރ</th>
-                    <th class="px-4 py-2">މުއްދަތުހަމަވާ ތާރީޚް</th>
-                    <th class="px-4 py-2">މަހުފީ</th>
-                    <th class="px-4 py-2">ޖޫރިމަނާ</th>
-                    <th class="px-4 py-2">ދައްކަންޖެހޭ ޖުމްލަ</th>
-                    <th class="px-4 py-2">ދެއްކި ޖުމްލަ</th>
-                    <th class="px-4 py-2">ސްޓޭޓަސް</th>
+    <body class="bg-white p-8" dir="rtl">
+        <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+                <tr class="divide-x divide-gray-200">
+              <th scope="col" class="whitespace-nowrap py-3.5 pl-4 pr-3 text-right text-sm font-semibold text-gray-900 sm:pl-0">ނަން</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">ބިލްކުރެވުނު މުއްދަތު</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">ވިޔަ ރެފަރެންސް ނަންބަރ</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">މުއްދަތުހަމަވާ ތާރީޚް</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">މަހުފީ</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">ޖޫރިމަނާ</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">ދައްކަންޖެހޭ ޖުމްލަ</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">ދެއްކި ޖުމްލަ</th>
+              <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-right text-sm font-semibold text-gray-900">ސްޓޭޓަސް</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($users as $payable)
-                    <tr class="border-b border-gray-200 even:bg-gray-100">
-                        <td class="px-4 py-2">{{ $payable->property->name }}</td>
-                        <td class="px-4 py-2">{{ date('F Y', strtotime($payable->billed_period)) }}</td>
-                        <td class="px-4 py-2 text-blue-500">{{ $payable->viya_reference_no }}</td>
-                        <td class="px-4 py-2">{{ date('F j, Y', strtotime($payable->due_date)) }}</td>
-                        <td class="px-4 py-2">{{ $payable->amount }}</td>
-                        <td class="px-4 py-2">{{ $payable->fine }}</td>
-                        <td class="px-4 py-2">{{ $payable->grand_total - $payable->balance }}</td>
-                        <td class="px-4 py-2">{{ $payable->status }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</body>
 
+            <tbody class="divide-y divide-gray-200 bg-white">
+                @foreach ($payables as $payable)
+                <tr class="divide-x divide-gray-200">
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500 sm:pl-0">{{ $payable->property->name }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm font-medium text-gray-900">{{ (new App\Services\FormatDhivehiDate())->formatDhivehiMonthYear($payable->billed_period) }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-900">{{ $payable->viya_reference_no }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500">{{ (new App\Services\FormatDhivehiDate())->formatDhivehiDate($payable->due_date) }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500">{{ $payable->amount }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500">{{ $payable->fine }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500">{{ $payable->balance }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500">{{ $payable->grand_total - $payable->balance }}</td>
+                    <td class="whitespace-nowrap p-4 text-sm text-gray-500">
+                        {{ (new \App\Services\PayableStateMapping())->handle($payable->state) }}
+                    </td>
+                </tr>
+                @endforeach
+          </tbody>
+        </table>
+    </body>
 </html>
+
+
+
+
