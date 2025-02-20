@@ -82,12 +82,12 @@
                                     </span>
                                 </td>
                                 <td
-                                    class="flex justify-around relative whitespace-nowrap py-5 text-sm font-medium sm:pr-0 text-center px-auto"
+                                    class="flex justify-center relative whitespace-nowrap py-5 text-sm font-medium sm:pr-0 text-center px-auto"
                                 >
                                     <NewCategory :category="category" />
-                                    <ConfirmDelete
+                                    <!-- <ConfirmDelete
                                         :property_id="`${category.id}`"
-                                    />
+                                    /> -->
                                 </td>
                             </tr>
                         </tbody>
