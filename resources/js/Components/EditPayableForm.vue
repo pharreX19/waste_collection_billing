@@ -29,7 +29,6 @@
                                 >
                                     <div class="sm:col-span-4">
                                         <TextInput
-                                            type="password"
                                             name="viya_reference_no"
                                             label="ވިޔަ ރެފަރެންސް ނަންބަރ"
                                             v-model="form.viya_reference_no"
