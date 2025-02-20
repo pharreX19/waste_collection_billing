@@ -73,7 +73,8 @@ class AuthController extends Controller
 
 
         return to_route('payables.index', [
-            'property' => $request->property_id
+            'property' => $request->property_id,
+            'year' => Carbon::now()->year
         ]);
     }
 
