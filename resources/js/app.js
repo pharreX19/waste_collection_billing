@@ -3,6 +3,7 @@ import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { ZiggyVue } from "ziggy-js";
 import Layout from "./Layout.vue";
+import "vue3-toastify/dist/index.css";
 
 createInertiaApp({
     resolve: (name) => {

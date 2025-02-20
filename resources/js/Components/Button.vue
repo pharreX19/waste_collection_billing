@@ -21,7 +21,7 @@ const props = defineProps({
     variant: {
         type: String,
         default: "submit",
-        validator: (value) => ["submit", "cancel"].includes(value),
+        validator: (value) => ["submit", "cancel", "danger"].includes(value),
     },
     label: {
         type: String,
@@ -45,6 +45,8 @@ const buttonClasses = computed(() => ({
     "bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600 text-white shadow-sm":
         props.variant === "submit",
     "text-sm/6 text-gray-900": props.variant === "cancel",
+    "bg-red-600 hover:bg-red-500 focus-visible:outline-red-600":
+        props.variant === "danger",
     "opacity-50 cursor-not-allowed": props.disabled,
 }));
 
