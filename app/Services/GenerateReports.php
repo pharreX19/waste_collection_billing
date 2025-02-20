@@ -36,9 +36,8 @@ class GenerateReports
     private function pdf($data)
     {
         $html = view('PayableReport', ['payables' => $data])->render();
-        $pdfPath = public_path('payables.pdf');
 
-        Browsershot::html($html)
+        $pdfContent = Browsershot::html($html)
             ->margins(10, 10, 10, 10)
             ->format('A4')
             ->landscape()
@@ -47,44 +46,52 @@ class GenerateReports
             ->setOption('args', ['--no-sandbox', '--disable-gpu'])
             ->setOption('disable-dev-shm-usage', true)
             ->waitUntilNetworkIdle()
-            ->save($pdfPath);
+            ->pdf();
 
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        return response(
+            $pdfContent,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="payables.pdf"',
+            ]
+        );
     }
 
     private function csv($data)
     {
-        $csvFileName = 'payables.csv';
-        $csvFile = fopen($csvFileName, 'w');
-        $headers = [
-            'ސްޓޭޓަސް',
-            'ދެއްކި ޖުމްލަ',
-            'ދައްކަންޖެހޭ ޖުމްލަ',
-            'ޖޫރިމަނާ',
-            'މަހުފީ',
-            'މުއްދަތުހަމަވާ ތާރީޚް',
-            'ވިޔަ ރެފަރެންސް ނަންބަރ',
-            'ބިލްކުރެވުނު މުއްދަތު',
-            'ގޭގެ ނަން',
-        ];
+        return response()->stream(function () use ($data) {
+            $handle = fopen('php://output', 'w');
 
-        fputcsv($csvFile, $headers);
+            $headers = [
+                'ސްޓޭޓަސް',
+                'ދެއްކި ޖުމްލަ',
+                'ދައްކަންޖެހޭ ޖުމްލަ',
+                'ޖޫރިމަނާ',
+                'މަހުފީ',
+                'މުއްދަތުހަމަވާ ތާރީޚް',
+                'ވިޔަ ރެފަރެންސް ނަންބަރ',
+                'ބިލްކުރެވުނު މުއްދަތު',
+                'ގޭގެ ނަން',
+            ];
 
-        foreach ($data as $row) {
-            fputcsv($csvFile, [
-                $stateLabels[$row['state']] ?? 'މުއްދަތު ހަމަވެފައި',
-                $row['grand_total'] - $row['balance'],
-                $row['balance'],
-                $row['fine'],
-                $row['amount'],
-                (new FormatDhivehiDate())->formatDhivehiDate($row['due_date']),
-                $row['viya_reference_no'],
-                (new FormatDhivehiDate())->formatDhivehiMonthYear($row['billed_period']),
-                $row->property->name,
-            ]);
-        }
-
-        fclose($csvFile);
-        return response()->download(public_path($csvFileName))->deleteFileAfterSend(true);
+            fputcsv($handle, $headers);
+            foreach ($data as $row) {
+                fputcsv($handle, [
+                    (new PayableStateMapping())->handle($row['state']),
+                    $row['grand_total'] - $row['balance'],
+                    $row['balance'],
+                    $row['fine'],
+                    $row['amount'],
+                    (new FormatDhivehiDate())->formatDhivehiDate($row['due_date']),
+                    $row['viya_reference_no'],
+                    (new FormatDhivehiDate())->formatDhivehiMonthYear($row['billed_period']),
+                    $row->property->name,
+                ]);
+            }
+        }, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="payables.csv"',
+        ]);
     }
 }
