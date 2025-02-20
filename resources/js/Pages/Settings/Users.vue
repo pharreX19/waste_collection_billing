@@ -154,7 +154,7 @@
                 </div>
             </div>
         </div>
-        <Pagination :links="data.links" />
+        <Pagination :links="data.links" v-if="data.length > 0" />
     </div>
 </template>
 

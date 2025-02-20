@@ -20,7 +20,7 @@
                         <dd
                             class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto"
                         >
-                            <div class="text-gray-900">{{ user.name }}</div>
+                            <div class="text-gray-600">{{ user.name }}</div>
                         </dd>
                     </div>
                     <div class="py-6 sm:flex">
@@ -32,7 +32,7 @@
                         <dd
                             class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto"
                         >
-                            <div class="text-gray-900">
+                            <div class="text-gray-600">
                                 {{ user.email }}
                             </div>
                         </dd>
@@ -46,7 +46,7 @@
                         <dd
                             class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto"
                         >
-                            <div class="text-gray-900">
+                            <div class="text-gray-600">
                                 {{ userRole }}
                             </div>
                         </dd>
@@ -60,7 +60,7 @@
                         <dd
                             class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto"
                         >
-                            <div class="text-gray-900">
+                            <div class="text-gray-600">
                                 {{
                                     dayjs(user.created_at).format(
                                         "DD MMMM YYYY"
