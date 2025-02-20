@@ -50,7 +50,7 @@ class UserController extends Controller
     {
         $updateFields = [];
 
-        if (auth()->user()->role_id === Role::ADMIN) {
+        if (auth()->user()->role_id == Role::ADMIN) {
             if ($request->filled('is_active')) {
                 $updateFields['is_active'] = intval($request->is_active);
             }
