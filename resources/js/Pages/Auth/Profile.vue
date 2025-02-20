@@ -125,6 +125,7 @@ import dayjs from "../../utils/dayjs";
 import TextInput from "@/components/UI/TextInput.vue";
 import Button from "@/components/Button.vue";
 import { computed, ref } from "vue";
+import { toast } from "vue3-toastify";
 
 const props = defineProps({
     user: {
@@ -158,6 +159,7 @@ const updatePassword = () => {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
+            toast.success("ތިޔަ ފަރާތުގެ ޕާސްވާރޑް އަޕްޑޭޓް ކުރެވިއްޖެ");
         },
         onError: (errorMessages) => {
             errors.value = errorMessages;

@@ -263,6 +263,7 @@ import { ref, computed } from "vue";
 import dayjs from "../utils/dayjs";
 import { NumberFormatter } from "../utils/numberFormatter";
 import Button from "@/components/Button.vue";
+import { toast } from "vue3-toastify";
 
 const props = defineProps({
     errors: {
@@ -321,13 +322,14 @@ const onSubmit = async () => {
             },
         });
         if (!response.ok) {
-            throw new Error("Network response was not ok", response);
+            throw new Error("Network response was not ok");
         }
 
+        toast.success("ފައިސާ ބަލައިގަނެވިއްޖެ");
         selectedPayables.value = [];
         fetchProperty();
     } catch (error) {
-        console.error("Error fetching companies", error);
+        console.error("Error when submitting payment");
     }
 
     // form.transform((data) =>
