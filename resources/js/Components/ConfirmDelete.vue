@@ -61,20 +61,18 @@
                                 </div>
                             </div>
                             <div class="mt-5 sm:mt-6 flex justify-around px-10">
-                                <button
-                                    type="button"
-                                    class="text-sm font-semibold leading-6 text-gray-900 px-2"
+                                <Button
                                     @click="open = false"
-                                >
-                                    ނޫނެކެވެ
-                                </button>
-                                <button
-                                    type="button"
-                                    class="inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                                    @click="deleteProperty"
-                                >
-                                    އާއެކެވެ
-                                </button>
+                                    variant="cancel"
+                                    label="ނޫނެކެވެ"
+                                />
+
+                                <Button
+                                    @click="deleteConfirm"
+                                    variant="danger"
+                                    label="އާއެކެވެ"
+                                    class="text-white bg-red-600"
+                                />
                             </div>
                         </DialogPanel>
                     </TransitionChild>
@@ -94,34 +92,25 @@ import {
     TransitionRoot,
 } from "@headlessui/vue";
 import { ExclamationCircleIcon, TrashIcon } from "@heroicons/vue/24/outline";
-import { router } from "@inertiajs/vue3";
-import { toast } from "vue3-toastify";
+import Button from "@/components/Button.vue";
+import { useDelete } from "../Composables/useDelete";
 
 const props = defineProps({
-    property_id: {
+    url: {
         type: String,
+        required: true,
+    },
+    parameter: {
+        type: Object,
         required: true,
     },
 });
 
 const open = ref(false);
+const { deleteRecord } = useDelete();
 
-const deleteProperty = async () => {
-    router.delete(
-        route("property.destroy", {
-            voucher: props.property_id,
-        }),
-        {
-            onSuccess: () => {
-                toast.success("Property deleted successfully");
-            },
-            onError: (errorMessages) => {
-                toast.error("Error deleting property, please try again later");
-            },
-            onFinish: () => {
-                open.value = false;
-            },
-        }
-    );
+const deleteConfirm = async () => {
+    await deleteRecord(props.url, props.parameter);
+    open.value = false;
 };
 </script>

@@ -216,7 +216,10 @@
                                     class="flex justify-around relative whitespace-nowrap py-5 text-right text-sm font-medium sm:pr-0"
                                 >
                                     <NewProperty :id="property.id" />
-                                    <ConfirmDelete :property_id="property.id" />
+                                    <ConfirmDelete
+                                        :parameter="{ property: property.id }"
+                                        url="properties.destroy"
+                                    />
                                 </td>
                             </tr>
                         </tbody>

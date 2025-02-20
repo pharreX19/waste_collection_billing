@@ -144,7 +144,8 @@
                                 >
                                     <NewUser :user="user" />
                                     <ConfirmDelete
-                                        :property_id="`${user.id}`"
+                                        url="users.destroy"
+                                        :parameter="{ user: user.id }"
                                     />
                                 </td>
                             </tr>
