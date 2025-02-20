@@ -157,7 +157,7 @@ const page = usePage();
 const { isUser } = useUserRole();
 
 const userNavigation = [
-    { name: "ޔޫޒަރ ޕުރޮފައިލް", href: "#", method: "GET" },
+    { name: "ޔޫޒަރ ޕުރޮފައިލް", href: route("users.show"), method: "GET" },
     // { name: "Settings", href: "#" },
     { name: "ލޮގް އައުޓް", href: route("auth.logout"), method: "POST" },
 ];

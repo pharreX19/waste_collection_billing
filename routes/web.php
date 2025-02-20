@@ -68,6 +68,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('users', [UserController::class, 'store'])->name('users.store');
         Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::get('auth/user', [UserController::class, 'show'])->name('users.show');
 
         Route::post('categories', [PropertyCategoryController::class, 'store'])->name('categories.store');
         Route::put('categories/{category}', [PropertyCategoryController::class, 'update'])->name('categories.update');

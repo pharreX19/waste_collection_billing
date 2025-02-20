@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
+use Inertia\Inertia;
+use App\Constants\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
-use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -32,9 +35,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $user = User::with(['role'])->findOrFail(auth()->user()->id);
+        return Inertia::render('Auth/Profile', [
+            'user' => $user
+        ]);
     }
 
     /**
@@ -44,21 +50,39 @@ class UserController extends Controller
     {
         $updateFields = [];
 
-        if ($request->filled('is_active')) {
-            $updateFields['is_active'] = intval($request->is_active);
-        }
+        if (auth()->user()->role_id === Role::ADMIN) {
+            if ($request->filled('is_active')) {
+                $updateFields['is_active'] = intval($request->is_active);
+            }
 
-        if ($request->filled('password')) {
-            $updateFields['password'] = Hash::make($request->password);
-        }
+            if ($request->filled('password')) {
+                $updateFields['password'] = Hash::make($request->password);
+            }
 
-        if (!empty($updateFields)) {
-            $user->update($updateFields);
-        }
 
-        return to_route('settings.index', [
-            'type' => 'users'
-        ]);
+            if (!empty($updateFields)) {
+                $user->update($updateFields);
+            }
+
+            return to_route('settings.index', [
+                'type' => 'users'
+            ]);
+        } else {
+
+            $user = auth()->user();
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'current_password' => ['ތިޔަ ޖެއްސެވި ޕާސްވާރޑް ރަނގަޅެއް ނޫން'],
+                ]);
+            }
+
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+
+            return back();
+        }
     }
 
     /**
