@@ -91,7 +91,8 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        return $property->deleteOrFail();
+        $property->deleteOrFail();
+        return back();
     }
 
 
