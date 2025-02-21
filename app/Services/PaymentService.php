@@ -2,8 +2,14 @@
 
 namespace App\Services;
 
+use Ramsey\Uuid\Uuid;
 use App\Models\Payable;
+use Illuminate\Support\Str;
+use Ramsey\Uuid\Rfc4122\UuidV5;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use App\Constants\Payable as ConstantsPayable;
+use App\Libraries\Traits\ProcessingPayableIdGenerator;
 
 class PaymentService
 {
@@ -19,10 +25,17 @@ class PaymentService
         $response = $this->login();
 
         if ($token = $response["access_token"]) {
+            $this->updatePayableState($payables);
             $tx = $this->createTransaction($payload, $token);
             return  $tx['data']['url'];
         }
         return null;
+    }
+
+    private function updatePayableState(array $payables)
+    {
+        $payable_ids = collect($payables)->pluck('payable_id')->toArray();
+        Payable::whereIn('id', $payable_ids)->update(['state' => ConstantsPayable::PROCESSING]);
     }
 
 
@@ -53,7 +66,6 @@ class PaymentService
     {
         $purposes = array_map(function ($payable) {
             return [
-                "local_id" => $payable['payable_id'],
                 'local_code' => '549103MAF',
                 "amount" => (int) $payable['amount'] * self::MINOR_UNIT_CONVERSION_RATE,
             ];
@@ -71,14 +83,12 @@ class PaymentService
             "currency" => "MVR",
             "purposes" => $purposes,
             "return_url" => $this->returnUrl(),
-            // "customer_reference" => (string) $invoice->payer_uuid,
-            // "local_id" => (string) $invoice->uuid,
-            // "total_amount" => $this->convertCurrencyToMvr($amount, $invoice),
+            "local_id" => (new ProcessingPayableIdGenerator())->generate($payables),
         ];
     }
 
     private function returnUrl()
     {
-        return config("payment.bpg.redirect_url");
+        return request()->headers->get('referer');
     }
 }
