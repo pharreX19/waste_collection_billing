@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Constants\Payable;
+use App\Constants\Payment as ConstantsPayment;
+use App\Models\Payable as ModelsPayable;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
 
@@ -13,16 +15,26 @@ class PaymentObserver
      */
     public function created(Payment $payment): void
     {
-        if ($payment->state === 'confirmed') {
-            DB::transaction(function () use ($payment) {
-                $payable = $payment->payable;
-                $payable->balance = $payable->balance - $payment->amount;
-                if ($payable->grand_total == $payable->payments()->sum('amount')) {
-                    $payable->state = Payable::PAID;
-                }
-                $payable->save();
-            });
+        $payable = $payment->payable;
+
+        if ($payment->state === ConstantsPayment::CONFIRMED) {
+            $this->handleConfirmedPayment($payable, $payment);
+        } else if ($payment->state === ConstantsPayment::CANCELLED) {
+            $this->handleCancelledPayment($payable);
         }
+    }
+
+    private function handleConfirmedPayment(ModelsPayable $payable, Payment $payment)
+    {
+        $payable->decrement('balance', $payment->amount);
+        if ($payable->grand_total == $payable->payments()->sum('amount')) {
+            $payable->update(['state' => Payable::PAID]);
+        }
+    }
+
+    private function handleCancelledPayment(ModelsPayable $payable)
+    {
+        $payable->update(['state' => Payable::PENDING]);
     }
 
     /**
