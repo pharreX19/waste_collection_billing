@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUlid('payable_id')->constrained();
             $table->decimal('amount');
             $table->dateTime('payment_date')->default(now());
+            $table->string('bpg_reference_id')->nullable();
             $table->enum('state', ['pending', 'confirmed', 'cancelled']);
             $table->timestamps();
             $table->softDeletes();
