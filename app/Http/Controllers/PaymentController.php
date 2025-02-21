@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Role;
 use Inertia\Inertia;
 use App\Models\Payment;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Payable;
+use App\Services\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Symfony\Component\Uid\Ulid;
@@ -24,13 +26,22 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        collect($request->validated())->map(function ($item) {
-            Payment::create([
-                ...$item,
-                'payment_date' => now(),
-                'state' => 'confirmed'
-            ]);
-        });
+        if (auth()->user()->role_id == Role::USER) {
+            $result = (new PaymentService())->pay($request->validated());
+            return response()->json([
+                'url' => $result
+            ], Response::HTTP_OK);
+        } else {
+            collect($request->validated())->map(function ($item) {
+                Payment::create([
+                    ...$item,
+                    'payment_date' => now(),
+                    'state' => 'confirmed'
+                ]);
+            });
+        }
+
+
 
         return response()->json('Payments created success', Response::HTTP_CREATED);
     }
