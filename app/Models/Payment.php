@@ -20,7 +20,8 @@ class Payment extends Model
         'payable_id',
         'amount',
         'state',
-        'payment_date'
+        'payment_date',
+        'bpg_reference_id'
     ];
 
     protected static function booted()
