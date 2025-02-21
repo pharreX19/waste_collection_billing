@@ -245,7 +245,11 @@
                             class="mt-3 flex items-center justify-start gap-x-6"
                         >
                             <Button variant="cancel" @click="onCancel" />
-                            <Button variant="submit" type="submit" />
+                            <Button
+                                variant="submit"
+                                type="submit"
+                                :loading="loading"
+                            />
                         </div>
                     </form>
                 </DialogPanel>
@@ -294,11 +298,8 @@ const total_due = computed(() => {
 });
 
 const emit = defineEmits(["cancel:form"]);
-
 const page = usePage();
-// const form = useForm({
-//     selectedPayables: [],
-// });
+const loading = ref(false);
 
 onMounted(() => {
     fetchProperty();
@@ -311,6 +312,8 @@ const onSubmit = async () => {
         payable_id: payable.id,
         amount: payable.balance,
     }));
+
+    loading.value = true;
 
     try {
         const response = await fetch(route("payments.store"), {
@@ -325,11 +328,20 @@ const onSubmit = async () => {
             throw new Error("Network response was not ok");
         }
 
-        toast.success("ފައިސާ ބަލައިގަނެވިއްޖެ");
+        const data = await response.json();
+
+        if (data.url) {
+            window.open(data.url, "_self");
+        } else {
+            toast.success("ފައިސާ ބަލައިގަނެވިއްޖެ");
+        }
+
         selectedPayables.value = [];
         fetchProperty();
     } catch (error) {
         console.error("Error when submitting payment");
+    } finally {
+        loading.value = false;
     }
 
     // form.transform((data) =>

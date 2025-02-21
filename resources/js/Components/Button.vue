@@ -1,18 +1,29 @@
 <template>
     <button
-        :disabled="disabled"
+        :disabled="disabled || loading"
         :type="type"
         :class="buttonClasses"
         @click="handleClick"
     >
-        {{ computedLabel }}
+        <span class="flex flex-row justify-center items-center"
+            ><ArrowPathIcon
+                class="size-5 text-white animate-spin ml-2"
+                v-if="loading"
+            />{{ computedLabel }}</span
+        >
     </button>
 </template>
 
 <script setup>
+import { ArrowPathIcon } from "@heroicons/vue/24/outline";
 import { computed } from "vue";
 
 const props = defineProps({
+    loading: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     disabled: {
         type: Boolean,
         required: false,
