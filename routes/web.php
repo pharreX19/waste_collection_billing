@@ -16,21 +16,21 @@ use App\Http\Controllers\PropertyCategoryController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 
-Route::get('login', function () {
-    return Inertia::render('Auth/Login');
-})->name('login');
+Route::middleware(['guest'])->group(function () {
 
-Route::get('admin/login', function () {
-    return Inertia::render('Auth/AdminLogin');
-})->name('login.admin');
+    Route::get('login', function () {
+        return Inertia::render('Auth/Login');
+    })->name('login');
 
+    Route::get('admin/login', function () {
+        return Inertia::render('Auth/AdminLogin');
+    })->name('login.admin');
 
+    Route::post('auth/otp', [AuthController::class, 'getOtpForLogin'])->name('auth.otp');
+    Route::post('auth/login', [AuthController::class, 'login'])->name('auth.login');
 
-Route::post('auth/otp', [AuthController::class, 'getOtpForLogin'])->name('auth.otp');
-Route::post('auth/login', [AuthController::class, 'login'])->name('auth.login');
-
-Route::post('login', [AuthController::class, 'adminLogin'])->name('auth.admin-login');
-
+    Route::post('login', [AuthController::class, 'adminLogin'])->name('auth.admin-login');
+});
 
 Route::middleware(['auth'])->group(function () {
 
