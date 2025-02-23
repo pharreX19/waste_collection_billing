@@ -217,6 +217,7 @@
                                 >
                                     <NewProperty :id="property.id" />
                                     <ConfirmDelete
+                                        v-if="isAdmin"
                                         :parameter="{ property: property.id }"
                                         url="properties.destroy"
                                     />
@@ -238,6 +239,7 @@ import ConfirmDelete from "@/components/ConfirmDelete.vue";
 import { Switch } from "@headlessui/vue";
 import { useForm } from "@inertiajs/vue3";
 import dayjs from "../../utils/dayjs";
+import { useUserRole } from "@/composables/useUserRole";
 
 const props = defineProps({
     data: {
@@ -248,6 +250,8 @@ const props = defineProps({
         type: Array,
     },
 });
+
+const { isAdmin } = useUserRole();
 
 const togglePropertyState = (property) => {
     const form = useForm({
