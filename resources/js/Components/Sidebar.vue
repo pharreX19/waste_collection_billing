@@ -16,6 +16,7 @@
                         <li v-for="item in currentNavigation" :key="item.name">
                             <Link
                                 v-if="!item.children"
+                                v-show="item.isAdmin ? isAdmin : true"
                                 :href="item.href"
                                 :class="[
                                     item.current
@@ -31,7 +32,7 @@
                                 />
                                 {{ item.name }}
                             </Link>
-                            <Disclosure as="div" v-else v-slot="{ open }">
+                            <!-- <Disclosure as="div" v-else v-slot="{ open }">
                                 <DisclosureButton
                                     :class="[
                                         item.current
@@ -56,12 +57,11 @@
                                         aria-hidden="true"
                                     />
                                 </DisclosureButton>
-                                <DisclosurePanel as="ul" class="mt-1 px-10">
+                                 <DisclosurePanel as="ul" class="mt-1 px-10">
                                     <li
                                         v-for="subItem in item.children"
                                         :key="subItem.name"
                                     >
-                                        <!-- 44px -->
                                         <DisclosureButton
                                             as="a"
                                             :href="subItem.href"
@@ -77,7 +77,7 @@
                                         >
                                     </li>
                                 </DisclosurePanel>
-                            </Disclosure>
+                            </Disclosure> -->
                         </li>
                     </ul>
                 </li>
@@ -154,7 +154,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { useUserRole } from "@/composables/useUserRole";
 
 const page = usePage();
-const { isUser } = useUserRole();
+const { isUser, isAdmin } = useUserRole();
 
 const userNavigation = [
     { name: "ޔޫޒަރ ޕުރޮފައިލް", href: route("users.show"), method: "GET" },
@@ -192,6 +192,7 @@ const navigation = reactive([
         href: route("settings.index", { type: "users" }),
         icon: WrenchIcon,
         current: false,
+        isAdmin: true,
     },
 ]);
 

@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
 
-    Route::middleware([])->group(function () {
+    Route::middleware(['isOfficer'])->group(function () {
         Route::get('properties/search', function () {
             return Inertia::render('Properties/Search');
         })->name('properties.search');
@@ -53,7 +53,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('properties', [PropertyController::class, 'index'])->name('properties.index');
         Route::get('properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
         Route::put('properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
-        Route::delete('properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
 
         Route::get('payables/reports', [PayableController::class, 'reports'])->name('payables.reports');
         Route::get('payables/reports/print', [PayableController::class, 'downloadReport'])->name('payables.download-reports');
@@ -61,10 +60,15 @@ Route::middleware(['auth'])->group(function () {
         Route::put('payables/{payable}', [PayableController::class, 'update'])->name('payables.update');
 
         Route::get('people/{nid}/search', [PersonController::class, 'search'])->name('people.search');
+    });
+
+
+    Route::middleware(['isAdmin'])->group(function () {
+
+        Route::delete('properties/{property}', [PropertyController::class, 'destroy'])->name('properties.destroy');
 
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
-
 
         Route::post('users', [UserController::class, 'store'])->name('users.store');
         Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -73,7 +77,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('categories', [PropertyCategoryController::class, 'store'])->name('categories.store');
         Route::put('categories/{category}', [PropertyCategoryController::class, 'update'])->name('categories.update');
-
 
         Route::get('generate-payables/{date}', function (String $date) {
             Artisan::call('payables:generate', [
@@ -86,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
             Artisan::call('payables:calculate-fines');
         })->name('fines.generate');
     });
+
 
     // Route::get('properties/{property}/payments', [PaymentController::class, 'index'])->name('payments.index');
     // Route::get('payments/reports', [PaymentController::class, 'reports'])->name('payments.reports');
