@@ -84,7 +84,7 @@
                         </div>
                     </dl>
                     <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-                        <Create :id="id" />
+                        <Create :id="id" @close:modal="refreshPayables" />
                     </div>
                 </div>
             </div>
@@ -370,6 +370,25 @@ const onPrint = (item) => {
         route("payables.print", {
             payable: item.id,
         })
+    );
+};
+
+const refreshPayables = () => {
+    router.visit(
+        route("payables.index", {
+            property: id,
+            year: new Date().getFullYear(),
+        }),
+
+        {
+            only: ["payables"],
+            preserveScroll: true,
+            preserveState: true,
+            headers: {
+                Accept: "text/html",
+                "Content-type": "text/html",
+            },
+        }
     );
 };
 

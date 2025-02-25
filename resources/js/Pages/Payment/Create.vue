@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { Dialog, TransitionChild, TransitionRoot } from "@headlessui/vue";
 import NewPaymentForm from "@/components/NewPaymentForm.vue";
 import { usePage } from "@inertiajs/vue3";
@@ -49,7 +49,7 @@ const props = defineProps({
         default: null,
     },
 });
-
+const emit = defineEmits(["close:modal"]);
 const { isUser } = useUserRole();
 const open = ref(false);
 const errors = ref({});
@@ -57,6 +57,16 @@ const errors = ref({});
 const handleModalOpen = () => {
     open.value = true;
 };
+
+watch(
+    open,
+    (value) => {
+        if (!value) {
+            emit("close:modal");
+        }
+    },
+    { deep: true }
+);
 
 const onCancel = () => {
     router.visit(

@@ -302,7 +302,7 @@ const page = usePage();
 const loading = ref(false);
 
 onMounted(() => {
-    fetchProperty();
+    fetchPayables();
 });
 
 const onSubmit = async () => {
@@ -336,10 +336,13 @@ const onSubmit = async () => {
             toast.success("ފައިސާ ބަލައިގަނެވިއްޖެ");
         }
 
+        payables.value = payables.value.filter(
+            (payable) => !selectedPayables.value.includes(payable)
+        );
+
         selectedPayables.value = [];
-        fetchProperty();
     } catch (error) {
-        console.error("Error when submitting payment");
+        toast.error("ފައިސާ ބަލައިގަތުމުގައި މައްސަލައެއް ދިމާވެއްޖެ");
     } finally {
         loading.value = false;
     }
@@ -359,7 +362,7 @@ const onCancel = function () {
     emit("cancel:form");
 };
 
-const fetchProperty = async () => {
+const fetchPayables = async () => {
     try {
         const response = await fetch(
             route("payables.index", {
