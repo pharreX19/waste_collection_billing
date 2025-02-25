@@ -9,24 +9,29 @@ use App\Models\Payable;
 use App\Models\Property;
 // use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\Request;
+use App\Services\GenerateReport;
+use App\Services\GenerateReports;
 use Illuminate\Support\Facades\DB;
 use Spatie\LaravelPdf\Facades\Pdf;
 use App\Services\FormatDhivehiDate;
 use Spatie\Browsershot\Browsershot;
 use App\Http\Requests\PayableRequest;
 use Illuminate\Support\Facades\Response;
+use App\Libraries\Traits\PropertyAccessGuard;
 use App\Constants\Payable as ConstantsPayable;
-use App\Services\GenerateReport;
-use App\Services\GenerateReports;
 
 class PayableController extends Controller
 {
+    use PropertyAccessGuard;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request, Property $property)
     {
         $state = (isset($request->state) ? [$request->state]  : $request->state === ConstantsPayable::PENDING) ? ConstantsPayable::PENDING_STATES : [];
+
+        $this->ensureUserIsResponsible($property);
 
         $total_pending = DB::table('payables')
             ->select('state')

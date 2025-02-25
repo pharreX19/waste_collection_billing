@@ -48,7 +48,8 @@ class OTPForLoginAction
         ], [
             'name' => $property->responsiblePersons[0]->name,
             'contact_no' => $this->_data['contact_no'],
-            'role_id' => Role::USER
+            'role_id' => Role::USER,
+            'person_id' => $property->responsiblePersons[0]->id,
         ]);
 
         $this->_user->otp = Hash::make($otp);

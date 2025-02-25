@@ -6,6 +6,7 @@
             :placeholder="placeholder"
             v-model="modelValue.name"
             @update:modelValue="handleInput"
+            autoComplete="off"
             dir="rtl"
             lang="dv"
         />

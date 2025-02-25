@@ -36,8 +36,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    Route::get('categories', [PropertyCategoryController::class, 'index'])->name('categories.index');
-
+    Route::get('properties', [PropertyController::class, 'index'])->name('properties.index');
     Route::get('properties/{property}/payables', [PayableController::class, 'index'])->name('payables.index');
 
     Route::post('payments', [PaymentController::class, 'store'])->name('payments.store');
@@ -48,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
         })->name('properties.search');
 
         Route::get('/', DashboardController::class)->name('dashboard');
+
+        Route::get('categories', [PropertyCategoryController::class, 'index'])->name('categories.index');
 
         Route::post('properties', [PropertyController::class, 'store'])->name('properties.store');
         Route::get('properties', [PropertyController::class, 'index'])->name('properties.index');
