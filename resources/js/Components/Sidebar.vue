@@ -17,10 +17,12 @@
                             <Link
                                 v-if="!item.children"
                                 v-show="item.isAdmin ? isAdmin : true"
+                                :as="isUser ? 'button' : 'a'"
+                                disabled="true"
                                 :href="item.href"
                                 :class="[
                                     item.current
-                                        ? 'bg-gray-50'
+                                        ? 'bg-gray-50 w-full'
                                         : 'hover:bg-gray-50',
                                     'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700',
                                 ]"
