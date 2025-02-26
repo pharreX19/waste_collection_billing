@@ -22,9 +22,9 @@
                                 :href="item.href"
                                 :class="[
                                     item.current
-                                        ? 'bg-gray-50 w-full'
+                                        ? 'bg-gray-50'
                                         : 'hover:bg-gray-50',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700',
+                                    'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 w-full',
                                 ]"
                             >
                                 <component
