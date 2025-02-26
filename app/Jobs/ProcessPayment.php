@@ -29,6 +29,11 @@ class ProcessPayment implements ShouldQueue
     public function handle(): void
     {
         $payables = $this->getPayables();
+        info('cached payables: ' . json_encode($payables));
+        if (!$payables) {
+            return;
+        }
+
         foreach ($payables as $payable) {
             if ($payable && $payable['state'] === ConstantsPayable::PROCESSING) {
                 $this->createPayment($payable);
@@ -49,6 +54,7 @@ class ProcessPayment implements ShouldQueue
     private function retrieveCachePayablesIds()
     {
         $cache_key = 'processing_payables: ' . $this->_data['local_id'];
+        info('getting cache_key: ' . $cache_key);
         return Cache::get($cache_key);
     }
 

@@ -22,6 +22,7 @@ class ProcessingPayableIdGenerator
     private function cachePayables($payables, $bpg_local_id)
     {
         $cache_key = 'processing_payables: ' . $bpg_local_id;
+        info('setting cache_key: ' . $cache_key);
         $payable_ids = $this->extractPayableIds($payables);
         Cache::put($cache_key, $payable_ids, now()->addMinutes(5));
     }
