@@ -39,6 +39,7 @@ return [
         'base_url' => env('BPG_BASE_URL'),
         'client_id' => env('BPG_CLIENT_ID'),
         'client_secret' => env('BPG_CLIENT_SECRET'),
+        'signing_secret' => env('BPG_SIGNING_SECRET'),
     ],
 
 ];
