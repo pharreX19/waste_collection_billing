@@ -26,7 +26,7 @@ class BPGVerificationService
             ['+', '/', '='],
             ['-', '_', ''],
             base64_encode(
-                hash_hmac('sha256', $message, config("payment.bpg.signing_secret"), true)
+                hash_hmac('sha256', $message, config("services.bpg.signing_secret"), true)
             )
         );
 
