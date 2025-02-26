@@ -12,14 +12,14 @@ class WebhookAction
 {
     public function execute($data = [])
     {
-        // if (!(new BPGVerificationService())->verifySignature(
-        //     $data,
-        //     request()->header("x-bpg-signature")
-        // )) {
-        //     Log::info('failed: Signature mismatch');
-        //     throw new AuthorizationException('Unable to verify signature', Response::HTTP_FORBIDDEN);
-        // }
-        $this->processPayment($data);
+        if (!(new BPGVerificationService())->verifySignature(
+            $data,
+            request()->header("x-bpg-signature")
+        )) {
+            Log::info('failed: Signature mismatch');
+            throw new AuthorizationException('Unable to verify signature', Response::HTTP_FORBIDDEN);
+        }
+        $this->processPayment($data['data']);
     }
 
 

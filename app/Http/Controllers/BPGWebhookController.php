@@ -37,6 +37,6 @@ class BPGWebhookController
             return response()->json(null, Response::HTTP_NO_CONTENT);
         }
 
-        return (new WebhookAction())->execute($payload['data']);
+        return (new WebhookAction())->execute($payload);
     }
 }
