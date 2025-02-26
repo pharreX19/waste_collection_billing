@@ -4,10 +4,7 @@ namespace App\Services;
 
 use Ramsey\Uuid\Uuid;
 use App\Models\Payable;
-use Illuminate\Support\Str;
-use Ramsey\Uuid\Rfc4122\UuidV5;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 use App\Constants\Payable as ConstantsPayable;
 use App\Libraries\Traits\ProcessingPayableIdGenerator;
 
@@ -74,12 +71,13 @@ class PaymentService
 
         $customer = [
             "type" => "Individual Local",
-            "id" => '1234567890123',
-            "name" => 'Test User',
+            "id" => auth()->user()->person->national_id,
+            "name" => auth()->user()->person->name,
         ];
 
         return [
             "customer" => $customer,
+            "customer_reference" => (string) $customer['id'],
             "currency" => "MVR",
             "purposes" => $purposes,
             "return_url" => $this->returnUrl(),
